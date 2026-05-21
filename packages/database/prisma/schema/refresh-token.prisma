@@ -1,0 +1,12 @@
+model RefreshToken {
+  token     String   @id
+  userAgent String
+  expiresAt DateTime
+
+  createdAt DateTime @default(now())
+
+  user   User   @relation(name: "user-refreshTokens", fields: userId, references: [id], onDelete: Cascade)
+  userId String @unique
+
+  @@map("refresh-tokens")
+}

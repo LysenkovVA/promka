@@ -1,0 +1,17 @@
+generator client {
+  provider        = "prisma-client"
+  // Папка для сгенерированного Prisma клиента
+  output          = "../.generated"
+  // previewFeatures = ["relationJoins", "strictUndefinedChecks", "prismaSchemaFolder"]
+  previewFeatures = ["relationJoins", "strictUndefinedChecks"]
+  binaryTargets   = ["native", "linux-musl-arm64-openssl-3.0.x", "windows"]
+}
+
+/**
+ * Чтобы не было ошибки из-за отсутствующего параметра url было установлено
+ * "@prisma/language-server": "^7.0.0" и в настройках WebStorm
+ * выбран локальный Language Server Package
+ */
+datasource db {
+  provider = "postgresql"
+}

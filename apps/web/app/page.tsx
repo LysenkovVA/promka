@@ -10,10 +10,41 @@ import {
 } from "@workspace/ui/components/card"
 import { Field, FieldGroup } from "@workspace/ui/components/field"
 import { Input } from "@workspace/ui/components/input"
-import { toast } from "sonner"
 import Image from "next/image"
+import { useCallback, useEffect, useMemo, useState } from "react"
+import { useAppDispatch, useAppSelector } from "@/lib/redux"
+import { loginThunk } from "@/app/(auth)/model/thunks/loginThunk"
+import { getUserAuthDataError } from "@/app/(auth)/model/selectors/authSelectors"
+import { toast } from "sonner"
 
 export default function Page() {
+  const [login, setLogin] = useState("")
+  const [password, setPassword] = useState("")
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const dispatch = useAppDispatch()
+  const error = useAppSelector(getUserAuthDataError)
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error, { position: "top-center" })
+    }
+  }, [error])
+
+  const submitDisabled = useMemo(() => {
+    return login.length === 0 || password.length === 0
+  }, [login.length, password.length])
+
+  const onLogin = useCallback(async () => {
+    try {
+      setIsSubmitting(true)
+      await dispatch(loginThunk({ email: login, password }))
+      // console.log("Login successful")
+    } finally {
+      setIsSubmitting(false)
+    }
+  }, [dispatch, login, password])
+
   return (
     <div
       style={{
@@ -35,8 +66,9 @@ export default function Page() {
             <Image
               src="/logo.png" // Убедитесь, что файл находится в public/logo.png
               alt="Логотип"
-              width={60}
-              height={60}
+              loading={"eager"}
+              width={70}
+              height={70}
               style={{ objectFit: "contain" }}
             />
           </div>
@@ -54,7 +86,12 @@ export default function Page() {
           <CardContent>
             <FieldGroup>
               <Field>
-                <Input id="login" placeholder="Логин" required />
+                <Input
+                  id="email"
+                  placeholder="E-mail"
+                  required
+                  onChange={(e) => setLogin(e.target.value)}
+                />
               </Field>
               <Field>
                 <Input
@@ -62,6 +99,7 @@ export default function Page() {
                   placeholder="Пароль"
                   type={"password"}
                   required
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </Field>
             </FieldGroup>
@@ -77,11 +115,13 @@ export default function Page() {
             <Button
               style={{ width: "100%" }}
               type={"submit"}
-              onClick={() => {
-                toast("Кнопка нажата", { position: "top-center" })
+              onClick={async (e) => {
+                e.preventDefault()
+                await onLogin()
               }}
+              disabled={submitDisabled || isSubmitting}
             >
-              Войти
+              {isSubmitting ? "Вход..." : "Войти"}
             </Button>
           </CardFooter>
         </Card>
