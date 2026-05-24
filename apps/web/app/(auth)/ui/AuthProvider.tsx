@@ -31,7 +31,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
    */
   useEffect(() => {
     if (!isInitialized) {
-      // console.log("🔁 Запускаем refresh")
+      console.log("🔁 Запускаем refresh")
       try {
         dispatch(refreshThunk()).then((result) => {
           // console.log("refresh thunk successful")

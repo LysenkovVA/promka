@@ -8,13 +8,18 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@workspace/ui/components/sidebar"
-import { LayoutDashboardIcon } from "lucide-react"
+import { LayoutDashboardIcon, UsersIcon } from "lucide-react"
+import { HEADER_HEIGHT } from "@/config/app"
+import { useAppSelector } from "@/lib/redux"
+import { getUserAuthDataIsInitialized } from "@/app/(auth)/model/selectors/authSelectors"
 
 export function AppSidebar() {
+  const isInitialized = useAppSelector(getUserAuthDataIsInitialized)
+
   return (
     <Sidebar>
       <SidebarHeader>
-        <SidebarMenu>
+        <SidebarMenu style={{ background: "red", height: HEADER_HEIGHT }}>
           {"Sidebar menu here"}
           {/*<SidebarMenuItem>*/}
           {/*  <DropdownMenu>*/}
@@ -42,6 +47,12 @@ export function AppSidebar() {
               <span className="text-base">Dashboard</span>
             </a>
           </SidebarMenuButton>
+          <SidebarMenuButton asChild>
+            <a href="/employees">
+              <UsersIcon className="size-5!" />
+              <span className="text-base">Employees</span>
+            </a>
+          </SidebarMenuButton>
           {/*<SidebarMenuAction>*/}
           {/*  <Plus /> <span className="sr-only">Add Project</span>*/}
           {/*</SidebarMenuAction>*/}
@@ -55,6 +66,7 @@ export function AppSidebar() {
         {/*</SidebarGroup>*/}
         {/*<SidebarGroup />*/}
       </SidebarContent>
+      <div>{`Auth init: ${isInitialized}`}</div>
       <SidebarFooter />
     </Sidebar>
   )

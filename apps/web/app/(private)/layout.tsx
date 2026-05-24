@@ -19,10 +19,30 @@ export default function PrivateLayout({
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main style={{ width: "100%" }}>
+      <div
+        style={{
+          // display: "flex",
+          // flexDirection: "column",
+          // alignItems: "center",
+          // justifyContent: "center",
+          // margin: "auto",
+          width: "100%",
+        }}
+      >
         <AppHeader />
-        {children}
-      </main>
+        <main
+          style={{
+            width: "100%",
+            padding: 8,
+            margin: 8,
+            borderRadius: 12,
+            border: "1px solid black",
+            // height: "100%",
+          }}
+        >
+          {children}
+        </main>
+      </div>
     </SidebarProvider>
   )
 }
