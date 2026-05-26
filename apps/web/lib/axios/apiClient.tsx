@@ -34,6 +34,7 @@ const apiClient = axios.create({
 apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
+    toast.info("Interceptor response")
     // Оригинальный запрос
     const originalRequest = error.config
 

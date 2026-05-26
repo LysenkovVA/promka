@@ -6,6 +6,7 @@ import {
   verifyAccessToken,
   verifyRefreshToken,
 } from "@/lib/jose/client/tokens"
+import dayjs from "dayjs"
 
 const publicPaths = ["/", "/api/login", "/api/refresh"]
 
@@ -18,7 +19,7 @@ async function clearSession() {
   }
 }
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // Признак API-запроса
@@ -27,7 +28,7 @@ export async function middleware(request: NextRequest) {
   const isPublicPath = publicPaths.includes(pathname)
 
   // 🔓 Публичные маршруты — разрешаем
-  if (isPublicPath) {
+  if (isPublicPath || isApiRoute) {
     return NextResponse.next()
   }
 
@@ -40,14 +41,15 @@ export async function middleware(request: NextRequest) {
     const verifiedAccessToken = await verifyAccessToken(accessToken)
 
     if (verifiedAccessToken) {
+      console.log("[middleware] Access token валиден")
       return NextResponse.next()
     }
   }
 
   // ❌ Нет access token
-  // console.error(
-  //   `[${dayjs().format("HH:mm:ss")}][SERVER][middleware][${request.method}][Access token отсутствует][${pathname}]`
-  // )
+  console.error(
+    `[${dayjs().format("HH:mm:ss")}][SERVER][middleware][${request.method}][Access token отсутствует][${pathname}]`
+  )
 
   const refreshToken = cookieStore.get("refreshToken")?.value
 

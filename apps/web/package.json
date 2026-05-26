@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.11.2",
+    "@tabler/icons-react": "^3.44.0",
     "@workspace/ui": "*",
     "dayjs": "^1.11.20",
     "jose": "^6.2.3",

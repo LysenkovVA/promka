@@ -1,6 +1,6 @@
 "use client"
 
-import { SidebarProvider } from "@workspace/ui/components/sidebar"
+import { SidebarInset, SidebarProvider } from "@workspace/ui/components/sidebar"
 import { AppSidebar } from "@/components/AppSidebar/app-sidebar"
 import { AppHeader } from "@/components/AppHeader/AppHeader"
 
@@ -17,32 +17,27 @@ export default function PrivateLayout({
   // console.log("🌞PrivateLayout отрисован")
 
   return (
-    <SidebarProvider>
-      <AppSidebar />
-      <div
-        style={{
-          // display: "flex",
-          // flexDirection: "column",
-          // alignItems: "center",
-          // justifyContent: "center",
-          // margin: "auto",
-          width: "100%",
-        }}
-      >
+    <SidebarProvider
+      style={
+        {
+          "--sidebar-width": "calc(var(--spacing) * 72)",
+          "--header-height": "calc(var(--spacing) * 12)",
+        } as React.CSSProperties
+      }
+    >
+      <AppSidebar variant={"inset"} />
+      <SidebarInset>
         <AppHeader />
         <main
           style={{
-            width: "100%",
             padding: 8,
             margin: 8,
-            borderRadius: 12,
-            border: "1px solid black",
-            // height: "100%",
+            overflowY: "auto",
           }}
         >
           {children}
         </main>
-      </div>
+      </SidebarInset>
     </SidebarProvider>
   )
 }

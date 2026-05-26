@@ -10,16 +10,23 @@ import {
 } from "@workspace/ui/components/sidebar"
 import { LayoutDashboardIcon, UsersIcon } from "lucide-react"
 import { HEADER_HEIGHT } from "@/config/app"
+import Link from "next/link"
+import { SidebarUser } from "@/components/AppSidebar/sidebar-user"
 import { useAppSelector } from "@/lib/redux"
-import { getUserAuthDataIsInitialized } from "@/app/(auth)/model/selectors/authSelectors"
+import { getAuthDataUser } from "@/app/(auth)/model/selectors/authSelectors"
 
-export function AppSidebar() {
-  const isInitialized = useAppSelector(getUserAuthDataIsInitialized)
+export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const user = useAppSelector(getAuthDataUser)
 
   return (
-    <Sidebar>
-      <SidebarHeader>
-        <SidebarMenu style={{ background: "red", height: HEADER_HEIGHT }}>
+    <Sidebar collapsible="offcanvas" {...props}>
+      <SidebarHeader style={{ margin: 0, padding: 0 }}>
+        <SidebarMenu
+          style={{
+            background: "red",
+            height: HEADER_HEIGHT,
+          }}
+        >
           {"Sidebar menu here"}
           {/*<SidebarMenuItem>*/}
           {/*  <DropdownMenu>*/}
@@ -42,16 +49,16 @@ export function AppSidebar() {
         <SidebarGroupLabel>Модули</SidebarGroupLabel>
         <SidebarMenuItem>
           <SidebarMenuButton asChild>
-            <a href="/dashboard">
+            <Link href="/dashboard">
               <LayoutDashboardIcon className="size-5!" />
-              <span className="text-base">Dashboard</span>
-            </a>
+              <span className="text-base">Информация</span>
+            </Link>
           </SidebarMenuButton>
           <SidebarMenuButton asChild>
-            <a href="/employees">
+            <Link href="/employees">
               <UsersIcon className="size-5!" />
-              <span className="text-base">Employees</span>
-            </a>
+              <span className="text-base">Работники</span>
+            </Link>
           </SidebarMenuButton>
           {/*<SidebarMenuAction>*/}
           {/*  <Plus /> <span className="sr-only">Add Project</span>*/}
@@ -66,8 +73,9 @@ export function AppSidebar() {
         {/*</SidebarGroup>*/}
         {/*<SidebarGroup />*/}
       </SidebarContent>
-      <div>{`Auth init: ${isInitialized}`}</div>
-      <SidebarFooter />
+      <SidebarFooter>
+        <SidebarUser user={user} />
+      </SidebarFooter>
     </Sidebar>
   )
 }

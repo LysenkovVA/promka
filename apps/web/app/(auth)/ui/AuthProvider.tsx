@@ -18,7 +18,7 @@ import { toast } from "sonner"
  * @constructor
  */
 export function AuthProvider({ children }: { children: ReactNode }) {
-  // console.log("🎮 AuthProvider отрисован")
+  console.log("🎮 AuthProvider отрисован")
   const authUser = useAppSelector(getAuthDataUser)
   const isInitialized = useAppSelector(getUserAuthDataIsInitialized)
 
@@ -40,7 +40,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         console.error("Error in AuthProvider:", error)
       }
     }
-  }, [])
+  }, [dispatch, isInitialized])
 
   useEffect(() => {
     if (authUser && authUser.id && path === "/") {
