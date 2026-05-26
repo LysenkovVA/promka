@@ -29,6 +29,10 @@ import {
   IconNotification,
   IconUserCircle,
 } from "@tabler/icons-react"
+import Link from "next/link"
+import { ROUTE } from "@/config/routes"
+import { useAppDispatch } from "@/lib/redux"
+import { logout } from "@/lib/axios/apiClient"
 
 export interface ServerSideProps {
   user: IUserEntity | undefined
@@ -38,6 +42,8 @@ export function SidebarUser(props: ServerSideProps) {
   const { isMobile } = useSidebar()
 
   const { user } = props
+
+  const dispatch = useAppDispatch()
 
   return (
     <SidebarMenu>
@@ -88,21 +94,27 @@ export function SidebarUser(props: ServerSideProps) {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <IconUserCircle />
-                Профиль
+              <DropdownMenuItem asChild>
+                <Link href={ROUTE.PROFILE.href}>
+                  <IconUserCircle />
+                  {ROUTE.PROFILE.name}
+                </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem disabled>
                 <IconCreditCard />
                 Платежи
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem disabled>
                 <IconNotification />
                 Уведомления
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={async () => {
+                await logout()
+              }}
+            >
               <IconLogout />
               Выход
             </DropdownMenuItem>

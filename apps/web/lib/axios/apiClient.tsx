@@ -7,6 +7,10 @@ import { ResponseData } from "@/lib/responses/ResponseData"
 
 // Эндпоинт для обновления токена
 const REFRESH_TOKEN_URL = "/refresh"
+// Эндпоинт для выхода
+const LOGOUT_URL = "/logout"
+// Эндпоинты, для которых НЕ нужно делать refresh
+const NO_REFRESH_URLS = ["/", "/login"]
 
 // Флаг: идёт ли сейчас обновление токена
 let isRefreshing = false
@@ -17,6 +21,34 @@ let failedRequestsQueue: Array<(token: string | null) => void> = []
 const processQueue = (error: any, token: string | null) => {
   failedRequestsQueue.forEach((prom) => prom(token))
   failedRequestsQueue = []
+}
+
+// Экспортируем функцию logout
+export const logout = async () => {
+  try {
+    // Отправляем запрос на logout (сервер удалит refresh-токен, например)
+    await apiClient.post(
+      LOGOUT_URL,
+      {},
+      {
+        withCredentials: true,
+      }
+    )
+  } catch (error) {
+    // Игнорируем ошибки logout — пользователь всё равно выходит
+    console.warn("Logout request failed, proceeding anyway", error)
+  } finally {
+    // Очищаем флаги и очередь
+    isRefreshing = false
+    failedRequestsQueue = []
+
+    // Очистка локального состояния (если используется localStorage)
+    // Например:
+    // localStorage.removeItem('accessToken')
+
+    // Редирект на страницу входа
+    window.location.href = process.env.NEXT_PUBLIC_PATH!
+  }
 }
 
 // Создаём экземпляр axios
@@ -34,7 +66,6 @@ const apiClient = axios.create({
 apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
-    toast.info("Interceptor response")
     // Оригинальный запрос
     const originalRequest = error.config
 
@@ -61,6 +92,7 @@ apiClient.interceptors.response.use(
         // Отправляем запрос на обновление токена
         const response = await axios.post(
           `${apiClient.defaults.baseURL}${REFRESH_TOKEN_URL}`,
+          {},
           {
             headers: { "Content-Type": "application/json" },
             withCredentials: true, // ← позволяет отправлять cookies

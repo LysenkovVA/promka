@@ -3,6 +3,7 @@ import { loginThunk } from "../thunks/loginThunk"
 import { IAuthData } from "../types/IAuthData"
 import { DetailsReduxSchema } from "@/lib/redux/model/types/DetailsReduxSchema"
 import { refreshThunk } from "@/app/(auth)/model/thunks/refreshThunk"
+import { logoutThunk } from "@/app/(auth)/model/thunks/logoutThunk"
 
 const initialState: DetailsReduxSchema<IAuthData> = {
   entityData: {
@@ -102,6 +103,24 @@ export const authSlice = createSlice({
         state.isFetching = false
         state.isSaving = false
         state._isInitialized = true
+      })
+      .addCase(logoutThunk.fulfilled, (state, error) => {
+        state.entityData = {
+          user: {
+            email: "",
+            hashedPassword: "",
+          },
+        }
+        state.entityFormData = {
+          user: {
+            email: "",
+            hashedPassword: "",
+          },
+        }
+        state.error = ""
+        state.isFetching = false
+        state.isSaving = false
+        state._isInitialized = false
       })
   },
 })

@@ -30,12 +30,21 @@ export default function PrivateLayout({
         <AppHeader />
         <main
           style={{
-            padding: 8,
-            margin: 8,
-            overflowY: "auto",
+            height: "calc(100vh - var(--header-height) - 16px)", // Занимает всю высоту экрана минус шапка и отступы
+            display: "flex",
           }}
         >
-          {children}
+          <div
+            style={{
+              width: "100%",
+              overflowY: "auto",
+              flexGrow: 1,
+              padding: 16,
+              margin: 8,
+            }}
+          >
+            {children}
+          </div>
         </main>
       </SidebarInset>
     </SidebarProvider>

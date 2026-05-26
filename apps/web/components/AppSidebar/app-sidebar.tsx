@@ -2,32 +2,37 @@ import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@workspace/ui/components/sidebar"
 import { LayoutDashboardIcon, UsersIcon } from "lucide-react"
-import { HEADER_HEIGHT } from "@/config/app"
 import Link from "next/link"
 import { SidebarUser } from "@/components/AppSidebar/sidebar-user"
 import { useAppSelector } from "@/lib/redux"
 import { getAuthDataUser } from "@/app/(auth)/model/selectors/authSelectors"
+import { CompanySelector } from "@/app/(private)/(companies)"
+import { ROUTE } from "@/config/routes"
+import { usePathname } from "next/navigation"
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const user = useAppSelector(getAuthDataUser)
+
+  const path = usePathname()
 
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader style={{ margin: 0, padding: 0 }}>
         <SidebarMenu
-          style={{
-            background: "red",
-            height: HEADER_HEIGHT,
-          }}
+          style={
+            {
+              // height: HEADER_HEIGHT,
+              // border: "1px solid black",
+            }
+          }
         >
-          {"Sidebar menu here"}
+          <CompanySelector companies={undefined} />
           {/*<SidebarMenuItem>*/}
           {/*  <DropdownMenu>*/}
           {/*    <DropdownMenuTrigger asChild>*/}
@@ -46,18 +51,18 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarGroupLabel>Модули</SidebarGroupLabel>
+        {/*<SidebarGroupLabel>Модули</SidebarGroupLabel>*/}
         <SidebarMenuItem>
-          <SidebarMenuButton asChild>
-            <Link href="/dashboard">
+          <SidebarMenuButton asChild isActive={path === ROUTE.DASHBOARD.href}>
+            <Link href={ROUTE.DASHBOARD.href}>
               <LayoutDashboardIcon className="size-5!" />
-              <span className="text-base">Информация</span>
+              <span className="text-base">{ROUTE.DASHBOARD.name}</span>
             </Link>
           </SidebarMenuButton>
-          <SidebarMenuButton asChild>
-            <Link href="/employees">
+          <SidebarMenuButton asChild isActive={path === ROUTE.EMPLOYEES.href}>
+            <Link href={ROUTE.EMPLOYEES.href}>
               <UsersIcon className="size-5!" />
-              <span className="text-base">Работники</span>
+              <span className="text-base">{ROUTE.EMPLOYEES.name}</span>
             </Link>
           </SidebarMenuButton>
           {/*<SidebarMenuAction>*/}
