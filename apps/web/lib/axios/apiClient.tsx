@@ -7,10 +7,10 @@ import { ResponseData } from "@/lib/responses/ResponseData"
 
 // Эндпоинт для обновления токена
 const REFRESH_TOKEN_URL = "/refresh"
-// Эндпоинт для выхода
-const LOGOUT_URL = "/logout"
-// Эндпоинты, для которых НЕ нужно делать refresh
-const NO_REFRESH_URLS = ["/", "/login"]
+// // Эндпоинт для выхода
+// const LOGOUT_URL = "/logout"
+// // Эндпоинты, для которых НЕ нужно делать refresh
+// const NO_REFRESH_URLS = ["/", "/login", "/logout"]
 
 // Флаг: идёт ли сейчас обновление токена
 let isRefreshing = false
@@ -23,33 +23,34 @@ const processQueue = (error: any, token: string | null) => {
   failedRequestsQueue = []
 }
 
-// Экспортируем функцию logout
-export const logout = async () => {
-  try {
-    // Отправляем запрос на logout (сервер удалит refresh-токен, например)
-    await apiClient.post(
-      LOGOUT_URL,
-      {},
-      {
-        withCredentials: true,
-      }
-    )
-  } catch (error) {
-    // Игнорируем ошибки logout — пользователь всё равно выходит
-    console.warn("Logout request failed, proceeding anyway", error)
-  } finally {
-    // Очищаем флаги и очередь
-    isRefreshing = false
-    failedRequestsQueue = []
-
-    // Очистка локального состояния (если используется localStorage)
-    // Например:
-    // localStorage.removeItem('accessToken')
-
-    // Редирект на страницу входа
-    window.location.href = process.env.NEXT_PUBLIC_PATH!
-  }
-}
+// // Экспортируем функцию logout
+// export const logout = async () => {
+//   try {
+//     // Отправляем запрос на logout (сервер удалит refresh-токен, например)
+//     await apiClient.post(
+//       LOGOUT_URL,
+//       {},
+//       {
+//         withCredentials: true,
+//       }
+//     )
+//   } catch (error) {
+//     // Игнорируем ошибки logout — пользователь всё равно выходит
+//     // console.warn("Logout request failed, proceeding anyway", error)
+//   } finally {
+//     // Очищаем флаги и очередь
+//     isRefreshing = false
+//     failedRequestsQueue = []
+//
+//     // Очистка локального состояния (если используется localStorage)
+//     // Например:
+//     // localStorage.removeItem('accessToken')
+//
+//     // Редирект на страницу входа
+//     // Редирект в AuthProvider
+//     // window.location.href = process.env.NEXT_PUBLIC_PATH!
+//   }
+// }
 
 // Создаём экземпляр axios
 const apiClient = axios.create({
@@ -64,7 +65,9 @@ const apiClient = axios.create({
 
 // Интерцептор ответов API (например, обработка ошибок)
 apiClient.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    return response
+  },
   async (error) => {
     // Оригинальный запрос
     const originalRequest = error.config
@@ -108,11 +111,12 @@ apiClient.interceptors.response.use(
         return apiClient(originalRequest)
       } catch (refreshError) {
         // Если refresh тоже упал — разлогиниваем
-        toast.error("Обновление токена завершилось с ошибкой", {
+        toast.error("Refresh токен протух", {
           position: "top-center",
           style: { color: "tomato" },
+          description: "Axios",
         })
-        window.location.href = process.env.NEXT_PUBLIC_PATH!
+        // window.location.href = process.env.NEXT_PUBLIC_PATH!
         processQueue(refreshError, null)
 
         return Promise.reject(refreshError)
@@ -126,17 +130,20 @@ apiClient.interceptors.response.use(
 
     switch (error.response?.status) {
       case 403:
+        // Ничего не показываем, это связано с авторизацией (для удобства)
         break
       case 500:
         if (errorData?.errorMessages) {
           toast.error(`${errorData.errorMessages} (axios)`, {
             position: "top-center",
             style: { color: "tomato" },
+            description: "Axios",
           })
         } else {
           toast.error("Неизвестная ошибка (axios)", {
             position: "top-center",
             style: { color: "tomato" },
+            description: "Axios",
           })
         }
         break

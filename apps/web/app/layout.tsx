@@ -16,7 +16,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  console.log("🌞RootLayout отрисован")
+  // console.log("🌞RootLayout отрисован")
   return (
     <html
       lang="en"

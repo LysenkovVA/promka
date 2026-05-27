@@ -11,11 +11,9 @@ import {
 import { Field, FieldGroup } from "@workspace/ui/components/field"
 import { Input } from "@workspace/ui/components/input"
 import Image from "next/image"
-import { useCallback, useEffect, useMemo, useState } from "react"
-import { useAppDispatch, useAppSelector } from "@/lib/redux"
+import { useCallback, useMemo, useState } from "react"
+import { useAppDispatch } from "@/lib/redux"
 import { loginThunk } from "@/app/(auth)/model/thunks/loginThunk"
-import { getUserAuthDataError } from "@/app/(auth)/model/selectors/authSelectors"
-import { toast } from "sonner"
 
 export default function Page() {
   const [login, setLogin] = useState("")
@@ -23,13 +21,13 @@ export default function Page() {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const dispatch = useAppDispatch()
-  const error = useAppSelector(getUserAuthDataError)
+  // const error = useAppSelector(getUserAuthDataError)
 
-  useEffect(() => {
-    if (error) {
-      toast.error(error, { position: "top-center" })
-    }
-  }, [error])
+  // useEffect(() => {
+  //   if (error) {
+  //     toast.error(error, { position: "top-center" })
+  //   }
+  // }, [error])
 
   const submitDisabled = useMemo(() => {
     return login.length === 0 || password.length === 0

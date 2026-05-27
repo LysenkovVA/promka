@@ -9,7 +9,7 @@ export default function EmployeesPage() {
       {/* Генерация 50 div'ов */}
       {[...Array(50)].map((_, index) => (
         <div key={index} className="my-2 border p-4">
-          Див {index + 1}
+          Сотрудник {index + 1}
         </div>
       ))}
     </div>

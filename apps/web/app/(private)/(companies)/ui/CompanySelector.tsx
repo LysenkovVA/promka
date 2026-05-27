@@ -24,7 +24,7 @@ export const CompanySelector = memo((props: CompanySelectorProps) => {
         loading={"eager"}
         width={HEADER_HEIGHT * 0.9}
         height={HEADER_HEIGHT * 0.9}
-        style={{ objectFit: "contain" }}
+        style={{ objectFit: "contain", opacity: 0.8 }}
       />
       <h4 className="scroll-m-20 text-xs font-light tracking-tight">Промка+</h4>
     </div>

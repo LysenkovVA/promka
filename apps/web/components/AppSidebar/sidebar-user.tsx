@@ -32,7 +32,7 @@ import {
 import Link from "next/link"
 import { ROUTE } from "@/config/routes"
 import { useAppDispatch } from "@/lib/redux"
-import { logout } from "@/lib/axios/apiClient"
+import { logoutThunk } from "@/app/(auth)/model/thunks/logoutThunk"
 
 export interface ServerSideProps {
   user: IUserEntity | undefined
@@ -112,7 +112,8 @@ export function SidebarUser(props: ServerSideProps) {
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={async () => {
-                await logout()
+                // await logout()
+                await dispatch(logoutThunk())
               }}
             >
               <IconLogout />
