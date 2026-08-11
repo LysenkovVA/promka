@@ -5,28 +5,47 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@workspace/ui/components/avatar"
-import { useIsMobile } from "@workspace/ui/hooks/use-mobile"
 import { EditProfileSheet } from "@/app/(private)/(profile)"
 import { useUser } from "@/app/(auth)"
+import { IconMail, IconPhone } from "@tabler/icons-react"
+import { Separator } from "@workspace/ui/components/separator"
 
 export default function ProfilePage() {
   const { user } = useUser()
-  const isMobile = useIsMobile()
+  // const isMobile = useIsMobile()
   return (
-    <div className={"m-auto flex flex-col items-center justify-center gap-2"}>
-      <Avatar className={"rounded-full"} style={{ width: 150, height: 150 }}>
-        <AvatarImage src={undefined} alt={user?.email} />
-        <AvatarFallback className="rounded-full">
-          {" "}
-          {user?.email?.[0]?.toUpperCase()}
-        </AvatarFallback>
-      </Avatar>
-      <p>{user?.email}</p>
-      <p>
-        {user?.surname} {user?.name}
-      </p>
-      <p>{user?.phoneNumber}</p>
-      <p>{isMobile ? "Мобильное устройство" : "Десктоп"}</p>
+    <div className={"m-auto flex flex-col items-start justify-center gap-2"}>
+      <div
+        className={
+          "m-auto flex w-full flex-row items-center justify-start gap-4"
+        }
+      >
+        <Avatar className={"rounded-full"} style={{ width: 150, height: 150 }}>
+          <AvatarImage src={undefined} alt={user?.email} />
+          <AvatarFallback className="rounded-full">
+            {user?.email?.[0]?.toUpperCase()}
+          </AvatarFallback>
+        </Avatar>
+        <div
+          className={
+            "m-auto flex w-full flex-col items-start justify-start gap-1"
+          }
+        >
+          <p className={"text-xl"}>
+            {user?.surname} {user?.name}
+          </p>
+          <Separator />
+          <div className={"flex items-center justify-center gap-2"}>
+            <IconMail stroke={2} className={"size-5 text-gray-400"} />
+            <p className={"text-sm text-gray-400"}>{user?.email}</p>
+          </div>
+          <div className={"flex items-center justify-center gap-2"}>
+            <IconPhone stroke={2} className={"size-5 text-gray-400"} />
+            <p className={"text-sm text-gray-400"}>{user?.phoneNumber}</p>
+          </div>
+        </div>
+      </div>
+      {/*<p>{isMobile ? "Мобильное устройство" : "Десктоп"}</p>*/}
       <EditProfileSheet />
     </div>
   )
