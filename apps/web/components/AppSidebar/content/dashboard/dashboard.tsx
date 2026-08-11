@@ -8,7 +8,6 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@workspace/ui/components/sidebar"
-import { usePathname } from "next/navigation"
 import { DynamicModuleLoader } from "@/lib/redux"
 import {
   companiesSimpleListReducer,
@@ -29,8 +28,6 @@ export interface DashboardProps {}
 export const Dashboard = memo((props: DashboardProps) => {
   const {} = props
 
-  const path = usePathname()
-
   const { data } = useCompaniesSimpleList()
 
   return (
@@ -41,7 +38,7 @@ export const Dashboard = memo((props: DashboardProps) => {
       <Collapsible defaultOpen className="group/collapsible">
         {/*Группа*/}
         <SidebarGroup>
-          <SidebarGroupLabel asChild>
+          <SidebarGroupLabel asChild className={"m-0 p-0"}>
             <CollapsibleTrigger>
               <Link
                 className={
@@ -49,8 +46,8 @@ export const Dashboard = memo((props: DashboardProps) => {
                 }
                 href={ROUTE.DASHBOARD.href}
               >
-                <IconLayoutDashboard className="size-5!" />
-                <div className="text-base">{ROUTE.DASHBOARD.name}</div>
+                <IconLayoutDashboard className="size-3" />
+                <div className="text-sm">{ROUTE.DASHBOARD.name}</div>
               </Link>
               <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
             </CollapsibleTrigger>
@@ -67,7 +64,7 @@ export const Dashboard = memo((props: DashboardProps) => {
                       href={`/dashboard?companyId=${company.id}`}
                     >
                       <IconBuilding className="size-3" />
-                      <div className="truncate text-xs">{company.name}</div>
+                      <div className="text-xs">{company.name}</div>
                     </Link>
                   </SidebarMenuSubButton>
                 ))}
@@ -79,35 +76,3 @@ export const Dashboard = memo((props: DashboardProps) => {
     </DynamicModuleLoader>
   )
 })
-
-//   <Collapsible defaultOpen className="group/collapsible">
-//   <SidebarGroup>
-//   {/*<SidebarGroupLabel asChild>*/}
-// {/*  */}
-// {/*</SidebarGroupLabel>*/}
-// <SidebarMenuItem>
-//   <CollapsibleTrigger>
-//     <SidebarMenuButton
-//       asChild
-//       isActive={path === ROUTE.DASHBOARD.href}
-//     >
-//
-//       <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
-//   </CollapsibleTrigger>
-//   <Link href={ROUTE.DASHBOARD.href}>
-//     <IconLayoutDashboard className="size-5!" />
-//     <span className="text-base">{ROUTE.DASHBOARD.name}</span>
-//   </Link>
-// </SidebarMenuButton>
-// <CollapsibleContent>
-//   <SidebarMenuSub>
-//     {data.map((company) => (
-//       <SidebarMenuSubItem key={company.id}>
-//         <div className={"size-3 font-light"}>{company.name}</div>
-//       </SidebarMenuSubItem>
-//     ))}
-//   </SidebarMenuSub>
-// </CollapsibleContent>
-// </SidebarMenuItem>
-// </SidebarGroup>
-// </Collapsible>

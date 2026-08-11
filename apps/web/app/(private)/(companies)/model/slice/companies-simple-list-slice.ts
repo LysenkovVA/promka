@@ -4,6 +4,7 @@ import { ICompanyEntity } from "../types/ICompanyEntity"
 import { getCompaniesSimpleListThunk } from "@/app/(private)/(companies)/model/thunks/get-companies-simple-list-thunk"
 import { companyAdapter } from "@/app/(private)/(companies)/model/adapter/companyAdapter"
 import { upsertCompanyThunk } from "@/app/(private)/(companies)/model/thunks/upsert-company-thunk"
+import { deleteCompanyByIdThunk } from "@/app/(private)/(companies)/model/thunks/delete-company-by-id-thunk"
 
 const initialState: SimpleListReduxSchema<ICompanyEntity> = {
   ids: [],
@@ -60,6 +61,13 @@ export const companiesSimpleListSlice = createSlice({
         (state: SimpleListReduxSchema<ICompanyEntity>, action) => {
           if (action.payload.data)
             companyAdapter.upsertOne(state, action.payload.data)
+        }
+      )
+      .addCase(
+        deleteCompanyByIdThunk.fulfilled,
+        (state: SimpleListReduxSchema<ICompanyEntity>, action) => {
+          if (action.payload.data && action.payload.data?.id)
+            companyAdapter.removeOne(state, action.payload.data?.id)
         }
       )
   },

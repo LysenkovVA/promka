@@ -1,6 +1,6 @@
 "use client"
 
-import { memo, useState } from "react"
+import { memo, useCallback, useState } from "react"
 import {
   Item,
   ItemActions,
@@ -13,12 +13,16 @@ import {
   IconEditFilled,
   IconLocationPin,
   IconRosetteDiscountCheck,
+  IconTrash,
 } from "@tabler/icons-react"
 import { EditCompanySheet } from "@/app/(private)/(companies)/ui/edit-company-sheet/edit-company-sheet"
 import { Button } from "@workspace/ui/components/button"
 import { useRouter } from "next/navigation"
 import { useAppDispatch, useAppSelector } from "@/lib/redux"
 import { getAuthData } from "@/app/(auth)/model/selectors/authSelectors"
+import { YesNoDialog } from "@/components/YesNoDialog/YesNoDialog"
+import { deleteCompanyByIdThunk } from "@/app/(private)/(companies)/model/thunks/delete-company-by-id-thunk"
+import { toast } from "sonner"
 
 export interface CompanyWidgetProps {
   company: ICompanyEntity
@@ -28,11 +32,24 @@ export const CompanyWidget = memo((props: CompanyWidgetProps) => {
   const { company } = props
 
   const [sheetIsOpen, setSheetIsOpen] = useState(false)
+  const [deleteModalIsOpen, setdeleteModalIsOpen] = useState(false)
 
   const dispatch = useAppDispatch()
   const authData = useAppSelector(getAuthData)
 
   const router = useRouter()
+
+  const deleteOrganizationCallback = useCallback(async () => {
+    if (company?.id) {
+      const result = await dispatch(deleteCompanyByIdThunk({ id: company.id }))
+
+      if (result.meta.requestStatus === "fulfilled") {
+        toast.success("Организация удалена", { position: "top-center" })
+      } else {
+        toast.error(JSON.stringify(result.payload))
+      }
+    }
+  }, [company.id, dispatch])
 
   return (
     <>
@@ -74,7 +91,9 @@ export const CompanyWidget = memo((props: CompanyWidgetProps) => {
             </div>
           </div>
         </ItemContent>
-        <ItemActions className={"h-full"}>
+        <ItemActions
+          className={"flex h-full flex-col items-center justify-center"}
+        >
           <Button
             className={"cursor-pointer"}
             variant={"outline"}
@@ -85,6 +104,16 @@ export const CompanyWidget = memo((props: CompanyWidgetProps) => {
           >
             <IconEditFilled className={"fill-orange-300"} />
           </Button>
+          <Button
+            className={"cursor-pointer"}
+            variant={"outline"}
+            onClick={(e) => {
+              e.stopPropagation()
+              setdeleteModalIsOpen(true)
+            }}
+          >
+            <IconTrash className={"text-red-400"} />
+          </Button>
         </ItemActions>
       </Item>
       {sheetIsOpen && (
@@ -92,6 +121,19 @@ export const CompanyWidget = memo((props: CompanyWidgetProps) => {
           isOpen={sheetIsOpen}
           handleOpenChange={(isOpen) => setSheetIsOpen(isOpen)}
           companyId={company?.id ?? undefined}
+        />
+      )}
+      {deleteModalIsOpen && (
+        <YesNoDialog
+          isOpen={deleteModalIsOpen}
+          onOpenChange={(isOpen) => setdeleteModalIsOpen(isOpen)}
+          title={"Удаление"}
+          content={"Удалить выбранную организацию?"}
+          onSubmit={async () => {
+            setdeleteModalIsOpen(false)
+            await deleteOrganizationCallback()
+          }}
+          onClose={() => setdeleteModalIsOpen(false)}
         />
       )}
     </>

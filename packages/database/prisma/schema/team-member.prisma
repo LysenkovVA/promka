@@ -5,7 +5,7 @@ model TeamMember {
   id String @id @default(cuid())
 
   // Пользователь (участник)
-  user   User   @relation(name: "user-team-members", fields: [userId], references: [id])
+  user   User   @relation(name: "user-team-members", fields: [userId], references: [id], onDelete: Cascade)
   userId String
 
   // Роль участника
@@ -15,7 +15,7 @@ model TeamMember {
   workspacePermissions WorkspacePermissions?
 
   // Принадлежность к рабочему пространству
-  workspace   Workspace @relation(name: "workspace-team-members", fields: [workspaceId], references: [id])
+  workspace   Workspace @relation(name: "workspace-team-members", fields: [workspaceId], references: [id], onDelete: Cascade)
   workspaceId String
 
   @@map("team-members")
