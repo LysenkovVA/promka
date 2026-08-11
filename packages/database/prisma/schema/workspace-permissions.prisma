@@ -1,0 +1,15 @@
+/**
+ * Разрешения TeamMember-а рабочего пространства
+ */
+model WorkspacePermissions {
+  id        String  @id @default(cuid())
+  canRead   Boolean @default(true)
+  canWrite  Boolean @default(true)
+  canDelete Boolean @default(true)
+
+  // Участник (один-к-одному)
+  teamMember   TeamMember @relation(fields: [teamMemberId], references: [id], onDelete: Cascade)
+  teamMemberId String     @unique
+
+  @@map("workspace-permissions")
+}

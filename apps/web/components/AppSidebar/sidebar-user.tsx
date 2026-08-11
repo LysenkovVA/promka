@@ -5,7 +5,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar,
 } from "@workspace/ui/components/sidebar"
 import {
   DropdownMenu,
@@ -33,13 +32,14 @@ import Link from "next/link"
 import { ROUTE } from "@/config/routes"
 import { useAppDispatch } from "@/lib/redux"
 import { logoutThunk } from "@/app/(auth)/model/thunks/logoutThunk"
+import { useIsMobile } from "@workspace/ui/hooks/use-mobile"
 
 export interface ServerSideProps {
   user: IUserEntity | undefined
 }
 
 export function SidebarUser(props: ServerSideProps) {
-  const { isMobile } = useSidebar()
+  const isMobile = useIsMobile()
 
   const { user } = props
 
@@ -57,12 +57,11 @@ export function SidebarUser(props: ServerSideProps) {
               <Avatar className="h-8 w-8 rounded-lg grayscale">
                 <AvatarImage src={""} alt={user?.email} />
                 <AvatarFallback className="rounded-lg">
-                  {" "}
-                  {user?.email?.[0]}
+                  {user?.name?.[0] ?? user?.email?.[0]}
                 </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{user?.email}</span>
+                <span className="truncate font-medium">{user?.name}</span>
                 <span className="truncate text-xs text-muted-foreground">
                   {user?.email}
                 </span>

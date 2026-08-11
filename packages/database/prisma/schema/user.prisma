@@ -1,9 +1,28 @@
 model User {
-  id             String @id @default(cuid())
-  email          String
-  hashedPassword String
+  id                   String    @id @default(cuid())
+  // Email
+  email                String
+  // Хешированный пароль
+  hashedPassword       String
+  // Номер телефона
+  phoneNumber          String?
+  // Признак того, что email подтвержден
+  emailConfirmed       Boolean   @default(false)
+  // Признак того, что телефон подтвержден
+  phoneNumberConfirmed Boolean   @default(false)
+  // Фамилия
+  surname              String?
+  // Имя
+  name                 String?
+  // Дата рождения
+  birthDate            DateTime?
+  // URL аватара
+  avatar               File?     @relation(name: "user-avatar")
 
   refreshTokens RefreshToken[] @relation(name: "user-refreshTokens")
 
+  teamMembers TeamMember[] @relation(name: "user-team-members")
+
+  @@index([email])
   @@map("users")
 }

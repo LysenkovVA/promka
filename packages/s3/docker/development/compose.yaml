@@ -1,0 +1,22 @@
+# РАЗРАБОТКА
+
+name: "promka_dev"
+services:
+  minio:
+    container_name: "${MINIO_CONTAINER_NAME}"
+    image: bitnami/minio:latest
+    ports:
+      - "${MINIO_API_PORT_NUMBER}:${MINIO_API_PORT_NUMBER}"
+      - "${MINIO_CONSOLE_PORT_NUMBER}:${MINIO_CONSOLE_PORT_NUMBER}"
+    environment:
+      # https://hub.docker.com/r/bitnami/minio
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
+      - MINIO_DEFAULT_BUCKETS=${MINIO_DEFAULT_BUCKET}
+      - MINIO_API_PORT_NUMBER=${MINIO_API_PORT_NUMBER}
+      - MINIO_CONSOLE_PORT_NUMBER=${MINIO_CONSOLE_PORT_NUMBER}
+      - MINIO_SERVER_ACCESS_KEY=${MINIO_ACCESS_KEY}
+      - MINIO_SERVER_SECRET_KEY=${MINIO_SECRET_KEY}
+    volumes:
+      - ${MINIO_VOLUME_DATA}:/bitnami/minio/data
+    restart: unless-stopped

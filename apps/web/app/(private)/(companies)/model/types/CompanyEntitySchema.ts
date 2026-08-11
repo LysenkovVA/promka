@@ -24,14 +24,26 @@ export const CompanyEntitySchema: ZodType<ICompanyEntity> = z.object(
         },
       })
       .nullish(),
-    name: z.string({
-      error: (issue) => {
-        switch (issue.code) {
-          case "invalid_type":
-            return ZOD_INVALID_STRING_TYPE
-        }
-      },
-    }),
+    name: z
+      .string({
+        error: (issue) => {
+          switch (issue.code) {
+            case "invalid_type":
+              return ZOD_INVALID_STRING_TYPE
+          }
+        },
+      })
+      .min(1, { error: "Название компании обязательно" }),
+    address: z
+      .string({
+        error: (issue) => {
+          switch (issue.code) {
+            case "invalid_type":
+              return ZOD_INVALID_STRING_TYPE
+          }
+        },
+      })
+      .nullish(),
   },
   /**
    * Параметры объекта

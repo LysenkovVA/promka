@@ -21,22 +21,10 @@ async function clearSession() {
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  // // Признак API-запроса
-  // const isApiRoute = pathname.startsWith("/api")
-  // // Признак публичного маршрута
-  // const isPublicPath = publicPaths.includes(pathname)
-
   // 🔓 Публичные маршруты — разрешаем
   if (publicPaths.includes(pathname)) {
-    // console.warn(
-    //   `[${dayjs().format("HH:mm:ss")}][middleware] Публичный маршрут: ${pathname}`
-    // )
     return NextResponse.next()
   }
-
-  // console.log(
-  //   `[${dayjs().format("HH:mm:ss")}][SERVER][middleware][${request.method}][НЕ Публичный маршрут][${pathname}]`
-  // )
 
   // 🍪 Получаем токены
   const cookieStore = await cookies()
@@ -47,15 +35,9 @@ export async function proxy(request: NextRequest) {
     const verifiedAccessToken = await verifyAccessToken(accessToken)
 
     if (verifiedAccessToken) {
-      // console.log("[middleware] Access token валиден")
       return NextResponse.next()
     }
   }
-
-  // // ❌ Нет access token
-  // console.error(
-  //   `[${dayjs().format("HH:mm:ss")}][SERVER][middleware][${request.method}][Access token отсутствует][${pathname}]`
-  // )
 
   const refreshToken = cookieStore.get("refreshToken")?.value
 
@@ -63,24 +45,9 @@ export async function proxy(request: NextRequest) {
     await clearSession()
 
     // 🌐 Страница: Делаем редирект на /
-    // console.error(`[middleware] Страница: Redirect to /`)
     const url = request.nextUrl.clone()
     url.pathname = "/"
     return NextResponse.redirect(url)
-
-    // if (isApiRoute) {
-    //   // 🚫 API: Возвращаем 401, НЕ делаем редирект
-    //   console.error(`[middleware] API: Refresh token отсутствует → 401`)
-    //   return ResponseData.NotAuthorized([
-    //     "Требуется авторизация",
-    //   ]).toNextResponse()
-    // } else {
-    //   // 🌐 Страница: Делаем редирект на /
-    //   console.error(`[middleware] Страница: Redirect to /`)
-    //   const url = request.nextUrl.clone()
-    //   url.pathname = "/"
-    //   return NextResponse.redirect(url)
-    // }
   }
 
   // 🔄 Есть refresh token — пробуем обновить
@@ -90,43 +57,24 @@ export async function proxy(request: NextRequest) {
     await clearSession()
 
     // 🌐 Страница: Редирект на /
-    // console.error(
-    //   `[middleware] Страница: Refresh token недействителен → Redirect to /`
-    // )
     const url = request.nextUrl.clone()
     url.pathname = "/"
     return NextResponse.redirect(url)
-
-    // if (isApiRoute) {
-    //   // 🚫 API: Возвращаем 401
-    //   console.error(`[middleware] API: Refresh token недействителен → 401`)
-    //   return ResponseData.NotAuthorized(["Сессия истекла"]).toNextResponse()
-    // } else {
-    //   // 🌐 Страница: Редирект на /
-    //   console.error(
-    //     `[middleware] Страница: Refresh token недействителен → Redirect to /`
-    //   )
-    //   const url = request.nextUrl.clone()
-    //   url.pathname = "/"
-    //   return NextResponse.redirect(url)
-    // }
   }
 
   // ✅ Успешно обновили сессию — устанавливаем новый access token
   const expiresInAccess = new Date(
+    // eslint-disable-next-line turbo/no-undeclared-env-vars
     Date.now() + Number(process.env.ACCESS_TOKEN_LIVE_NUMBER)
   )
   const encryptedSessionAccessToken = await createAccessToken(session)
-
-  // const response = isApiRoute
-  //   ? NextResponse.next() // Для API — не редиректим, просто добавляем куку
-  //   : NextResponse.redirect(request.url) // Для страниц — редиректим, чтобы следующий запрос был с новой кукой
 
   // Для страниц — редиректим, чтобы следующий запрос был с новой кукой
   const response = NextResponse.redirect(request.url)
 
   response.cookies.set("accessToken", encryptedSessionAccessToken, {
     httpOnly: true,
+    // eslint-disable-next-line turbo/no-undeclared-env-vars
     secure: process.env.NODE_ENV === "production",
     expires: expiresInAccess,
     sameSite: "lax",
@@ -136,7 +84,6 @@ export async function proxy(request: NextRequest) {
   return response
 }
 
-// ⚠️ Middleware применяется ко всем путям, кроме статики
 export const config = {
   matcher: [
     /*

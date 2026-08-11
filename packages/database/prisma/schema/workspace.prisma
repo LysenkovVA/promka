@@ -1,0 +1,16 @@
+/**
+ * Рабочее пространство
+ * Эта сущность отвечает за связь пользователей и компаний
+ */
+model Workspace {
+  id String @id @default(cuid())
+
+  // Компания
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  companyId String  @unique
+
+  // Участники рабочего пространства
+  teamMembers TeamMember[] @relation(name: "workspace-team-members")
+
+  @@map("workspaces")
+}

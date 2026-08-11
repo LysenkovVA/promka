@@ -1,0 +1,14 @@
+/**
+ * Компания
+ */
+model Company {
+  id      String  @id @default(cuid())
+  name    String
+  address String?
+
+  // Рабочее пространство
+  workspace Workspace?
+
+  @@index([name])
+  @@map("companies")
+}

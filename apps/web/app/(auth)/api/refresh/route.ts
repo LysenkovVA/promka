@@ -29,7 +29,10 @@ export async function POST(request: NextRequest) {
       ]).toNextResponse()
     }
 
-    const user = await prisma.user.findFirst({ where: { id: session.user.id } })
+    const user = await prisma.user.findFirst({
+      where: { id: session.user.id },
+      // include: { companies: true },
+    })
 
     if (!user) {
       return ResponseData.Forbidden([

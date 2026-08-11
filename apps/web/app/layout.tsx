@@ -2,7 +2,11 @@ import { Geist, Geist_Mono } from "next/font/google"
 
 import "@workspace/ui/globals.css"
 import { cn } from "@workspace/ui/lib/utils"
-import { ClientProviders } from "@/components/ClientProviders"
+import { ThemeProvider } from "@/components/theme-provider"
+import { StoreProvider } from "@/lib/redux"
+import { AuthProvider } from "@/app/(auth)/ui/AuthProvider"
+import { Toaster } from "@workspace/ui/components/sonner"
+import { TooltipProvider } from "@workspace/ui/components/tooltip"
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" })
 
@@ -16,7 +20,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  // console.log("🌞RootLayout отрисован")
   return (
     <html
       lang="en"
@@ -29,7 +32,15 @@ export default function RootLayout({
       )}
     >
       <body>
-        <ClientProviders>{children}</ClientProviders>
+        {/*<ClientProviders>{children}</ClientProviders>*/}
+        <TooltipProvider>
+          <ThemeProvider>
+            <StoreProvider>
+              <AuthProvider>{children}</AuthProvider>
+            </StoreProvider>
+          </ThemeProvider>
+          <Toaster />
+        </TooltipProvider>
       </body>
     </html>
   )

@@ -12,7 +12,7 @@ import { SessionData } from "../types/sessionData"
 /**
  * Получение сессии пользователя из файлов cookie
  */
-export async function getSession(): Promise<SessionData | null> {
+export async function getSessionData(): Promise<SessionData | null> {
   try {
     const cookieStore = await cookies()
     const accessToken = cookieStore.get("accessToken")?.value

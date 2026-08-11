@@ -1,5 +1,9 @@
 import { GlobalStateSchema } from "../../../../lib/redux"
 
+export const getAuthData = (state: GlobalStateSchema) => {
+  return state.authSchema?.entityData ?? undefined
+}
+
 export const getAuthDataUser = (state: GlobalStateSchema) => {
   return state.authSchema?.entityData?.user ?? undefined
 }

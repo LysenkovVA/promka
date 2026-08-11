@@ -21,6 +21,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     // Поиск пользователя в БД
     const candidate = await prisma.user.findFirst({
       where: { email: validatedData.email },
+      include: { avatar: true },
     })
 
     // Пользователь не найден

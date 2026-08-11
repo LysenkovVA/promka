@@ -4,7 +4,10 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./*"],
-      "@workspace/ui/*": ["../../packages/ui/src/*"]
+      "@workspace/ui/*": ["../../packages/ui/src/*"],
+      // Модули
+      "@/Files": ["./app/(private)/(files)/index.ts"],
+      "@/Files/*": ["./app/(private)/(files)/*"]
     },
     "plugins": [
       {

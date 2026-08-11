@@ -1,5 +1,7 @@
 "use client"
 
+import { CompaniesWidgetList } from "../../../(companies)/ui/companies-widget-list/companies-widget-list"
+
 const getDeviceInfo = () => {
   return {
     userAgent: navigator.userAgent,
@@ -38,10 +40,6 @@ const isSmallScreen = (): boolean => {
   return window.matchMedia("(max-width: 768px)").matches
 }
 
-export default function Page() {
-  return (
-    <h1 className={"m-auto flex items-center justify-start font-light"}>
-      Здесь будет Dashboard
-    </h1>
-  )
+export default function DashboardCompaniesPage() {
+  return <CompaniesWidgetList />
 }

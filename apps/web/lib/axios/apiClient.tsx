@@ -7,10 +7,6 @@ import { ResponseData } from "@/lib/responses/ResponseData"
 
 // Эндпоинт для обновления токена
 const REFRESH_TOKEN_URL = "/refresh"
-// // Эндпоинт для выхода
-// const LOGOUT_URL = "/logout"
-// // Эндпоинты, для которых НЕ нужно делать refresh
-// const NO_REFRESH_URLS = ["/", "/login", "/logout"]
 
 // Флаг: идёт ли сейчас обновление токена
 let isRefreshing = false
@@ -23,42 +19,14 @@ const processQueue = (error: any, token: string | null) => {
   failedRequestsQueue = []
 }
 
-// // Экспортируем функцию logout
-// export const logout = async () => {
-//   try {
-//     // Отправляем запрос на logout (сервер удалит refresh-токен, например)
-//     await apiClient.post(
-//       LOGOUT_URL,
-//       {},
-//       {
-//         withCredentials: true,
-//       }
-//     )
-//   } catch (error) {
-//     // Игнорируем ошибки logout — пользователь всё равно выходит
-//     // console.warn("Logout request failed, proceeding anyway", error)
-//   } finally {
-//     // Очищаем флаги и очередь
-//     isRefreshing = false
-//     failedRequestsQueue = []
-//
-//     // Очистка локального состояния (если используется localStorage)
-//     // Например:
-//     // localStorage.removeItem('accessToken')
-//
-//     // Редирект на страницу входа
-//     // Редирект в AuthProvider
-//     // window.location.href = process.env.NEXT_PUBLIC_PATH!
-//   }
-// }
-
 // Создаём экземпляр axios
 const apiClient = axios.create({
   baseURL:
     process.env.NEXT_PUBLIC_API_PATH || "Error reading env file for axios", // Базовый URL API
   timeout: 10000,
   headers: {
-    "Content-Type": "application/json",
+    /* Content-Type устанавливается автоматически браузером для FormData,
+       а для JSON-запросов задаётся явно в опциях каждого запроса */
   },
   withCredentials: true, // ← позволяет отправлять cookies
 })
@@ -110,13 +78,6 @@ apiClient.interceptors.response.use(
         // Повторяем оригинальный запрос
         return apiClient(originalRequest)
       } catch (refreshError) {
-        // Если refresh тоже упал — разлогиниваем
-        toast.error("Refresh токен протух", {
-          position: "top-center",
-          style: { color: "tomato" },
-          description: "Axios",
-        })
-        // window.location.href = process.env.NEXT_PUBLIC_PATH!
         processQueue(refreshError, null)
 
         return Promise.reject(refreshError)
@@ -134,16 +95,18 @@ apiClient.interceptors.response.use(
         break
       case 500:
         if (errorData?.errorMessages) {
-          toast.error(`${errorData.errorMessages} (axios)`, {
+          toast.error(`${errorData.errorMessages}`, {
             position: "top-center",
+            duration: 5000,
+            dismissible: true,
             style: { color: "tomato" },
-            description: "Axios",
+            // description: "Ошибка",
           })
         } else {
-          toast.error("Неизвестная ошибка (axios)", {
+          toast.error("Неизвестная ошибка", {
             position: "top-center",
             style: { color: "tomato" },
-            description: "Axios",
+            // description: "Ошибка",
           })
         }
         break

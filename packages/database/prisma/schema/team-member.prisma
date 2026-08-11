@@ -1,0 +1,30 @@
+/**
+ * Участник рабочего пространства
+ */
+model TeamMember {
+  id String @id @default(cuid())
+
+  // Пользователь (участник)
+  user   User   @relation(name: "user-team-members", fields: [userId], references: [id])
+  userId String
+
+  // Роль участника
+  teamMemberRole TeamMemberRole @default(MEMBER)
+
+  // Разрешения участника в рабочем пространстве (один-к-одному)
+  workspacePermissions WorkspacePermissions?
+
+  // Принадлежность к рабочему пространству
+  workspace   Workspace @relation(name: "workspace-team-members", fields: [workspaceId], references: [id])
+  workspaceId String
+
+  @@map("team-members")
+}
+
+/**
+ * Роль участника в рабочем пространстве
+ */
+enum TeamMemberRole {
+  ADMIN
+  MEMBER
+}

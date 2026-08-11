@@ -1,0 +1,13 @@
+model File {
+  id            String @id @default(cuid())
+  s3name        String
+  size          Int
+  mimeType      String
+  fileName      String
+
+  user   User?   @relation(name: "user-avatar", fields: [userId], references: [id], onDelete: Cascade)
+  userId String? @unique
+
+  @@index([fileName])
+  @@map("files")
+}
