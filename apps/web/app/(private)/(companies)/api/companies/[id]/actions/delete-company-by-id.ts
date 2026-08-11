@@ -38,31 +38,6 @@ export async function deleteCompanyByIdAtTransaction(
       return ResponseData.BadRequest([`Организация с ID=${id} не была удалена`])
     }
 
-    // const workspace = await prismaTransaction.workspace.findFirst({
-    //   where: {
-    //     company: {
-    //       id: id,
-    //     },
-    //   },
-    //   include: {
-    //     company: true,
-    //   },
-    // })
-    //
-    // if (!workspace) {
-    //   return ResponseData.BadRequest([`Организация с ID=${id} не была удалена`])
-    // }
-
-    // await prismaTransaction.workspace.delete({ where: { id: workspace.id } })
-
-    // const candidate = await prismaTransaction.company.delete({
-    //   where: { id },
-    // })
-    //
-    // if (!candidate) {
-    //   return ResponseData.BadRequest([`Организация с ID=${id} не была удалена`])
-    // }
-
     return ResponseData.Ok<ICompanyEntity>(
       JSON.parse(JSON.stringify(candidate)) as ICompanyEntity
     )

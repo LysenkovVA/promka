@@ -40,14 +40,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   /**
    * Отображение ошибки
    */
-  useEffect(() => {
-    if (error) {
-      toast.error(`${error}`, {
-        position: "top-center",
-        description: "Ошибка в AuthProvider",
-      })
-    }
-  }, [error])
+  // useEffect(() => {
+  //   if (error) {
+  //     toast.error(`${error}`, {
+  //       position: "top-center",
+  //       description: "Ошибка в AuthProvider",
+  //     })
+  //   }
+  // }, [error])
 
   /**
    * Обработка редиректов
@@ -62,7 +62,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         )
       }
     } else {
-      if (!authUser?.id) {
+      if (!authUser?.id && path !== "/" && path !== "/register") {
         if (process.env.NEXT_PUBLIC_PATH) {
           router.push(process.env.NEXT_PUBLIC_PATH)
         } else {

@@ -7,7 +7,7 @@ import {
   verifyRefreshToken,
 } from "@/lib/jose/client/tokens"
 
-const publicPaths = ["/", "/api/login", "/api/refresh"]
+const publicPaths = ["/", "/register", "/api/login", "/api/refresh"]
 
 async function clearSession() {
   try {

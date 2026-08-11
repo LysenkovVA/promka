@@ -8,6 +8,7 @@ import {
   prismaNonExistentId,
   PrismaTransaction,
 } from "@workspace/database/prisma"
+import { Prisma } from "@workspace/database/.generated/client"
 
 export async function upsertUserAtTransaction(
   data: IUserEntity,
@@ -30,9 +31,9 @@ export async function upsertUserAtTransaction(
         // }),
         email: validatedData.email!,
         hashedPassword: validatedData.hashedPassword!,
-        surname: validatedData.surname,
-        name: validatedData.name,
-        birthDate: validatedData.birthDate,
+        surname: validatedData.surname ?? Prisma.skip,
+        name: validatedData.name ?? Prisma.skip,
+        birthDate: validatedData.birthDate ?? Prisma.skip,
       },
       /**
        * Обновление записи, если идентификатор задан
@@ -49,12 +50,12 @@ export async function upsertUserAtTransaction(
         //       }),
         email: validatedData.email!,
         hashedPassword: validatedData.hashedPassword!,
-        emailConfirmed: validatedData.emailConfirmed,
-        phoneNumber: validatedData.phoneNumber,
-        phoneNumberConfirmed: validatedData.phoneNumberConfirmed,
-        surname: validatedData.surname,
-        name: validatedData.name,
-        birthDate: validatedData.birthDate,
+        emailConfirmed: validatedData.emailConfirmed ?? Prisma.skip,
+        phoneNumber: validatedData.phoneNumber ?? Prisma.skip,
+        phoneNumberConfirmed: validatedData.phoneNumberConfirmed ?? Prisma.skip,
+        surname: validatedData.surname ?? Prisma.skip,
+        name: validatedData.name ?? Prisma.skip,
+        birthDate: validatedData.birthDate ?? Prisma.skip,
       },
       include: {
         avatar: true,

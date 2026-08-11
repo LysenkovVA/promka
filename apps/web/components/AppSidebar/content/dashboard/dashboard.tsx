@@ -49,7 +49,9 @@ export const Dashboard = memo((props: DashboardProps) => {
                 <IconLayoutDashboard className="size-3" />
                 <div className="text-sm">{ROUTE.DASHBOARD.name}</div>
               </Link>
-              <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
+              {data?.length > 0 && (
+                <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
+              )}
             </CollapsibleTrigger>
           </SidebarGroupLabel>
           <CollapsibleContent>

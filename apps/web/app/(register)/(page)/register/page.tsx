@@ -1,6 +1,5 @@
 "use client"
 
-import { Button } from "@workspace/ui/components/button"
 import {
   Card,
   CardContent,
@@ -8,38 +7,44 @@ import {
   CardHeader,
   CardTitle,
 } from "@workspace/ui/components/card"
+import Image from "next/image"
 import { Field, FieldGroup } from "@workspace/ui/components/field"
 import { Input } from "@workspace/ui/components/input"
-import Image from "next/image"
+import { Button } from "@workspace/ui/components/button"
 import { useCallback, useMemo, useState } from "react"
 import { useAppDispatch } from "@/lib/redux"
-import { loginThunk } from "@/app/(auth)/model/thunks/loginThunk"
+import { upsertUserThunk } from "@/app/(private)/(users)/model/thunks/upsertUserThunk"
+import bcrypt from "bcryptjs"
+import { toast } from "sonner"
 
-export default function Page() {
+export default function RegistrationPage() {
   const [login, setLogin] = useState("")
   const [password, setPassword] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const dispatch = useAppDispatch()
-  // const error = useAppSelector(getUserAuthDataError)
-
-  // useEffect(() => {
-  //   if (error) {
-  //     toast.error(error, { position: "top-center" })
-  //   }
-  // }, [error])
 
   const submitDisabled = useMemo(() => {
     return login.length === 0 || password.length === 0
   }, [login.length, password.length])
 
-  const onLogin = useCallback(async () => {
-    try {
-      setIsSubmitting(true)
-      await dispatch(loginThunk({ email: login, password }))
-      // console.log("Login successful")
-    } finally {
-      setIsSubmitting(false)
+  const onRegisterUser = useCallback(async () => {
+    const result = await dispatch(
+      upsertUserThunk({
+        entityData: {
+          email: login,
+          hashedPassword: bcrypt.hashSync(password, 10),
+          emailConfirmed: false,
+          phoneNumberConfirmed: false,
+        },
+      })
+    )
+
+    if (result.meta.requestStatus === "fulfilled") {
+      toast.success("Пользователь зарегистрирован!", { position: "top-center" })
+      return true
+    } else {
+      toast.error(JSON.stringify(result.payload))
     }
   }, [dispatch, login, password])
 
@@ -72,7 +77,7 @@ export default function Page() {
             />
           </div>
           {/* При необходимости можно добавить заголовок */}
-          <CardTitle>{"Авторизация".toUpperCase()}</CardTitle>
+          <CardTitle>{"Регистрация пользователя".toUpperCase()}</CardTitle>
         </CardHeader>
         <Card
           style={{
@@ -116,13 +121,13 @@ export default function Page() {
               type={"submit"}
               onClick={async (e) => {
                 e.preventDefault()
-                await onLogin()
+                await onRegisterUser()
               }}
               disabled={submitDisabled || isSubmitting}
             >
-              {isSubmitting ? "Вход..." : "Войти"}
+              {isSubmitting ? "Регистрация..." : "Создать"}
             </Button>
-            <a href={"/register"}>Регистрация</a>
+            <a href={"/"}>Авторизация</a>
           </CardFooter>
         </Card>
       </form>
