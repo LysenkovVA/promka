@@ -9,34 +9,34 @@ import {
 import { companyDetailsReducer } from "@/app/(private)/(companies)/model/slice/company-details-slice"
 import { getCompanyDetailsData } from "@/app/(private)/(companies)/model/selectors/company-details-selectors"
 import { getCompanyByIdThunk } from "@/app/(private)/(companies)/model/thunks/get-company-by-id-thunk"
-import { getAuthData } from "@/app/(auth)/model/selectors/authSelectors"
 import { ResponseData } from "@/lib/responses/ResponseData"
 import { ICompanyEntity } from "@/app/(private)/(companies)"
 import { changeActiveCompanyThunk } from "@/app/(auth)/model/thunks/changeActiveCompanyThunk"
+import { getCompaniesSimpleList } from "@/app/(private)/(companies)/model/selectors/companies-simple-list-selectors"
 
 export interface CompanyDashboardProps {
-  companyId: string
+  workspaceId: string
 }
 
 export const CompanyDashboard = memo((props: CompanyDashboardProps) => {
-  const { companyId } = props
+  const { workspaceId } = props
 
   const dispatch = useAppDispatch()
   const data = useAppSelector(getCompanyDetailsData)
-  const authData = useAppSelector(getAuthData)
+  const companies = useAppSelector(getCompaniesSimpleList.selectAll)
 
   useEffect(() => {
-    dispatch(getCompanyByIdThunk({ id: companyId })).then((data) => {
-      const company = data.payload as ResponseData<ICompanyEntity>
+    const comp = companies?.find((c) => c.workspace?.id === workspaceId)
+    if (comp && comp.id) {
+      dispatch(getCompanyByIdThunk({ id: comp.id })).then((data) => {
+        const company = data.payload as ResponseData<ICompanyEntity>
 
-      if (company?.data) {
-        // dispatch(
-        //   authActions.setData({ ...authData!, activeCompany: company.data })
-        // )
-        dispatch(changeActiveCompanyThunk({ company: company.data }))
-      }
-    })
-  }, [companyId, dispatch])
+        if (company?.data) {
+          dispatch(changeActiveCompanyThunk({ company: company.data }))
+        }
+      })
+    }
+  }, [companies, dispatch, workspaceId])
 
   return (
     <DynamicModuleLoader

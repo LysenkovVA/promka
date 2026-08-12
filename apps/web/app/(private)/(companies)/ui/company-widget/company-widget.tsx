@@ -60,7 +60,7 @@ export const CompanyWidget = memo((props: CompanyWidgetProps) => {
           // dispatch(
           //   authActions.setData({ ...authData!, activeCompany: company })
           // )
-          router.push(`/dashboard?companyId=${company.id}`)
+          router.push(`/dashboard?workspaceId=${company.workspace?.id}`)
         }}
       >
         <ItemContent className={"h-full w-full"}>

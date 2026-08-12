@@ -7,13 +7,8 @@ import {
   useCompaniesSimpleList,
 } from "@/app/(private)/(companies)"
 import { CompanyWidgetSkeleton } from "../company-widget/company-widget-skeleton"
-import {
-  DynamicModuleLoader,
-  useAppDispatch,
-  useAppSelector,
-} from "@/lib/redux"
+import { DynamicModuleLoader, useAppDispatch } from "@/lib/redux"
 import { AddNewCompanyWidget } from "@/app/(private)/(companies)/ui/add-new-company-widget/add-new-company-widget"
-import { getAuthData } from "@/app/(auth)/model/selectors/authSelectors"
 import { useSearchParams } from "next/navigation"
 import { CompanyDashboard } from "@/app/(private)/(companies)/ui/dashboard/CompanyDashboard"
 import { changeActiveCompanyThunk } from "@/app/(auth)/model/thunks/changeActiveCompanyThunk"
@@ -24,18 +19,17 @@ export const CompaniesWidgetList = memo((props: CompaniesWidgetListProps) => {
   const { data, isFetching } = useCompaniesSimpleList()
 
   const searchParams = useSearchParams()
-  const companyId = searchParams.get("companyId")
+  const workspaceId = searchParams.get("workspaceId")
 
   const dispatch = useAppDispatch()
-  const authData = useAppSelector(getAuthData)
 
   useEffect(() => {
     // dispatch(authActions.setData({ ...authData!, activeCompany: undefined }))
     dispatch(changeActiveCompanyThunk({ company: undefined }))
   }, [])
 
-  if (companyId) {
-    return <CompanyDashboard companyId={companyId} />
+  if (workspaceId) {
+    return <CompanyDashboard workspaceId={workspaceId} />
   }
 
   return (
