@@ -1,17 +1,24 @@
 "use client"
 
+import { DynamicModuleLoader } from "@/lib/redux"
+import { employeesSimpleListReducer } from "@/app/(private)/(employees)/model/slice/employees-simple-list-slice"
+import { useEmployeesSimpleList } from "@/app/(private)/(employees)/hooks/useCompaniesSimpleList"
+import { EmployeeCard } from "@/app/(private)/(employees)/ui/employee-card/employee-card"
+
 export default function EmployeesPage() {
+  const { data, isFetching } = useEmployeesSimpleList()
+
   return (
-    <div>
-      <h1 className={"m-auto flex items-center justify-start font-light"}>
-        Здесь будет страница с сотрудниками
-      </h1>
-      {/* Генерация 50 div'ов */}
-      {[...Array(50)].map((_, index) => (
-        <div key={index} className="my-2 border p-4">
-          Сотрудник {index + 1}
-        </div>
-      ))}
-    </div>
+    <DynamicModuleLoader
+      reducers={{ employeesSimpleListSchema: employeesSimpleListReducer }}
+      removeAfterUnmount={false}
+    >
+      <div className={"mb-4 text-xl font-bold"}>Сотрудники</div>
+      <div className="grid w-full grid-cols-3 gap-2 p-2 font-light">
+        {data?.map((employee) => {
+          return <EmployeeCard key={employee.id} employee={employee} />
+        })}
+      </div>
+    </DynamicModuleLoader>
   )
 }

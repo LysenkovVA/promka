@@ -13,10 +13,10 @@ import {
   useAppSelector,
 } from "@/lib/redux"
 import { AddNewCompanyWidget } from "@/app/(private)/(companies)/ui/add-new-company-widget/add-new-company-widget"
-import { authActions } from "@/app/(auth)"
 import { getAuthData } from "@/app/(auth)/model/selectors/authSelectors"
 import { useSearchParams } from "next/navigation"
 import { CompanyDashboard } from "@/app/(private)/(companies)/ui/dashboard/CompanyDashboard"
+import { changeActiveCompanyThunk } from "@/app/(auth)/model/thunks/changeActiveCompanyThunk"
 
 export interface CompaniesWidgetListProps {}
 
@@ -30,7 +30,8 @@ export const CompaniesWidgetList = memo((props: CompaniesWidgetListProps) => {
   const authData = useAppSelector(getAuthData)
 
   useEffect(() => {
-    dispatch(authActions.setData({ ...authData!, activeCompany: undefined }))
+    // dispatch(authActions.setData({ ...authData!, activeCompany: undefined }))
+    dispatch(changeActiveCompanyThunk({ company: undefined }))
   }, [])
 
   if (companyId) {

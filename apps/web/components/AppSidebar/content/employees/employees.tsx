@@ -1,6 +1,6 @@
 "use client"
 
-import { memo } from "react"
+import { memo, useState } from "react"
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -9,11 +9,14 @@ import { ROUTE } from "@/config/routes"
 import Link from "next/link"
 import { IconCirclePlusFilled, IconUsers } from "@tabler/icons-react"
 import { Button } from "@workspace/ui/components/button"
+import { EditEmployeeSheet } from "@/app/(private)/(employees)"
 
 export interface EmployeesProps {}
 
 export const Employees = memo((props: EmployeesProps) => {
   const {} = props
+
+  const [sheetIsOpen, setSheetIsOpen] = useState(false)
 
   return (
     <SidebarGroup>
@@ -28,9 +31,16 @@ export const Employees = memo((props: EmployeesProps) => {
             <IconUsers className="size-3" />
             <div>{ROUTE.EMPLOYEES.name}</div>
           </Link>
-          <Button variant={"ghost"}>
+          <Button variant={"ghost"} onClick={() => setSheetIsOpen(true)}>
             <IconCirclePlusFilled className={"fill-green-500"} />
           </Button>
+          {sheetIsOpen && (
+            <EditEmployeeSheet
+              isOpen={sheetIsOpen}
+              handleOpenChange={(isOpen) => setSheetIsOpen(isOpen)}
+              employeeId={undefined}
+            />
+          )}
         </div>
       </SidebarGroupContent>
     </SidebarGroup>

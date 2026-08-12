@@ -13,6 +13,7 @@ export async function getCompanyById(
 
     const candidate = await prisma.company.findFirst({
       where: { id },
+      include: { workspace: true },
     })
 
     if (!candidate) {

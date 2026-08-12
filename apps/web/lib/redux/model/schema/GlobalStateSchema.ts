@@ -3,6 +3,7 @@ import { DetailsReduxSchema } from "@/lib/redux/model/types/DetailsReduxSchema"
 import { IAuthData } from "@/app/(auth)"
 import { SimpleListReduxSchema } from "../types/SimpleListReduxSchema"
 import { ICompanyEntity } from "@/app/(private)/(companies)"
+import { IEmployeeEntity } from "@/app/(private)/(employees)"
 
 /**
  * Схема глобального состояния
@@ -14,6 +15,8 @@ export interface GlobalStateSchema {
   // Динамические
   companiesSimpleListSchema?: SimpleListReduxSchema<ICompanyEntity>
   companyDetailsSchema?: DetailsReduxSchema<ICompanyEntity>
+  employeesSimpleListSchema?: SimpleListReduxSchema<IEmployeeEntity>
+  employeeDetailsSchema?: DetailsReduxSchema<IEmployeeEntity>
 }
 
 /**

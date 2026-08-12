@@ -8,17 +8,6 @@ import {
   useAppSelector,
 } from "@/lib/redux"
 import {
-  employeeDetailsActions,
-  employeeDetailsReducer,
-} from "@/app/(private)/(companies)/model/slice/employee-details-slice"
-import {
-  getEmployeeDetailsData,
-  getEmployeeDetailsFormData,
-  getEmployeeDetailsIsFetching,
-  getEmployeeDetailsIsInitialized,
-} from "@/app/(private)/(companies)/model/selectors/employee-details-selectors"
-import { getEmployeeByIdThunk } from "@/app/(private)/(companies)/model/thunks/get-employee-by-id-thunk"
-import {
   Sheet,
   SheetClose,
   SheetContent,
@@ -28,19 +17,26 @@ import {
   SheetTitle,
 } from "@workspace/ui/components/sheet"
 import { Button } from "@workspace/ui/components/button"
-import { upsertEmployeeThunk } from "@/app/(private)/(companies)/model/thunks/upsert-employee-thunk"
 import { toast } from "sonner"
+import { Field, FieldLabel } from "@workspace/ui/components/field"
 import {
-  Field,
-  FieldLabel,
-  FieldSeparator,
-} from "@workspace/ui/components/field"
+  getEmployeeDetailsData,
+  getEmployeeDetailsFormData,
+  getEmployeeDetailsIsFetching,
+  getEmployeeDetailsIsInitialized,
+} from "../../model/selectors/employee-details-selectors"
+import { getEmployeeByIdThunk } from "../../model/thunks/get-employee-by-id-thunk"
+import { upsertEmployeeThunk } from "../../model/thunks/upsert-employee-thunk"
+import {
+  employeeDetailsActions,
+  employeeDetailsReducer,
+} from "../../model/slice/employee-details-slice"
+import { getAuthData } from "@/app/(auth)/model/selectors/authSelectors"
 
 export interface EditEmployeeSheetProps {
   employeeId?: string
   isOpen: boolean
   handleOpenChange: (isOpen: boolean) => void
-  // onSubmit: () => void
 }
 
 export const EditEmployeeSheet = memo((props: EditEmployeeSheetProps) => {
@@ -51,6 +47,8 @@ export const EditEmployeeSheet = memo((props: EditEmployeeSheetProps) => {
   const isFetching = useAppSelector(getEmployeeDetailsIsFetching)
   const isInitialized = useAppSelector(getEmployeeDetailsIsInitialized)
 
+  const authData = useAppSelector(getAuthData)
+
   useEffect(() => {
     if (isOpen && employeeId && !isFetching && !isInitialized) {
       dispatch(getEmployeeByIdThunk({ id: employeeId }))
@@ -59,8 +57,16 @@ export const EditEmployeeSheet = memo((props: EditEmployeeSheetProps) => {
 
   const onSubmit = useCallback(async () => {
     if (formData) {
+      if (!authData?.activeCompany?.workspace?.id) {
+        toast.error(JSON.stringify("Не удалось определить workspaceId"))
+        return false
+      }
+
       const result = await dispatch(
-        upsertEmployeeThunk({ entityData: formData })
+        upsertEmployeeThunk({
+          entityData: formData,
+          workspaceId: authData?.activeCompany?.workspace?.id,
+        })
       )
 
       if (result.meta.requestStatus === "fulfilled") {
@@ -98,29 +104,28 @@ export const EditEmployeeSheet = memo((props: EditEmployeeSheetProps) => {
           </SheetHeader>
           <div className="grid flex-1 auto-rows-min gap-6 px-4">
             <Field>
-              <FieldLabel htmlFor="sheet-name">Название</FieldLabel>
+              <FieldLabel htmlFor="surname">Фамилия</FieldLabel>
               <Input
-                id="sheet-name"
-                value={formData?.name ?? ""}
+                id="surname"
+                value={formData?.surname ?? ""}
                 onChange={(e) =>
                   dispatch(
                     employeeDetailsActions.setFormData({
-                      data: { ...formData!, name: e.target.value },
+                      data: { ...formData!, surname: e.target.value },
                     })
                   )
                 }
               />
             </Field>
-            <FieldSeparator />
             <Field>
-              <FieldLabel htmlFor="address">Адрес</FieldLabel>
+              <FieldLabel htmlFor="name">Имя</FieldLabel>
               <Input
-                id="address"
-                value={formData?.address ?? ""}
+                id="name"
+                value={formData?.name ?? ""}
                 onChange={(e) =>
                   dispatch(
                     employeeDetailsActions.setFormData({
-                      data: { ...formData!, address: e.target.value },
+                      data: { ...formData!, name: e.target.value },
                     })
                   )
                 }

@@ -1,0 +1,15 @@
+/**
+ * Сотрудник
+ */
+model Employee {
+  id      String  @id @default(cuid())
+  surname String
+  name    String?
+
+  // Рабочее пространство
+  workspace   Workspace? @relation(name: "workspace-employees", fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId String?
+
+  @@index([surname, name])
+  @@map("employees")
+}

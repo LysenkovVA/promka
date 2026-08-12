@@ -9,10 +9,10 @@ import {
 import { companyDetailsReducer } from "@/app/(private)/(companies)/model/slice/company-details-slice"
 import { getCompanyDetailsData } from "@/app/(private)/(companies)/model/selectors/company-details-selectors"
 import { getCompanyByIdThunk } from "@/app/(private)/(companies)/model/thunks/get-company-by-id-thunk"
-import { authActions } from "@/app/(auth)"
 import { getAuthData } from "@/app/(auth)/model/selectors/authSelectors"
 import { ResponseData } from "@/lib/responses/ResponseData"
 import { ICompanyEntity } from "@/app/(private)/(companies)"
+import { changeActiveCompanyThunk } from "@/app/(auth)/model/thunks/changeActiveCompanyThunk"
 
 export interface CompanyDashboardProps {
   companyId: string
@@ -30,9 +30,10 @@ export const CompanyDashboard = memo((props: CompanyDashboardProps) => {
       const company = data.payload as ResponseData<ICompanyEntity>
 
       if (company?.data) {
-        dispatch(
-          authActions.setData({ ...authData!, activeCompany: company.data })
-        )
+        // dispatch(
+        //   authActions.setData({ ...authData!, activeCompany: company.data })
+        // )
+        dispatch(changeActiveCompanyThunk({ company: company.data }))
       }
     })
   }, [companyId, dispatch])

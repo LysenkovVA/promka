@@ -24,9 +24,9 @@ export async function getCompanies(): Promise<
         },
       },
       orderBy: [{ name: "asc" }],
-      // include: {
-      //   workspace: { include: { teamMembers: { include: { user: true } } } },
-      // },
+      include: {
+        workspace: true,
+      },
     })
 
     return ResponseData.Ok<ICompanyEntity[]>(
