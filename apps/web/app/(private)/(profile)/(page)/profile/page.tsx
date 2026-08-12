@@ -14,7 +14,7 @@ export default function ProfilePage() {
   const { user } = useUser()
   // const isMobile = useIsMobile()
   return (
-    <div className={"m-auto flex flex-col items-start justify-center gap-2"}>
+    <div className={"m-auto flex flex-col items-center justify-center gap-3"}>
       <div
         className={
           "m-auto flex w-full flex-row items-center justify-start gap-4"
@@ -28,14 +28,14 @@ export default function ProfilePage() {
         </Avatar>
         <div
           className={
-            "m-auto flex w-full flex-col items-start justify-start gap-1"
+            "m-auto flex w-full flex-col items-start justify-start gap-2"
           }
         >
-          <p className={"text-xl"}>
+          <p className={"text-2xl"}>
             {user?.surname} {user?.name}
           </p>
           <Separator />
-          <div className={"flex items-center justify-center gap-2"}>
+          <div className={"mt-2 flex items-center justify-center gap-2"}>
             <IconMail stroke={2} className={"size-5 text-gray-400"} />
             <p className={"text-sm text-gray-400"}>{user?.email}</p>
           </div>
@@ -45,7 +45,6 @@ export default function ProfilePage() {
           </div>
         </div>
       </div>
-      {/*<p>{isMobile ? "Мобильное устройство" : "Десктоп"}</p>*/}
       <EditProfileSheet />
     </div>
   )

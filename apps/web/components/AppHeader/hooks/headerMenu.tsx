@@ -36,17 +36,24 @@ export const HeaderMenu = memo((props: HeaderMenuProps) => {
             <IconLayoutDashboard className={"size-5! w-fit flex-shrink-0"} />
           </BreadcrumbLink>
         </BreadcrumbItem>
-        <BreadcrumbSeparator />
+
         {/*<BreadcrumbItem>*/}
         {/*  {activeCompany?.id && (*/}
         {/*    <BreadcrumbPage>{activeCompany?.name}</BreadcrumbPage>*/}
         {/*  )}*/}
         {/*</BreadcrumbItem>*/}
         {/*<BreadcrumbSeparator />*/}
+        {activeCompany?.id && (
+          <>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>{activeCompany.name}</BreadcrumbPage>
+            </BreadcrumbItem>
+          </>
+        )}
+        <BreadcrumbSeparator />
         <BreadcrumbItem>
-          <BreadcrumbPage>
-            {activeCompany?.id ? activeCompany.name : "Main"}
-          </BreadcrumbPage>
+          <BreadcrumbPage>{headerName}</BreadcrumbPage>
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>

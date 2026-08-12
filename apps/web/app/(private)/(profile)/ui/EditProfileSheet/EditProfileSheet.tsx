@@ -44,7 +44,7 @@ export const EditProfileSheet = memo(() => {
       }
       sheetDescription={"Изменение данных профиля"}
       onSubmit={onSubmit}
-      trigger={<Button>{"Изменить"}</Button>}
+      trigger={<Button variant={"outline"}>{"Изменить"}</Button>}
     >
       <div className="grid flex-1 auto-rows-min gap-6 px-4">
         <div className="grid gap-3">
