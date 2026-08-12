@@ -2,7 +2,7 @@
 
 import { SidebarTrigger } from "@workspace/ui/components/sidebar"
 import { Separator } from "@workspace/ui/components/separator"
-import { HeaderMenu } from "@/components/AppHeader/hooks/headerMenu"
+import { HeaderMenu } from "./components/header-menu/header-menu"
 
 export function AppHeader() {
   return (

@@ -6,6 +6,7 @@ import { ThunkConfig } from "@/lib/redux"
 import { ICompanyEntity } from "@/app/(private)/(companies)"
 import { authActions } from "@/app/(auth)"
 import { getEmployeesSimpleListThunk } from "@/app/(private)/(employees)/model/thunks/get-employees-simple-list-thunk"
+import { getCompanyByIdThunk } from "@/app/(private)/(companies)/model/thunks/get-company-by-id-thunk"
 
 export interface ChangeActiveCompanyThunkProps {
   company?: ICompanyEntity
@@ -33,6 +34,8 @@ export const changeActiveCompanyThunk = createAsyncThunk<
       // Компания изменилась, загружаем новые списки
       // TODO Контроль за всеми связанными списками
       if (props.company?.workspace?.id) {
+        dispatch(getCompanyByIdThunk({ id: props.company.id! }))
+
         // Обновление списка сотрудников
         dispatch(
           getEmployeesSimpleListThunk({
