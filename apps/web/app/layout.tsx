@@ -4,7 +4,7 @@ import "@workspace/ui/globals.css"
 import { cn } from "@workspace/ui/lib/utils"
 import { ThemeProvider } from "@/components/theme-provider"
 import { StoreProvider } from "@/lib/redux"
-import { AuthProvider } from "@/app/(auth)/ui/AuthProvider"
+import { AuthProvider } from "@/app/(public)/(auth)/ui/AuthProvider"
 import { Toaster } from "@workspace/ui/components/sonner"
 import { TooltipProvider } from "@workspace/ui/components/tooltip"
 

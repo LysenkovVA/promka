@@ -1,4 +1,6 @@
-import type { IUserEntity } from "./model/types/IUserEntity"
-import { UserEntitySchema } from "./model/types/UserEntitySchema"
+import { UserSchema } from "./model/types/UserSchema"
 
-export { IUserEntity, UserEntitySchema }
+import { UpdateUser, UpdateUserSchema } from "./model/types/UpdateUserSchema"
+
+export { UserSchema, UpdateUserSchema }
+export type { UpdateUser }

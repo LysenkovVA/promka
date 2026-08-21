@@ -1,5 +1,4 @@
-import { z, ZodType } from "zod/v4"
-import { IFileEntity } from "@/app/(private)/(files)"
+import { z } from "zod/v4"
 import {
   ZOD_INVALID_CUID_FORMAT,
   ZOD_INVALID_NUMBER_TYPE,
@@ -11,7 +10,7 @@ import {
 /**
  * Схема валидации FileEntity
  */
-export const FileEntitySchema: ZodType<IFileEntity> = z.object(
+export const FileEntitySchema = z.object(
   {
     id: z
       .cuid2({
@@ -67,5 +66,3 @@ export const FileEntitySchema: ZodType<IFileEntity> = z.object(
       issue.input === undefined ? ZOD_VALUE_REQUIRED : ZOD_INVALID_OBJECT_TYPE,
   }
 )
-
-// export type FileEntity = z.infer<typeof FileEntitySchema>;

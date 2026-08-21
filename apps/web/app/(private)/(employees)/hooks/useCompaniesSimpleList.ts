@@ -7,7 +7,7 @@ import {
   getEmployeesSimpleListIsInitialized,
 } from "../model/selectors/employees-simple-list-selectors"
 import { getEmployeesSimpleListThunk } from "../model/thunks/get-employees-simple-list-thunk"
-import { getAuthData } from "@/app/(auth)/model/selectors/authSelectors"
+import { useAuth } from "@/app/(public)/(auth)"
 
 export function useEmployeesSimpleList() {
   const dispatch = useAppDispatch()
@@ -17,24 +17,24 @@ export function useEmployeesSimpleList() {
   let error = useAppSelector(getEmployeesSimpleListError)
   const isInitialized = useAppSelector(getEmployeesSimpleListIsInitialized)
 
-  const authData = useAppSelector(getAuthData)
+  const { activeWorkspace } = useAuth()
 
-  if (!authData?.activeCompany?.workspace?.id) {
+  if (!activeWorkspace?.id) {
     error = "Не удалось определить workspaceId"
   }
 
   const fetchData = useCallback(
     (replaceData: boolean) => {
-      if (authData?.activeCompany?.workspace?.id) {
+      if (activeWorkspace?.id) {
         dispatch(
           getEmployeesSimpleListThunk({
             replaceData: replaceData,
-            workspaceId: authData?.activeCompany.workspace.id,
+            workspaceId: activeWorkspace.id,
           })
         )
       }
     },
-    [authData?.activeCompany?.workspace?.id, dispatch]
+    [activeWorkspace.id, dispatch]
   )
 
   useEffect(() => {

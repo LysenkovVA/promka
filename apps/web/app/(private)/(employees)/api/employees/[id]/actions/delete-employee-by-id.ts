@@ -3,7 +3,7 @@
 import { prisma, PrismaTransaction } from "@workspace/database/prisma"
 import { ResponseData } from "@/lib/responses/ResponseData"
 import { IEmployeeEntity } from "../../../../model/types/IEmployeeEntity"
-import { checkAuth } from "@/app/(auth)"
+import { checkAuth } from "@/app/(public)/(auth)"
 
 export async function deleteEmployeeByIdAtTransaction(
   id: string,

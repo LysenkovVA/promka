@@ -19,7 +19,7 @@ export interface ResponsePagination {
 export class ResponseData<T> {
   readonly isOk: boolean
   readonly status: number
-  readonly data: T
+  readonly data: T | undefined
   readonly pagination?: ResponsePagination
   readonly statusText: string | undefined = undefined
   readonly errorMessages: string[] | undefined = []
@@ -27,7 +27,7 @@ export class ResponseData<T> {
   constructor(
     isOk: boolean,
     status: number,
-    data: T,
+    data: T | undefined,
     pagination?: ResponsePagination,
     statusText?: string,
     errorMessages?: string[]
@@ -40,18 +40,43 @@ export class ResponseData<T> {
     this.errorMessages = errorMessages
   }
 
-  // 200
+  /**
+   * 200
+   * Запрос выполнен, данные обновлены, в теле ответа возвращается актуальная версия объекта.
+   * @param data
+   * @param pagination
+   * @param statusText
+   * @constructor
+   */
   static Ok<T>(data: T, pagination?: ResponsePagination, statusText?: string) {
     return new ResponseData<T>(true, 200, data, pagination, statusText)
   }
 
-  // 201
+  /**
+   * 201
+   * Запрос выполнен, данные добавлены, в теле ответа возвращается версия объекта
+   * @param data
+   * @param pagination
+   * @param statusText
+   * @constructor
+   */
   static Created<T>(
     data: T,
     pagination?: ResponsePagination,
     statusText?: string
   ) {
     return new ResponseData<T>(true, 201, data, pagination, statusText)
+  }
+
+  /**
+   * 204
+   * Данные успешно обновлены на сервере, но тело ответа пустое (клиенту не нужно менять текущий экран или страницу).
+   * @param pagination
+   * @param statusText
+   * @constructor
+   */
+  static NoContent<T>(pagination?: ResponsePagination, statusText?: string) {
+    return new ResponseData<T>(true, 204, undefined, pagination, statusText)
   }
 
   // 400

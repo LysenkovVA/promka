@@ -1,6 +1,5 @@
 "use client"
 
-import { IUserEntity } from "@/app/(private)/(users)"
 import {
   SidebarMenu,
   SidebarMenuButton,
@@ -31,11 +30,12 @@ import {
 import Link from "next/link"
 import { ROUTE } from "@/config/routes"
 import { useAppDispatch } from "@/lib/redux"
-import { logoutThunk } from "@/app/(auth)/model/thunks/logoutThunk"
+import { logoutThunk } from "@/app/(public)/(auth)/model/thunks/logoutThunk"
 import { useIsMobile } from "@workspace/ui/hooks/use-mobile"
+import { User } from "@/Users/model/types/UserSchema"
 
 export interface ServerSideProps {
-  user: IUserEntity | undefined
+  user: User | undefined
 }
 
 export function SidebarUser(props: ServerSideProps) {

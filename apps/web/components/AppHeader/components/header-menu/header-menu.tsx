@@ -8,10 +8,10 @@ import {
   BreadcrumbList,
 } from "@workspace/ui/components/breadcrumb"
 import { IconLayoutDashboard } from "@tabler/icons-react"
-import { useActiveCompany } from "@/app/(auth)/model/hooks/useActiveCompany"
 import { HeaderMenuSeparator } from "@/components/AppHeader/components/header-menu/header-menu-separator"
 import { HeaderMenuCompaniesItem } from "@/components/AppHeader/components/header-menu/header-menu-companies-item"
 import { HeaderMenuWorkspaceItems } from "@/components/AppHeader/components/header-menu/header-menu-workspace-items"
+import { useAuth } from "@/app/(public)/(auth)/model/hooks/useAuth"
 
 export const HeaderMenu = memo((_) => {
   // const path = usePathname()
@@ -21,7 +21,7 @@ export const HeaderMenu = memo((_) => {
   //   return entry?.name ?? "Неизвестный маршрут"
   // })()
 
-  const activeCompany = useActiveCompany()
+  const { activeWorkspace } = useAuth()
 
   return (
     <Breadcrumb>
@@ -31,7 +31,7 @@ export const HeaderMenu = memo((_) => {
             <IconLayoutDashboard className={"size-5! w-fit flex-shrink-0"} />
           </BreadcrumbLink>
         </BreadcrumbItem>
-        {activeCompany?.id && (
+        {activeWorkspace?.id && (
           <>
             <HeaderMenuSeparator />
             <HeaderMenuCompaniesItem />

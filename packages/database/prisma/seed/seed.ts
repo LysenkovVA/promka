@@ -40,12 +40,26 @@ async function main() {
         name: "Виктор",
         phoneNumber: "+79263357989",
         birthDate: dayjs.utc("1986-03-30").toDate(),
-        // companies: {
-        //   create: [
-        //     { name: 'ООО "СпецСтройТехнологии-М"' },
-        //     { name: 'ООО "РАД"' },
-        //   ],
-        // },
+        teamMembers: {
+          create: {
+            workspace: {
+              create: {
+                company: {
+                  create: {
+                    name: "First company",
+                  },
+                },
+              },
+            },
+            workspacePermissions: {
+              create: {
+                canRead: true,
+                canDelete: true,
+                canWrite: true,
+              },
+            },
+          },
+        },
         avatar: {
           create: {
             s3name: "test.jpg",

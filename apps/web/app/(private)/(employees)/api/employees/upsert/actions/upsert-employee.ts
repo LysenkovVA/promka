@@ -10,7 +10,7 @@ import { validateObject } from "@/lib/zod/validateObject"
 import { Prisma } from "@workspace/database/.generated/client"
 import { IEmployeeEntity } from "../../../../model/types/IEmployeeEntity"
 import { EmployeeEntitySchema } from "../../../../model/types/EmployeeEntitySchema"
-import { checkAuthForWorkspace } from "@/app/(auth)/api/checkAuth"
+import { checkAuthForWorkspace } from "@/app/(public)/(auth)/api/checkAuth"
 
 export async function upsertEmployeeAtTransaction(
   data: IEmployeeEntity,

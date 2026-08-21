@@ -1,23 +1,21 @@
 "use client"
 
-import { memo, useState } from "react"
-import { IUserEntity } from "@/app/(private)/(users)"
+import { memo } from "react"
 import { SidebarMenu, useSidebar } from "@workspace/ui/components/sidebar"
 import Image from "next/image"
 import { HEADER_HEIGHT } from "@/config/app"
-import { ICompanyEntity } from "@/app/(private)/(companies)/model/types/ICompanyEntity"
 
 export interface AppCompanySwitcherProps {
-  user?: IUserEntity
+  // user?: IUserEntity
 }
 
 export const AppCompanySwitcher = memo((props: AppCompanySwitcherProps) => {
-  const { user } = props
-
-  const { isMobile } = useSidebar()
-  const [activeTeam, setActiveTeam] = useState<ICompanyEntity | undefined>(
-    undefined
-  )
+  // const { user } = props
+  //
+  // const { isMobile } = useSidebar()
+  // const [activeTeam, setActiveTeam] = useState<ICompanyEntity | undefined>(
+  //   undefined
+  // )
 
   const { state } = useSidebar()
 

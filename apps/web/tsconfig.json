@@ -6,6 +6,18 @@
       "@/*": ["./*"],
       "@workspace/ui/*": ["../../packages/ui/src/*"],
       // Модули
+      "@/Workspaces": ["./app/(private)/(workspaces)/index.ts"],
+      "@/Workspaces/*": ["./app/(private)/(workspaces)/*"],
+      "@/WorkspacePermissions": [
+        "./app/(private)/(workspace-permissions)/index.ts"
+      ],
+      "@/WorkspacePermissions/*": ["./app/(private)/(workspace-permissions)/*"],
+      "@/TeamMember": ["./app/(private)/(team-members)/index.ts"],
+      "@/TeamMember/*": ["./app/(private)/(team-members)/*"],
+      "@/Companies": ["./app/(private)/(companies)/index.ts"],
+      "@/Companies/*": ["./app/(private)/(companies)/*"],
+      "@/Users": ["./app/(private)/(users)/index.ts"],
+      "@/Users/*": ["./app/(private)/(users)/*"],
       "@/Files": ["./app/(private)/(files)/index.ts"],
       "@/Files/*": ["./app/(private)/(files)/*"]
     },

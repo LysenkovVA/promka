@@ -10,12 +10,12 @@ import {
 } from "@workspace/ui/components/dropdown-menu"
 import { ChevronDownIcon } from "lucide-react"
 import { BreadcrumbItem } from "@workspace/ui/components/breadcrumb"
-import { useActiveCompany } from "@/app/(auth)/model/hooks/useActiveCompany"
 import { WORKSPACE_ROUTE } from "@/config/workspace-routes"
 import { useRouter } from "next/navigation"
+import { useAuth } from "@/app/(public)/(auth)/model/hooks/useAuth"
 
 export const HeaderMenuWorkspaceItems = memo((_) => {
-  const activeCompany = useActiveCompany()
+  const { activeWorkspace } = useAuth()
   const [workspaceItem, setWorkspaceItem] = useState(WORKSPACE_ROUTE.DASHBOARD)
   const router = useRouter()
 
@@ -36,7 +36,7 @@ export const HeaderMenuWorkspaceItems = memo((_) => {
                 onClick={() => {
                   setWorkspaceItem(wsRoute)
                   router.push(
-                    `${wsRoute.href}?workspaceId=${activeCompany?.workspace?.id}`
+                    `${wsRoute.href}?workspaceId=${activeWorkspace?.id}`
                   )
                 }}
               >

@@ -8,7 +8,7 @@ import {
   UnknownAction,
 } from "@reduxjs/toolkit"
 import { createReducerManager } from "./reducerManager"
-import { authReducer } from "@/app/(auth)/model/slice/authSlice"
+import { authReducer } from "@/app/(public)/(auth)/model/slice/authSlice"
 
 /**
  * Центральное хранилище стейта.

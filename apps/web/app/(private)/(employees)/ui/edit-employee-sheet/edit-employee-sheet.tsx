@@ -31,7 +31,7 @@ import {
   employeeDetailsActions,
   employeeDetailsReducer,
 } from "../../model/slice/employee-details-slice"
-import { getAuthData } from "@/app/(auth)/model/selectors/authSelectors"
+import { getAuthData } from "@/app/(public)/(auth)/model/selectors/authSelectors"
 
 export interface EditEmployeeSheetProps {
   employeeId?: string
@@ -57,7 +57,7 @@ export const EditEmployeeSheet = memo((props: EditEmployeeSheetProps) => {
 
   const onSubmit = useCallback(async () => {
     if (formData) {
-      if (!authData?.activeCompany?.workspace?.id) {
+      if (!authData?.activeWorkspaceId) {
         toast.error(JSON.stringify("Не удалось определить workspaceId"))
         return false
       }
@@ -65,7 +65,7 @@ export const EditEmployeeSheet = memo((props: EditEmployeeSheetProps) => {
       const result = await dispatch(
         upsertEmployeeThunk({
           entityData: formData,
-          workspaceId: authData?.activeCompany?.workspace?.id,
+          workspaceId: authData?.activeWorkspaceId,
         })
       )
 
@@ -78,7 +78,7 @@ export const EditEmployeeSheet = memo((props: EditEmployeeSheetProps) => {
       }
       return false
     }
-  }, [dispatch, formData, handleOpenChange])
+  }, [authData?.activeWorkspaceId, dispatch, formData, handleOpenChange])
 
   return (
     <DynamicModuleLoader

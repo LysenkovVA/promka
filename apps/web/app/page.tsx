@@ -13,7 +13,7 @@ import { Input } from "@workspace/ui/components/input"
 import Image from "next/image"
 import { useCallback, useMemo, useState } from "react"
 import { useAppDispatch } from "@/lib/redux"
-import { loginThunk } from "@/app/(auth)/model/thunks/loginThunk"
+import { loginThunk } from "@/app/(public)/(auth)/model/thunks/loginThunk"
 
 export default function Page() {
   const [login, setLogin] = useState("")
