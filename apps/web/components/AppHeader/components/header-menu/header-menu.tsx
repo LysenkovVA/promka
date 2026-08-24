@@ -4,7 +4,6 @@ import { memo } from "react"
 import {
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink,
   BreadcrumbList,
 } from "@workspace/ui/components/breadcrumb"
 import { IconLayoutDashboard } from "@tabler/icons-react"
@@ -13,6 +12,7 @@ import { HeaderMenuCompaniesItem } from "@/components/AppHeader/components/heade
 import { HeaderMenuWorkspaceItems } from "@/components/AppHeader/components/header-menu/header-menu-workspace-items"
 import { useAuth } from "@/app/(public)/(auth)/model/hooks/useAuth"
 import { useAppDispatch } from "@/lib/redux"
+import Link from "next/link"
 
 export const HeaderMenu = memo((_) => {
   // const path = usePathname()
@@ -29,9 +29,9 @@ export const HeaderMenu = memo((_) => {
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink href="/dashboard">
+          <Link href="/dashboard">
             <IconLayoutDashboard className={"size-5! w-fit flex-shrink-0"} />
-          </BreadcrumbLink>
+          </Link>
         </BreadcrumbItem>
         {activeWorkspace?.id && (
           <>

@@ -31,7 +31,6 @@ async function main() {
     where: { email: "user@mail.ru" },
   })
   if (!candidate) {
-    // Seed data logic
     await prisma.user.create({
       data: {
         email: "user@mail.ru",
@@ -41,24 +40,44 @@ async function main() {
         phoneNumber: "+79263357989",
         birthDate: dayjs.utc("1986-03-30").toDate(),
         teamMembers: {
-          create: {
-            workspace: {
-              create: {
-                company: {
-                  create: {
-                    name: "First company",
+          create: [
+            {
+              workspace: {
+                create: {
+                  company: {
+                    create: {
+                      name: "First company",
+                    },
                   },
                 },
               },
-            },
-            workspacePermissions: {
-              create: {
-                canRead: true,
-                canDelete: true,
-                canWrite: true,
+              workspacePermissions: {
+                create: {
+                  canRead: true,
+                  canDelete: true,
+                  canWrite: true,
+                },
               },
             },
-          },
+            {
+              workspace: {
+                create: {
+                  company: {
+                    create: {
+                      name: "Second company",
+                    },
+                  },
+                },
+              },
+              workspacePermissions: {
+                create: {
+                  canRead: true,
+                  canDelete: true,
+                  canWrite: true,
+                },
+              },
+            },
+          ],
         },
         avatar: {
           create: {

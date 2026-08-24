@@ -28,6 +28,9 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
             workspace: { include: { company: true } },
             workspacePermissions: true,
           },
+          orderBy: {
+            workspace: { company: { name: "asc" } },
+          },
         },
       },
     })
