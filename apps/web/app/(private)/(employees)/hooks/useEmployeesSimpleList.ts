@@ -34,7 +34,7 @@ export function useEmployeesSimpleList() {
         )
       }
     },
-    [activeWorkspace.id, dispatch]
+    [activeWorkspace?.id, dispatch]
   )
 
   useEffect(() => {

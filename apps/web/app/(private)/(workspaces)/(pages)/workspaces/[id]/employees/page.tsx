@@ -2,7 +2,7 @@
 
 import { DynamicModuleLoader } from "@/lib/redux"
 import { employeesSimpleListReducer } from "@/app/(private)/(employees)/model/slice/employees-simple-list-slice"
-import { useEmployeesSimpleList } from "@/app/(private)/(employees)/hooks/useCompaniesSimpleList"
+import { useEmployeesSimpleList } from "@/app/(private)/(employees)/hooks/useEmployeesSimpleList"
 import { EmployeeCard } from "@/app/(private)/(employees)/ui/employee-card/employee-card"
 
 export default function EmployeesPage() {

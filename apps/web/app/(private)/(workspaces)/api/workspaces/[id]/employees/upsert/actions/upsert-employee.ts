@@ -8,8 +8,8 @@ import {
 import { ResponseData } from "@/lib/responses/ResponseData"
 import { validateObject } from "@/lib/zod/validateObject"
 import { Prisma } from "@workspace/database/.generated/client"
-import { IEmployeeEntity } from "../../../../model/types/IEmployeeEntity"
-import { EmployeeEntitySchema } from "../../../../model/types/EmployeeEntitySchema"
+import { IEmployeeEntity } from "../../../../../../../(employees)/model/types/IEmployeeEntity"
+import { EmployeeEntitySchema } from "../../../../../../../(employees)/model/types/EmployeeEntitySchema"
 import { checkAuthForWorkspace } from "@/app/(public)/(auth)/api/checkAuth"
 
 export async function upsertEmployeeAtTransaction(

@@ -3,7 +3,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { upsertEmployee } from "./actions/upsert-employee"
 import { ResponseData } from "@/lib/responses/ResponseData"
-import { IEmployeeEntity } from "../../../model/types/IEmployeeEntity"
+import { IEmployeeEntity } from "../../../../../../(employees)/model/types/IEmployeeEntity"
 
 export async function POST(
   request: NextRequest

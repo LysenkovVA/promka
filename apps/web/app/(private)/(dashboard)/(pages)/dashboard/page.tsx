@@ -1,7 +1,6 @@
 "use client"
 
-import { useAuth } from "@/app/(public)/(auth)"
-import { TeamMemberCard } from "@/TeamMember/ui/TeamMemberCard/TeamMemberCard"
+import { Dashboard } from "@/app/(private)/(dashboard)/ui/Dashboard/Dashboard"
 
 const getDeviceInfo = () => {
   return {
@@ -42,13 +41,5 @@ const isSmallScreen = (): boolean => {
 }
 
 export default function DashboardCompaniesPage() {
-  const authData = useAuth()
-
-  return (
-    <div>
-      {authData.user?.teamMembers?.map((teamMember) => (
-        <TeamMemberCard key={teamMember.id} teamMember={teamMember} />
-      ))}
-    </div>
-  )
+  return <Dashboard />
 }

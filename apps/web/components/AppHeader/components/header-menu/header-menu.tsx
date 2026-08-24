@@ -12,6 +12,7 @@ import { HeaderMenuSeparator } from "@/components/AppHeader/components/header-me
 import { HeaderMenuCompaniesItem } from "@/components/AppHeader/components/header-menu/header-menu-companies-item"
 import { HeaderMenuWorkspaceItems } from "@/components/AppHeader/components/header-menu/header-menu-workspace-items"
 import { useAuth } from "@/app/(public)/(auth)/model/hooks/useAuth"
+import { useAppDispatch } from "@/lib/redux"
 
 export const HeaderMenu = memo((_) => {
   // const path = usePathname()
@@ -22,6 +23,7 @@ export const HeaderMenu = memo((_) => {
   // })()
 
   const { activeWorkspace } = useAuth()
+  const dispatch = useAppDispatch()
 
   return (
     <Breadcrumb>
@@ -35,10 +37,10 @@ export const HeaderMenu = memo((_) => {
           <>
             <HeaderMenuSeparator />
             <HeaderMenuCompaniesItem />
+            <HeaderMenuSeparator />
+            <HeaderMenuWorkspaceItems />
           </>
         )}
-        <HeaderMenuSeparator />
-        <HeaderMenuWorkspaceItems />
       </BreadcrumbList>
     </Breadcrumb>
   )

@@ -6,6 +6,7 @@ import {
   ZOD_INVALID_STRING_TYPE,
   ZOD_VALUE_REQUIRED,
 } from "@/lib/zod/commonErrors"
+import { TeamMemberSchema } from "@/TeamMember/model/types/TeamMemberSchema"
 
 /**
  * Схема валидации UserEntity
@@ -100,7 +101,7 @@ export const UserSchema = z.object(
       .array(
         // Для устранения ошибок с циклическими зависимостями
         z
-          .lazy(() => {
+          .lazy<typeof TeamMemberSchema>(() => {
             const { TeamMemberSchema } = require("@/TeamMember")
             return TeamMemberSchema
           })

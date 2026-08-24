@@ -51,7 +51,7 @@ export const Dashboard = memo(() => {
                     className={
                       "m-auto flex w-full flex-row items-center justify-start gap-1"
                     }
-                    href={`/dashboard?workspaceId=${workspace.id}`}
+                    href={`/workspaces/${workspace.id}`}
                   >
                     <IconBuilding className="size-3" />
                     <div className="text-xs">{workspace?.company.name}</div>

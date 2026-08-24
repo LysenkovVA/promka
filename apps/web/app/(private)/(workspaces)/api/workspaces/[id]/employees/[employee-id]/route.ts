@@ -2,7 +2,7 @@
 
 import { NextRequest, NextResponse } from "next/server"
 import { ResponseData } from "@/lib/responses/ResponseData"
-import { IEmployeeEntity } from "../../../model/types/IEmployeeEntity"
+import { IEmployeeEntity } from "../../../../../../(employees)/model/types/IEmployeeEntity"
 import { getEmployeeById } from "./actions/get-employee-by-id"
 import { deleteEmployeeById } from "./actions/delete-employee-by-id"
 

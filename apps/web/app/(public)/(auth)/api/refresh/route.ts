@@ -31,7 +31,15 @@ export async function POST(request: NextRequest) {
 
     const user = await prisma.user.findFirst({
       where: { id: session.user.id },
-      // include: { companies: true },
+      include: {
+        avatar: true,
+        teamMembers: {
+          include: {
+            workspace: { include: { company: true } },
+            workspacePermissions: true,
+          },
+        },
+      },
     })
 
     if (!user) {

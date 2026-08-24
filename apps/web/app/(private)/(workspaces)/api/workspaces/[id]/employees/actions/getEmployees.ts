@@ -1,6 +1,6 @@
 "use server"
 
-import { IEmployeeEntity } from "../../../model/types/IEmployeeEntity"
+import { IEmployeeEntity } from "../../../../../../(employees)/model/types/IEmployeeEntity"
 import { ResponseData } from "@/lib/responses/ResponseData"
 import { prisma } from "@workspace/database/prisma"
 import { checkAuthForWorkspace } from "@/app/(public)/(auth)/api/checkAuth"

@@ -9,7 +9,7 @@ import Link from "next/link"
 import { IconCirclePlusFilled, IconUsers } from "@tabler/icons-react"
 import { Button } from "@workspace/ui/components/button"
 import { EditEmployeeSheet } from "@/app/(private)/(employees)"
-import { WORKSPACE_ROUTE } from "@/config/workspace-routes"
+import { generateWorkspaceRoutes } from "@/config/workspace-routes"
 import { useAuth } from "@/app/(public)/(auth)/model/hooks/useAuth"
 
 export interface EmployeesProps {}
@@ -20,20 +20,25 @@ export const Employees = memo((props: EmployeesProps) => {
   const [sheetIsOpen, setSheetIsOpen] = useState(false)
 
   const { activeWorkspace } = useAuth()
+  const workspaceRoutes = activeWorkspace
+    ? generateWorkspaceRoutes(activeWorkspace.id)
+    : null
 
   return (
     <SidebarGroup>
       <SidebarGroupContent>
         <div className={"flex w-full flex-row items-center justify-between"}>
-          <Link
-            className={
-              "m-auto flex w-full flex-row items-center justify-start gap-1"
-            }
-            href={`${WORKSPACE_ROUTE.EMPLOYEES.href}?workspaceId=${activeWorkspace?.id}`}
-          >
-            <IconUsers className="size-3" />
-            <div>{WORKSPACE_ROUTE.EMPLOYEES.name}</div>
-          </Link>
+          {workspaceRoutes && (
+            <Link
+              className={
+                "m-auto flex w-full flex-row items-center justify-start gap-1"
+              }
+              href={workspaceRoutes.EMPLOYEES.href}
+            >
+              <IconUsers className="size-3" />
+              <div>{workspaceRoutes.EMPLOYEES.name}</div>
+            </Link>
+          )}
           <Button variant={"ghost"} onClick={() => setSheetIsOpen(true)}>
             <IconCirclePlusFilled className={"fill-green-500"} />
           </Button>

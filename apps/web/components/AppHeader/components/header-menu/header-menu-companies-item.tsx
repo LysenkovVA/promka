@@ -10,13 +10,13 @@ import {
 } from "@workspace/ui/components/dropdown-menu"
 import { ChevronDownIcon } from "lucide-react"
 import { BreadcrumbItem } from "@workspace/ui/components/breadcrumb"
-import { useRouter } from "next/navigation"
 import { useAuth } from "@/app/(public)/(auth)/model/hooks/useAuth"
+import Link from "next/link"
 
 export const HeaderMenuCompaniesItem = memo((_) => {
   const { activeWorkspace, userWorkspaces } = useAuth()
 
-  const router = useRouter()
+  // const router = useRouter()
 
   return (
     <BreadcrumbItem>
@@ -30,19 +30,9 @@ export const HeaderMenuCompaniesItem = memo((_) => {
         <DropdownMenuContent align="start">
           <DropdownMenuGroup>
             {userWorkspaces?.map((workspace) => (
-              <DropdownMenuItem
-                key={workspace.id}
-                onClick={() => {
-                  router.push(`/dashboard?workspaceId=${workspace.id}`)
-                  // dispatch(
-                  //   changeActiveCompanyThunk({
-                  //     company: companies?.find((c) => c.id === company.id),
-                  //   })
-                  // )
-                }}
-              >
-                {workspace.company.name}
-              </DropdownMenuItem>
+              <Link key={workspace.id} href={`/workspaces/${workspace?.id}`}>
+                <DropdownMenuItem>{workspace.company.name}</DropdownMenuItem>
+              </Link>
             ))}
           </DropdownMenuGroup>
         </DropdownMenuContent>

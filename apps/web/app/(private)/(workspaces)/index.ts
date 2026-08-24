@@ -7,6 +7,12 @@ import {
   UpdateWorkspace,
   UpdateWorkspaceSchema,
 } from "./model/types/UpdateWorkspaceSchema"
+import { WorkspacesList } from "./ui/WorkspacesList/WorkspacesList"
 
-export { WorkspaceSchema, CreateWorkspaceSchema, UpdateWorkspaceSchema }
+export {
+  WorkspaceSchema,
+  CreateWorkspaceSchema,
+  UpdateWorkspaceSchema,
+  WorkspacesList,
+}
 export type { CreateWorkspace, UpdateWorkspace }

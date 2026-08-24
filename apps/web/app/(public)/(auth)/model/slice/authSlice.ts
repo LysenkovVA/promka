@@ -31,6 +31,14 @@ export const authSlice = createSlice({
     ) => {
       state.entityData = action.payload
     },
+    setActiveWorkspaceId: (
+      state: DetailsReduxSchema<IAuthData>,
+      action: PayloadAction<string | undefined>
+    ) => {
+      if (state.entityData) {
+        state.entityData.activeWorkspaceId = action.payload
+      }
+    },
     setFormData: (
       state: DetailsReduxSchema<IAuthData>,
       action: PayloadAction<IAuthData>

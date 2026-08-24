@@ -3,7 +3,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { ResponseData } from "@/lib/responses/ResponseData"
 import { getEmployees } from "./actions/getEmployees"
-import { IEmployeeEntity } from "../../model/types/IEmployeeEntity"
+import { IEmployeeEntity } from "../../../../../(employees)/model/types/IEmployeeEntity"
 
 export async function GET(
   request: NextRequest
