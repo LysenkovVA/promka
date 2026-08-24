@@ -1,6 +1,6 @@
 "use client"
 
-import { memo, useState } from "react"
+import { memo, useMemo } from "react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,22 +13,32 @@ import { BreadcrumbItem } from "@workspace/ui/components/breadcrumb"
 import { generateWorkspaceRoutes } from "@/config/workspace-routes"
 import { useAuth } from "@/app/(public)/(auth)/model/hooks/useAuth"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 
 export const HeaderMenuWorkspaceItems = memo((_) => {
   const { activeWorkspace } = useAuth()
+
+  const path = usePathname()
 
   const workspaceRoutes = activeWorkspace
     ? generateWorkspaceRoutes(activeWorkspace.id)
     : null
 
-  const [workspaceItem, setWorkspaceItem] = useState(workspaceRoutes?.DASHBOARD)
+  const currentRouteName = useMemo(() => {
+    if (!workspaceRoutes) return null
+
+    const found = Object.values(workspaceRoutes).find(
+      (route) => path === route.href
+    )
+    return found?.name ?? null
+  }, [path, workspaceRoutes])
 
   return (
     <BreadcrumbItem>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <button className="flex items-center gap-1">
-            {workspaceItem?.name ?? "NO NAME"}
+            {currentRouteName ?? activeWorkspace?.name ?? "NO NAME"}
             <ChevronDownIcon data-icon="inline-end" className="size-3.5" />
           </button>
         </DropdownMenuTrigger>
@@ -37,12 +47,7 @@ export const HeaderMenuWorkspaceItems = memo((_) => {
             {workspaceRoutes &&
               Object.entries(workspaceRoutes).map(([key, wsRoute]) => (
                 <DropdownMenuItem key={key} asChild>
-                  <Link
-                    href={wsRoute.href}
-                    onClick={() => setWorkspaceItem(wsRoute)}
-                  >
-                    {wsRoute.name}
-                  </Link>
+                  <Link href={wsRoute.href}>{wsRoute.name}</Link>
                 </DropdownMenuItem>
               ))}
           </DropdownMenuGroup>

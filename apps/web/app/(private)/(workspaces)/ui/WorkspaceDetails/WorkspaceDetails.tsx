@@ -19,5 +19,7 @@ export const WorkspaceDetails = memo((props: WorkspaceDetailsProps) => {
     }
   }, [])
 
-  return <div>{workspaceId}</div>
+  return (
+    <div>{`Это страница с инофрмацией по workspace (id=${workspaceId})`}</div>
+  )
 })
