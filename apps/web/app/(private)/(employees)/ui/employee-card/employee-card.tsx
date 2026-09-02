@@ -12,6 +12,8 @@ import { YesNoDialog } from "@/components/YesNoDialog/YesNoDialog"
 import { EditEmployeeSheet } from "../edit-employee-sheet/edit-employee-sheet"
 import { Employee } from "@/app/(private)/(employees)"
 import { Avatar } from "@workspace/ui/components/avatar"
+import { useAuth } from "@/app/(public)/(auth)"
+import { useRouter } from "next/navigation"
 
 export interface EmployeeWidgetProps {
   employee: Employee
@@ -24,6 +26,9 @@ export const EmployeeCard = memo((props: EmployeeWidgetProps) => {
   const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false)
 
   const dispatch = useAppDispatch()
+  const { activeWorkspace } = useAuth()
+
+  const router = useRouter()
 
   const deleteOrganizationCallback = useCallback(async () => {
     if (employee?.id) {
@@ -46,12 +51,16 @@ export const EmployeeCard = memo((props: EmployeeWidgetProps) => {
         className={"min-h-20 w-full cursor-pointer"}
         variant={"outline"}
         onClick={() => {
-          // router.push(`/dashboard?employeeId=${employee.id}`)
-          alert("В разработке")
+          if (activeWorkspace.id)
+            router.push(
+              `/workspaces/${activeWorkspace.id}/employees/${employee.id}`
+            )
         }}
       >
         <ItemContent
-          className={"flex w-full flex-col items-center justify-center gap-1"}
+          className={
+            "flex h-full w-full flex-col items-center justify-start gap-1"
+          }
         >
           <Avatar style={{ width: 80, height: 80 }} />
           <ItemTitle

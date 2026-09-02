@@ -28,7 +28,14 @@ export const InfoWidget = memo((props: InfoWidgetProps) => {
         <div style={{ fontSize: 20, fontWeight: "lighter" }}>{title}</div>
         <div style={{ fontSize: 30, fontWeight: "bold" }}>{count}</div>
         {children}
-        <Button onClick={onAddClick}>{"Добавить"}</Button>
+        <Button
+          onClick={(e) => {
+            e.preventDefault()
+            onAddClick?.()
+          }}
+        >
+          {"Добавить"}
+        </Button>
       </div>
     </div>
   )

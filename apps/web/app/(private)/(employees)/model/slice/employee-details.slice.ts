@@ -3,6 +3,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { DetailsReduxSchema } from "@/lib/redux/model/types/DetailsReduxSchema"
 import { Employee } from "../types/employee.schema"
+import { getEmployeeByIdThunk } from "../thunks/get-employee-by-id.thunk"
 
 const initialState: DetailsReduxSchema<Employee> = {
   entityData: { surname: "" },
@@ -29,39 +30,39 @@ export const employeeDetailsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-    // Получение по id
-    // .addCase(getEmployeeByIdThunk.pending, (state, action) => {
-    //   state.isFetching = true
-    //   state.isSaving = false
-    //   state.error = ""
-    //   state.entityData = {
-    //     surname: "",
-    //   }
-    //   state.entityFormData = {
-    //     surname: "",
-    //   }
-    //   state._isInitialized = false
-    // })
-    // .addCase(getEmployeeByIdThunk.fulfilled, (state, action) => {
-    //   state.isFetching = false
-    //   state.isSaving = false
-    //   state.error = ""
-    //   state.entityData = action.payload.data!
-    //   state.entityFormData = action.payload.data!
-    //   state._isInitialized = true
-    // })
-    // .addCase(getEmployeeByIdThunk.rejected, (state, action) => {
-    //   state.isFetching = false
-    //   state.isSaving = false
-    //   state.error = action.payload
-    //   state.entityData = {
-    //     surname: "",
-    //   }
-    //   state.entityFormData = {
-    //     surname: "",
-    //   }
-    //   state._isInitialized = true
-    // })
+      // Получение по id
+      .addCase(getEmployeeByIdThunk.pending, (state, action) => {
+        state.isFetching = true
+        state.isSaving = false
+        state.error = ""
+        state.entityData = {
+          surname: "",
+        }
+        state.entityFormData = {
+          surname: "",
+        }
+        state._isInitialized = false
+      })
+      .addCase(getEmployeeByIdThunk.fulfilled, (state, action) => {
+        state.isFetching = false
+        state.isSaving = false
+        state.error = ""
+        state.entityData = action.payload.data!
+        state.entityFormData = action.payload.data!
+        state._isInitialized = true
+      })
+      .addCase(getEmployeeByIdThunk.rejected, (state, action) => {
+        state.isFetching = false
+        state.isSaving = false
+        state.error = action.payload
+        state.entityData = {
+          surname: "",
+        }
+        state.entityFormData = {
+          surname: "",
+        }
+        state._isInitialized = true
+      })
     // .addCase(upsertEmployeeThunk.pending, (state, action) => {
     //   state.isFetching = false
     //   state.isSaving = true
