@@ -1,18 +1,6 @@
-import { WorkspaceSchema } from "./model/types/WorkspaceSchema"
-import {
-  CreateWorkspace,
-  CreateWorkspaceSchema,
-} from "./model/types/CreateWorkspaceSchema"
-import {
-  UpdateWorkspace,
-  UpdateWorkspaceSchema,
-} from "./model/types/UpdateWorkspaceSchema"
+import { Workspace, WorkspaceSchema } from "./model/types/workspace.schema"
+
 import { WorkspacesList } from "./ui/WorkspacesList/WorkspacesList"
 
-export {
-  WorkspaceSchema,
-  CreateWorkspaceSchema,
-  UpdateWorkspaceSchema,
-  WorkspacesList,
-}
-export type { CreateWorkspace, UpdateWorkspace }
+export { WorkspaceSchema, WorkspacesList }
+export type { Workspace }

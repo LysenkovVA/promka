@@ -2,11 +2,7 @@
 
 import { memo, useCallback, useEffect } from "react"
 import { Input } from "@workspace/ui/components/input"
-import {
-  DynamicModuleLoader,
-  useAppDispatch,
-  useAppSelector,
-} from "@/lib/redux"
+import { DynamicModuleLoader, useAppDispatch, useAppSelector, } from "@/lib/redux"
 import {
   Sheet,
   SheetClose,
@@ -24,13 +20,9 @@ import {
   getEmployeeDetailsFormData,
   getEmployeeDetailsIsFetching,
   getEmployeeDetailsIsInitialized,
-} from "../../model/selectors/employee-details-selectors"
-import { getEmployeeByIdThunk } from "../../model/thunks/get-employee-by-id-thunk"
-import { upsertEmployeeThunk } from "../../model/thunks/upsert-employee-thunk"
-import {
-  employeeDetailsActions,
-  employeeDetailsReducer,
-} from "../../model/slice/employee-details-slice"
+} from "../../model/selectors/employee-details.selectors"
+import { createEmployeeThunk } from "../../model/thunks/create-employee.thunk"
+import { employeeDetailsActions, employeeDetailsReducer, } from "../../model/slice/employee-details.slice"
 import { getAuthData } from "@/app/(public)/(auth)/model/selectors/authSelectors"
 
 export interface EditEmployeeSheetProps {
@@ -51,7 +43,8 @@ export const EditEmployeeSheet = memo((props: EditEmployeeSheetProps) => {
 
   useEffect(() => {
     if (isOpen && employeeId && !isFetching && !isInitialized) {
-      dispatch(getEmployeeByIdThunk({ id: employeeId }))
+      // TODO
+      // dispatch(getEmployeeByIdThunk({ id: employeeId }))
     }
   }, [employeeId, dispatch, isFetching, isInitialized, isOpen])
 
@@ -62,23 +55,34 @@ export const EditEmployeeSheet = memo((props: EditEmployeeSheetProps) => {
         return false
       }
 
-      const result = await dispatch(
-        upsertEmployeeThunk({
-          entityData: formData,
-          workspaceId: authData?.activeWorkspaceId,
-        })
-      )
+      if (!employeeId) {
+        const result = await dispatch(
+          createEmployeeThunk({
+            entityData: formData,
+            workspaceId: authData?.activeWorkspaceId,
+          })
+        )
 
-      if (result.meta.requestStatus === "fulfilled") {
-        toast.success("Изменения сохранены", { position: "top-center" })
-        handleOpenChange(false)
-        return true
+        if (result.meta.requestStatus === "fulfilled") {
+          toast.success("Новый сотрудник добавлен", { position: "top-center" })
+          handleOpenChange(false)
+          return true
+        } else {
+          toast.error(JSON.stringify(result.payload))
+        }
+        return false
       } else {
-        toast.error(JSON.stringify(result.payload))
+        // TODO Обновлнение
+        return false
       }
-      return false
     }
-  }, [authData?.activeWorkspaceId, dispatch, formData, handleOpenChange])
+  }, [
+    authData?.activeWorkspaceId,
+    dispatch,
+    employeeId,
+    formData,
+    handleOpenChange,
+  ])
 
   return (
     <DynamicModuleLoader
@@ -96,11 +100,11 @@ export const EditEmployeeSheet = memo((props: EditEmployeeSheetProps) => {
                 {data?.id ? (
                   <div>{data.name}</div>
                 ) : (
-                  <div>{"Новая организация"}</div>
+                  <div>{"Новый сотрудник"}</div>
                 )}
               </div>
             </SheetTitle>
-            <SheetDescription>{"Данные организации"}</SheetDescription>
+            <SheetDescription>{"Данные сотрудника"}</SheetDescription>
           </SheetHeader>
           <div className="grid flex-1 auto-rows-min gap-6 px-4">
             <Field>

@@ -1,8 +1,8 @@
 import { Action, Reducer, ReducersMapObject } from "redux"
 import { DetailsReduxSchema } from "@/lib/redux/model/types/DetailsReduxSchema"
 import { IAuthData } from "@/app/(public)/(auth)"
-import { SimpleListReduxSchema } from "../types/SimpleListReduxSchema"
-import { IEmployeeEntity } from "@/app/(private)/(employees)"
+import { Workspace } from "@/Workspaces"
+import { Employee } from "@/app/(private)/(employees)"
 
 /**
  * Схема глобального состояния
@@ -12,8 +12,8 @@ export interface GlobalStateSchema {
   // Авторизация
   authSchema: DetailsReduxSchema<IAuthData>
   // Динамические
-  employeesSimpleListSchema?: SimpleListReduxSchema<IEmployeeEntity>
-  employeeDetailsSchema?: DetailsReduxSchema<IEmployeeEntity>
+  workspaceDetailsSchema?: DetailsReduxSchema<Workspace>
+  employeeDetailsSchema?: DetailsReduxSchema<Employee>
 }
 
 /**

@@ -12,13 +12,11 @@ import { IconEditFilled, IconTrash } from "@tabler/icons-react"
 import { Button } from "@workspace/ui/components/button"
 import { useAppDispatch } from "@/lib/redux"
 import { YesNoDialog } from "@/components/YesNoDialog/YesNoDialog"
-import { toast } from "sonner"
-import { IEmployeeEntity } from "../../model/types/IEmployeeEntity"
-import { deleteEmployeeByIdThunk } from "@/app/(private)/(employees)/model/thunks/delete-employee-by-id-thunk"
 import { EditEmployeeSheet } from "../edit-employee-sheet/edit-employee-sheet"
+import { Employee } from "@/app/(private)/(employees)"
 
 export interface EmployeeWidgetProps {
-  employee: IEmployeeEntity
+  employee: Employee
 }
 
 export const EmployeeCard = memo((props: EmployeeWidgetProps) => {
@@ -31,17 +29,18 @@ export const EmployeeCard = memo((props: EmployeeWidgetProps) => {
 
   const deleteOrganizationCallback = useCallback(async () => {
     if (employee?.id) {
-      const result = await dispatch(
-        deleteEmployeeByIdThunk({ id: employee.id })
-      )
-
-      if (result.meta.requestStatus === "fulfilled") {
-        toast.success("Сотрудник удалён", { position: "top-center" })
-      } else {
-        toast.error(JSON.stringify(result.payload))
-      }
+      // TODO
+      // const result = await dispatch(
+      //   deleteEmployeeByIdThunk({ id: employee.id })
+      // )
+      //
+      // if (result.meta.requestStatus === "fulfilled") {
+      //   toast.success("Сотрудник удалён", { position: "top-center" })
+      // } else {
+      //   toast.error(JSON.stringify(result.payload))
+      // }
     }
-  }, [employee.id, dispatch])
+  }, [employee?.id])
 
   return (
     <>

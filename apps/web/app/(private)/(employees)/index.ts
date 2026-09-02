@@ -1,5 +1,5 @@
 import { EditEmployeeSheet } from "./ui/edit-employee-sheet/edit-employee-sheet"
-import { IEmployeeEntity } from "./model/types/IEmployeeEntity"
+import { Employee, EmployeeSchema } from "./model/types/employee.schema"
 
-export { EditEmployeeSheet }
-export type { IEmployeeEntity }
+export { EditEmployeeSheet, EmployeeSchema }
+export type { Employee }

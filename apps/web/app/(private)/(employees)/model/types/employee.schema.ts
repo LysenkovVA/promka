@@ -1,16 +1,15 @@
-import { z, ZodType } from "zod/v4"
+import { z } from "zod/v4"
 import {
   ZOD_INVALID_CUID_FORMAT,
   ZOD_INVALID_OBJECT_TYPE,
   ZOD_INVALID_STRING_TYPE,
   ZOD_VALUE_REQUIRED,
 } from "@/lib/zod/commonErrors"
-import { IEmployeeEntity } from "./IEmployeeEntity"
 
 /**
- * Схема валидации EmployeeEntitySchema
+ * Схема валидации EmployeeSchema
  */
-export const EmployeeEntitySchema: ZodType<IEmployeeEntity> = z.object(
+export const EmployeeSchema = z.object(
   {
     id: z
       .cuid2({
@@ -53,3 +52,5 @@ export const EmployeeEntitySchema: ZodType<IEmployeeEntity> = z.object(
       issue.input === undefined ? ZOD_VALUE_REQUIRED : ZOD_INVALID_OBJECT_TYPE,
   }
 )
+
+export type Employee = z.infer<typeof EmployeeSchema>

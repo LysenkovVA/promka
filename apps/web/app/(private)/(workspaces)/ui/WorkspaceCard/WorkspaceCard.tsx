@@ -1,7 +1,7 @@
 "use client"
 
 import { memo } from "react"
-import { Workspace } from "../../model/types/WorkspaceSchema"
+import { Workspace } from "../../model/types/workspace.schema"
 import Link from "next/link"
 
 export interface WorkspaceCardProps {

@@ -6,6 +6,7 @@ import {
   ZOD_VALUE_REQUIRED,
 } from "@/lib/zod/commonErrors"
 import { TeamMemberSchema } from "@/TeamMember"
+import { CompanySchema } from "@/Companies"
 
 /**
  * Схема валидации WorkspaceSchema
@@ -27,7 +28,7 @@ export const WorkspaceSchema = z.object(
     company:
       // Для устранения ошибок с циклическими зависимостями
       z
-        .lazy(() => {
+        .lazy<typeof CompanySchema>(() => {
           const { CompanySchema } = require("@/Companies")
           return CompanySchema
         })

@@ -4,18 +4,18 @@ import { createAsyncThunk } from "@reduxjs/toolkit"
 import { ResponseData } from "@/lib/responses/ResponseData"
 import { ThunkConfig } from "@/lib/redux"
 import apiClient from "@/lib/axios/apiClient"
-import { IEmployeeEntity } from "../types/IEmployeeEntity"
+import { CreateWorkspaceResponse } from "../types/create-workspace-response.schema"
+import { CreateWorkspaceRequest } from "../types/create-workspace-request.schema"
 
-export interface UpsertEmployeeThunkProps {
-  entityData: IEmployeeEntity
-  workspaceId: string
+export interface CreateWorkspaceThunkProps {
+  entityData: CreateWorkspaceRequest
 }
 
-export const upsertEmployeeThunk = createAsyncThunk<
-  ResponseData<IEmployeeEntity | undefined>,
-  UpsertEmployeeThunkProps,
+export const createWorkspaceThunk = createAsyncThunk<
+  ResponseData<CreateWorkspaceResponse | undefined>,
+  CreateWorkspaceThunkProps,
   ThunkConfig<string>
->("upsertEmployeeThunk", async (props, thunkApi) => {
+>("createWorkspaceThunk", async (props, thunkApi) => {
   const { rejectWithValue } = thunkApi
 
   try {
@@ -24,16 +24,13 @@ export const upsertEmployeeThunk = createAsyncThunk<
     // Данные сущности
     formData.append("entity-data", JSON.stringify(props.entityData))
 
-    const response = await apiClient(
-      `/employees/upsert?workspaceId=${props.workspaceId}`,
-      {
-        method: "POST",
-        data: formData,
-      }
-    )
+    const response = await apiClient(`/workspaces`, {
+      method: "POST",
+      data: formData,
+    })
 
     const createdEntity = response.data as ResponseData<
-      IEmployeeEntity | undefined
+      CreateWorkspaceResponse | undefined
     >
 
     if (!createdEntity.isOk) {

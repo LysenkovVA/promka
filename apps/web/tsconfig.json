@@ -19,7 +19,9 @@
       "@/Users": ["./app/(private)/(users)/index.ts"],
       "@/Users/*": ["./app/(private)/(users)/*"],
       "@/Files": ["./app/(private)/(files)/index.ts"],
-      "@/Files/*": ["./app/(private)/(files)/*"]
+      "@/Files/*": ["./app/(private)/(files)/*"],
+      "@/Employees": ["./app/(private)/(employees)/index.ts"],
+      "@/Employees/*": ["./app/(private)/(employees)/*"]
     },
     "plugins": [
       {
