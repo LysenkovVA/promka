@@ -5,6 +5,7 @@ import { ResponseData } from "@/lib/responses/ResponseData"
 import { checkAuthForWorkspace } from "@/app/(public)/(auth)/api/checkAuth"
 import { prisma } from "@workspace/database/prisma"
 import { Employee } from "../../../../model/types/employee.schema"
+import { TAKE } from "@/config/app"
 
 export async function GET(
   request: NextRequest,
@@ -12,12 +13,18 @@ export async function GET(
 ): Promise<NextResponse<ResponseData<Employee[] | undefined>>> {
   try {
     const { id } = await props.params
+    const { searchParams } = new URL(request.url)
+
+    const take = searchParams.get("take") || TAKE
+    const skip = searchParams.get("skip") || 0
 
     // Проверяем доступы пользователя
     await checkAuthForWorkspace(id)
 
     const data = await prisma.employee.findMany({
       where: { workspace: { id: id } },
+      take: Number(take),
+      skip: Number(skip),
     })
 
     return ResponseData.Ok<Employee[]>(data).toNextResponse()

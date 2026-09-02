@@ -20,6 +20,7 @@ import { Picture } from "@/components/picture"
 import { Separator } from "@workspace/ui/components/separator"
 import { InfoWidget } from "@/Workspaces/ui/InfoWidget/InfoWidget"
 import { EditEmployeeSheet } from "@/app/(private)/(employees)"
+import Link from "next/link"
 
 export interface WorkspaceDetailsProps {
   workspaceId: string
@@ -79,18 +80,25 @@ export const WorkspaceDetails = memo((props: WorkspaceDetailsProps) => {
               "m-auto flex w-full flex-row items-center justify-center gap-3"
             }
           >
-            <InfoWidget
-              title={"Сотрудники"}
-              count={0}
-              onAddClick={() => setEmployeeSheetIsOpen(true)}
+            <Link
+              href={`/workspaces/${workspaceId}/employees`}
+              className={"w-full cursor-pointer"}
             >
-              <>
-                <EditEmployeeSheet
-                  isOpen={employeeSheetIsOpen}
-                  handleOpenChange={(isOpen) => setEmployeeSheetIsOpen(isOpen)}
-                />
-              </>
-            </InfoWidget>
+              <InfoWidget
+                title={"Сотрудники"}
+                count={0}
+                onAddClick={() => setEmployeeSheetIsOpen(true)}
+              >
+                <>
+                  <EditEmployeeSheet
+                    isOpen={employeeSheetIsOpen}
+                    handleOpenChange={(isOpen) =>
+                      setEmployeeSheetIsOpen(isOpen)
+                    }
+                  />
+                </>
+              </InfoWidget>
+            </Link>
           </div>
         </div>
       )}

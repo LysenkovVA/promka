@@ -3,17 +3,15 @@
 import { memo, useCallback, useState } from "react"
 import {
   Item,
-  ItemActions,
   ItemContent,
   ItemDescription,
   ItemTitle,
 } from "@workspace/ui/components/item"
-import { IconEditFilled, IconTrash } from "@tabler/icons-react"
-import { Button } from "@workspace/ui/components/button"
 import { useAppDispatch } from "@/lib/redux"
 import { YesNoDialog } from "@/components/YesNoDialog/YesNoDialog"
 import { EditEmployeeSheet } from "../edit-employee-sheet/edit-employee-sheet"
 import { Employee } from "@/app/(private)/(employees)"
+import { Avatar } from "@workspace/ui/components/avatar"
 
 export interface EmployeeWidgetProps {
   employee: Employee
@@ -45,53 +43,52 @@ export const EmployeeCard = memo((props: EmployeeWidgetProps) => {
   return (
     <>
       <Item
-        className={"min-h-44 w-full cursor-pointer"}
+        className={"min-h-20 w-full cursor-pointer"}
         variant={"outline"}
         onClick={() => {
           // router.push(`/dashboard?employeeId=${employee.id}`)
           alert("В разработке")
         }}
       >
-        <ItemContent className={"h-full w-full"}>
-          <div className={"flex h-full flex-col items-center justify-between"}>
-            <div className={"h-full w-full"}>
-              <ItemTitle
-                className={
-                  "align-center flex w-full justify-center text-center text-xl font-light"
-                }
-              >
-                {employee.surname}
-              </ItemTitle>
-              <ItemDescription className={"text-md text-start font-light"}>
-                {employee.name}
-              </ItemDescription>
-            </div>
-          </div>
-        </ItemContent>
-        <ItemActions
-          className={"flex h-full flex-col items-center justify-center"}
+        <ItemContent
+          className={"flex w-full flex-col items-center justify-center gap-1"}
         >
-          <Button
-            className={"cursor-pointer"}
-            variant={"outline"}
-            onClick={(e) => {
-              e.stopPropagation()
-              setSheetIsOpen(true)
-            }}
+          <Avatar style={{ width: 80, height: 80 }} />
+          <ItemTitle
+            className={
+              "align-center flex w-full justify-center text-center text-xl font-light"
+            }
           >
-            <IconEditFilled className={"fill-orange-300"} />
-          </Button>
-          <Button
-            className={"cursor-pointer"}
-            variant={"outline"}
-            onClick={(e) => {
-              e.stopPropagation()
-              setDeleteModalIsOpen(true)
-            }}
-          >
-            <IconTrash className={"text-red-400"} />
-          </Button>
-        </ItemActions>
+            {employee.surname}
+          </ItemTitle>
+          <ItemDescription className={"text-md text-start font-light"}>
+            {employee.name}
+          </ItemDescription>
+        </ItemContent>
+        {/*<ItemActions*/}
+        {/*  className={"flex h-full flex-col items-center justify-center"}*/}
+        {/*>*/}
+        {/*  <Button*/}
+        {/*    className={"cursor-pointer"}*/}
+        {/*    variant={"outline"}*/}
+        {/*    onClick={(e) => {*/}
+        {/*      e.stopPropagation()*/}
+        {/*      setSheetIsOpen(true)*/}
+        {/*    }}*/}
+        {/*  >*/}
+        {/*    <IconEditFilled className={"fill-orange-300"} />*/}
+        {/*  </Button>*/}
+        {/*  <Button*/}
+        {/*    className={"cursor-pointer"}*/}
+        {/*    variant={"outline"}*/}
+        {/*    onClick={(e) => {*/}
+        {/*      e.stopPropagation()*/}
+        {/*      setDeleteModalIsOpen(true)*/}
+        {/*    }}*/}
+        {/*  >*/}
+        {/*    <IconTrash className={"text-red-400"} />*/}
+        {/*  </Button>*/}
+        {/*</ItemActions>*/}
       </Item>
       {sheetIsOpen && (
         <EditEmployeeSheet
