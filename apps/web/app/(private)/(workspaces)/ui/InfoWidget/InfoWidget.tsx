@@ -30,6 +30,7 @@ export const InfoWidget = memo((props: InfoWidgetProps) => {
         {children}
         <Button
           onClick={(e) => {
+            e.stopPropagation()
             e.preventDefault()
             onAddClick?.()
           }}

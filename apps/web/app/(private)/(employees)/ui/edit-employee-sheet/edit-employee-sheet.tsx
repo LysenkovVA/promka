@@ -62,40 +62,47 @@ export const EditEmployeeSheet = memo((props: EditEmployeeSheetProps) => {
         return false
       }
 
-      if (!employeeId) {
-        const result = await dispatch(
-          createEmployeeThunk({
-            entityData: formData,
-            workspaceId: authData?.activeWorkspaceId,
-          })
-        )
+      try {
+        if (!employeeId) {
+          const result = await dispatch(
+            createEmployeeThunk({
+              entityData: formData,
+              workspaceId: authData?.activeWorkspaceId,
+            })
+          ).unwrap()
 
-        if (result.meta.requestStatus === "fulfilled") {
-          toast.success("Новый сотрудник добавлен", { position: "top-center" })
-          handleOpenChange(false)
-          return true
+          if (result.isOk) {
+            toast.success("Новый сотрудник добавлен", {
+              position: "top-center",
+              style: {
+                color: "green",
+              },
+            })
+            handleOpenChange(false)
+          }
         } else {
-          toast.error(JSON.stringify(result.payload))
-        }
-        return false
-      } else {
-        const result = await dispatch(
-          updateEmployeeThunk({
-            entityData: formData,
-            workspaceId: authData?.activeWorkspaceId,
-          })
-        )
+          const result = await dispatch(
+            updateEmployeeThunk({
+              entityData: formData,
+              workspaceId: authData?.activeWorkspaceId,
+            })
+          ).unwrap()
 
-        if (result.meta.requestStatus === "fulfilled") {
-          toast.success("Данные сотрудника обновлены", {
-            position: "top-center",
-          })
-          handleOpenChange(false)
-          return true
-        } else {
-          toast.error(JSON.stringify(result.payload))
+          if (result.isOk) {
+            toast.success("Изменения сохранены", {
+              position: "top-center",
+              style: {
+                color: "green",
+              },
+            })
+            handleOpenChange(false)
+          }
         }
-        return false
+      } catch (error) {
+        toast.error((error as string) ?? "Ошибка", {
+          position: "top-center",
+          style: { color: "tomato" },
+        })
       }
     }
   }, [

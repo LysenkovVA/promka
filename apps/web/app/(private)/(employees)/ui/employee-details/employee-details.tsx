@@ -49,19 +49,23 @@ export const EmployeeDetails = memo((props: EmployeeDetailsProps) => {
             employeeId: employeeId,
             workspaceId: auth.activeWorkspace.id,
           })
-        )
+        ).unwrap()
 
-        if (result.meta.requestStatus === "fulfilled") {
+        if (result.isOk) {
           toast.success(`Сотрудник '${data?.surname}' удалён`, {
             position: "top-center",
+            style: {
+              color: "green",
+            },
           })
           router.back()
-        } else {
-          toast.error(JSON.stringify(result.payload))
         }
       }
-    } catch (e) {
-      toast.error(JSON.stringify(e))
+    } catch (error) {
+      toast.error((error as string) ?? "Ошибка", {
+        position: "top-center",
+        style: { color: "tomato" },
+      })
     }
   }, [auth.activeWorkspace.id, data?.surname, dispatch, employeeId, router])
 

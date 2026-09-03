@@ -2,8 +2,6 @@
  * Клиент API-запросов
  */
 import axios from "axios"
-import { toast } from "sonner"
-import { ResponseData } from "@/lib/responses/ResponseData"
 
 // Эндпоинт для обновления токена
 const REFRESH_TOKEN_URL = "/refresh"
@@ -84,32 +82,6 @@ apiClient.interceptors.response.use(
       } finally {
         isRefreshing = false
       }
-    }
-
-    // Для других ошибок — показываем тост
-    const errorData = error.response?.data as ResponseData<undefined>
-
-    switch (error.response?.status) {
-      case 403:
-        // Ничего не показываем, это связано с авторизацией (для удобства)
-        break
-      case 500:
-        if (errorData?.errorMessages) {
-          toast.error(`${errorData.errorMessages}`, {
-            position: "top-center",
-            duration: 5000,
-            dismissible: true,
-            style: { color: "tomato" },
-            // description: "Ошибка",
-          })
-        } else {
-          toast.error("Неизвестная ошибка", {
-            position: "top-center",
-            style: { color: "tomato" },
-            // description: "Ошибка",
-          })
-        }
-        break
     }
 
     return Promise.reject(error)

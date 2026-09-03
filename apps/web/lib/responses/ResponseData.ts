@@ -5,6 +5,7 @@
 import { ZodError } from "zod/v4"
 import { NextResponse } from "next/server"
 import { formatZodErrorToMessages } from "@/lib/zod/validateObject"
+import axios from "axios"
 
 export interface ResponsePagination {
   take?: number
@@ -133,17 +134,19 @@ export class ResponseData<T> {
     pagination?: ResponsePagination,
     statusText?: string
   ) {
-    // console.log(`ErrorInstanse: ${typeof errorInstance}`)
-    // if (errorInstance instanceof String) {
-    //     return new ResponseData<undefined>(
-    //         false,
-    //         500,
-    //         undefined,
-    //         pagination,
-    //         String(errorInstance),
-    //         [String(errorInstance)],
-    //     );
-    // }
+    // Ошибки Axios
+    if (axios.isAxiosError(errorInstance) && errorInstance.response?.data) {
+      const errorData = errorInstance.response.data as ResponseData<undefined>
+
+      return new ResponseData<undefined>(
+        false,
+        500,
+        undefined,
+        pagination,
+        statusText,
+        [errorData.errorMessages?.[0] ?? "Ошибка сервера"]
+      )
+    }
 
     // Ошибки Zod
     if (errorInstance instanceof ZodError) {

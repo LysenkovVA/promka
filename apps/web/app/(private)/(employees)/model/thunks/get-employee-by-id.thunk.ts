@@ -44,7 +44,6 @@ export const getEmployeeByIdThunk = createAsyncThunk<
 
     return data
   } catch (error) {
-    // Неизвестная ошибка в thunk-е
     return rejectWithValue(
       ResponseData.InternalServerError(error).getAllErrors()
     )
