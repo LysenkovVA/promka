@@ -65,16 +65,22 @@ export async function PATCH(
   }
 }
 
-//
-// export async function DELETE(
-//   request: NextRequest,
-//   props: { params: Promise<{ id: string }> }
-// ): Promise<NextResponse<ResponseData<IEmployeeEntity | undefined>>> {
-//   try {
-//     const { id } = await props.params
-//
-//     return (await deleteEmployeeById(id)).toNextResponse()
-//   } catch (error) {
-//     return ResponseData.InternalServerError(error).toNextResponse()
-//   }
-// }
+export async function DELETE(
+  request: NextRequest,
+  props: { params: Promise<{ id: string; "employee-id": string }> }
+): Promise<NextResponse<ResponseData<Employee | undefined>>> {
+  try {
+    const { id, "employee-id": employeeId } = await props.params
+
+    await checkAuthForWorkspace(id)
+
+    const deletedEmployee = await prisma.employee.delete({
+      where: { id: employeeId },
+    })
+
+    // @ts-ignore
+    return ResponseData.Ok<Employee>(deletedEmployee).toNextResponse()
+  } catch (error) {
+    return ResponseData.InternalServerError(error).toNextResponse()
+  }
+}
