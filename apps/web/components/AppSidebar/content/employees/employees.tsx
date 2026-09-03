@@ -8,9 +8,9 @@ import {
 import Link from "next/link"
 import { IconCirclePlusFilled, IconUsers } from "@tabler/icons-react"
 import { Button } from "@workspace/ui/components/button"
-import { EditEmployeeSheet } from "@/app/(private)/(employees)"
 import { generateWorkspaceRoutes } from "@/config/workspace-routes"
 import { useAuth } from "@/app/(public)/(auth)/model/hooks/useAuth"
+import { EditEmployeeSheet } from "../../../../app/(private)/(employees)/ui/edit-employee-sheet/edit-employee-sheet"
 
 export interface EmployeesProps {}
 

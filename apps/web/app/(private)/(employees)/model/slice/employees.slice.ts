@@ -5,8 +5,8 @@ import { EmployeeFilters } from "../types/employee.filters"
 import { TAKE } from "@/config/app"
 import { getEmployeesThunk } from "../thunks/get-employees.thunk"
 import { employeeAdapter } from "../adapter/employee.adapter"
-import { updateEmployeeThunk } from "@/Employees/model/thunks/update-employee.thunk"
-import { deleteEmployeeThunk } from "@/Employees/model/thunks/delete-employee.thunk"
+import { updateEmployeeThunk } from "../thunks/update-employee.thunk"
+import { deleteEmployeeThunk } from "../thunks/delete-employee.thunk"
 
 const initialState: ListReduxSchema<Employee, EmployeeFilters> = {
   ids: [],

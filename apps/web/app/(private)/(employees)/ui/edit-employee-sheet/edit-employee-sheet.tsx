@@ -1,6 +1,6 @@
 "use client"
 
-import { memo, useCallback, useEffect } from "react"
+import { memo, useCallback } from "react"
 import { Input } from "@workspace/ui/components/input"
 import {
   DynamicModuleLoader,
@@ -30,7 +30,7 @@ import {
   employeeDetailsReducer,
 } from "../../model/slice/employee-details.slice"
 import { getAuthData } from "@/app/(public)/(auth)/model/selectors/authSelectors"
-import { updateEmployeeThunk } from "@/Employees/model/thunks/update-employee.thunk"
+import { updateEmployeeThunk } from "../../model/thunks/update-employee.thunk"
 
 export interface EditEmployeeSheetProps {
   employeeId?: string
@@ -48,12 +48,12 @@ export const EditEmployeeSheet = memo((props: EditEmployeeSheetProps) => {
 
   const authData = useAppSelector(getAuthData)
 
-  useEffect(() => {
-    if (isOpen && employeeId && !isFetching && !isInitialized) {
-      // TODO
-      // dispatch(getEmployeeByIdThunk({ id: employeeId }))
-    }
-  }, [employeeId, dispatch, isFetching, isInitialized, isOpen])
+  // useEffect(() => {
+  //   if (isOpen && employeeId && !isFetching && !isInitialized) {
+  //     // TODO
+  //     // dispatch(getEmployeeByIdThunk({ id: employeeId }))
+  //   }
+  // }, [employeeId, dispatch, isFetching, isInitialized, isOpen])
 
   const onSubmit = useCallback(async () => {
     if (formData) {

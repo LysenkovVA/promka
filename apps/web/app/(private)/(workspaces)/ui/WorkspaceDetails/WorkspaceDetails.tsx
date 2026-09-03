@@ -19,8 +19,8 @@ import { Skeleton } from "@workspace/ui/components/skeleton"
 import { Picture } from "@/components/picture"
 import { Separator } from "@workspace/ui/components/separator"
 import { InfoWidget } from "@/Workspaces/ui/InfoWidget/InfoWidget"
-import { EditEmployeeSheet } from "@/app/(private)/(employees)"
 import Link from "next/link"
+import { EditEmployeeSheet } from "@/Employees/ui/edit-employee-sheet/edit-employee-sheet"
 
 export interface WorkspaceDetailsProps {
   workspaceId: string

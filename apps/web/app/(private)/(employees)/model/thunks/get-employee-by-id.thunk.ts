@@ -1,7 +1,7 @@
 "use client"
 
 import { createAsyncThunk } from "@reduxjs/toolkit"
-import { Employee } from "@/Employees"
+import { Employee } from "../types/employee.schema"
 import { ResponseData } from "@/lib/responses/ResponseData"
 import { ThunkConfig } from "@/lib/redux"
 import apiClient from "@/lib/axios/apiClient"

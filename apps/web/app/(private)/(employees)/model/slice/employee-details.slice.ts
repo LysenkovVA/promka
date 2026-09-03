@@ -4,7 +4,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { DetailsReduxSchema } from "@/lib/redux/model/types/DetailsReduxSchema"
 import { Employee } from "../types/employee.schema"
 import { getEmployeeByIdThunk } from "../thunks/get-employee-by-id.thunk"
-import { updateEmployeeThunk } from "@/Employees/model/thunks/update-employee.thunk"
+import { updateEmployeeThunk } from "../thunks/update-employee.thunk"
 
 const initialState: DetailsReduxSchema<Employee> = {
   entityData: { surname: "" },

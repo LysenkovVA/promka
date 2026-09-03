@@ -6,16 +6,16 @@ import {
   useAppDispatch,
   useAppSelector,
 } from "@/lib/redux"
-import { employeeDetailsReducer } from "@/Employees/model/slice/employee-details.slice"
+import { employeeDetailsReducer } from "../../model/slice/employee-details.slice"
 import { Avatar } from "@workspace/ui/components/avatar"
 import {
   getEmployeeDetailsData,
   getEmployeeDetailsError,
-} from "@/Employees/model/selectors/employee-details.selectors"
-import { getEmployeeByIdThunk } from "@/Employees/model/thunks/get-employee-by-id.thunk"
+} from "../../model/selectors/employee-details.selectors"
+import { getEmployeeByIdThunk } from "../../model/thunks/get-employee-by-id.thunk"
 import { DetailsHeader } from "@/components/details-header/details-header"
-import { EditEmployeeSheet } from "@/Employees"
-import { deleteEmployeeThunk } from "@/Employees/model/thunks/delete-employee.thunk"
+import { EditEmployeeSheet } from "../edit-employee-sheet/edit-employee-sheet"
+import { deleteEmployeeThunk } from "../../model/thunks/delete-employee.thunk"
 import { useAuth } from "@/app/(public)/(auth)"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
