@@ -8,7 +8,10 @@ const WORKSPACE_ROUTE_TEMPLATES: Record<
   { template: string; name: string }
 > = {
   DASHBOARD: { template: "/workspaces/:workspaceId", name: "Главное" },
-  EMPLOYEES: { template: "/workspaces/:workspaceId/employees", name: "Сотрудники" },
+  EMPLOYEES: {
+    template: "/workspaces/:workspaceId/employees",
+    name: "Сотрудники",
+  },
 }
 
 /**
@@ -23,9 +26,14 @@ const WORKSPACE_ROUTE_TEMPLATES: Record<
  */
 export function generateWorkspaceRoutes(workspaceId: string) {
   return Object.fromEntries(
-    Object.entries(WORKSPACE_ROUTE_TEMPLATES).map(([key, { template, name }]) => [
-      key,
-      { href: template.replace(":workspaceId", workspaceId), name },
-    ])
+    Object.entries(WORKSPACE_ROUTE_TEMPLATES).map(
+      ([key, { template, name }]) => [
+        key,
+        {
+          href: template.replace(":workspaceId", workspaceId),
+          name,
+        },
+      ]
+    )
   ) as Record<WorkspaceRouteKey, { href: string; name: string }>
 }

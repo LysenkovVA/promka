@@ -1,6 +1,6 @@
 "use client"
 
-import { memo, useEffect } from "react"
+import { memo, useEffect, useState } from "react"
 import {
   DynamicModuleLoader,
   useAppDispatch,
@@ -13,11 +13,8 @@ import {
   getEmployeeDetailsError,
 } from "@/Employees/model/selectors/employee-details.selectors"
 import { getEmployeeByIdThunk } from "@/Employees/model/thunks/get-employee-by-id.thunk"
-import { ButtonGroup } from "@workspace/ui/components/button-group"
-import { Button } from "@workspace/ui/components/button"
-import { IconArrowLeft } from "@tabler/icons-react"
-import { Separator } from "@workspace/ui/components/separator"
-import { useRouter } from "next/navigation"
+import { DetailsHeader } from "@/components/details-header/details-header"
+import { EditEmployeeSheet } from "@/Employees"
 
 export interface EmployeeDetailsProps {
   employeeId?: string
@@ -30,7 +27,7 @@ export const EmployeeDetails = memo((props: EmployeeDetailsProps) => {
   const data = useAppSelector(getEmployeeDetailsData)
   const error = useAppSelector(getEmployeeDetailsError)
 
-  const router = useRouter()
+  const [editSheetIsOpen, setEditSheetIsOpen] = useState(false)
 
   useEffect(() => {
     if (employeeId) dispatch(getEmployeeByIdThunk({ employeeId: employeeId }))
@@ -42,19 +39,13 @@ export const EmployeeDetails = memo((props: EmployeeDetailsProps) => {
       removeAfterUnmount={true}
     >
       <div className={"flex w-full flex-col gap-4"}>
-        <ButtonGroup>
-          <ButtonGroup>
-            <Button
-              variant="outline"
-              aria-label="Go Back"
-              onClick={() => router.back()}
-            >
-              <IconArrowLeft />
-              {"Назад"}
-            </Button>
-          </ButtonGroup>
-        </ButtonGroup>
-        <Separator />
+        <DetailsHeader onEditClick={() => setEditSheetIsOpen(true)}>
+          <EditEmployeeSheet
+            isOpen={editSheetIsOpen}
+            handleOpenChange={(e) => setEditSheetIsOpen(e)}
+            employeeId={employeeId}
+          />
+        </DetailsHeader>
         <div className={"flex w-full flex-col items-start justify-start gap-3"}>
           {error && <div>{error}</div>}
           <div

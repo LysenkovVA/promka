@@ -31,7 +31,6 @@ export const HeaderMenu = memo((_) => {
           <>
             <HeaderMenuSeparator />
             <HeaderMenuCompaniesItem />
-            <HeaderMenuSeparator />
             <HeaderMenuWorkspaceItems />
           </>
         )}

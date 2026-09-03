@@ -4,6 +4,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { DetailsReduxSchema } from "@/lib/redux/model/types/DetailsReduxSchema"
 import { Employee } from "../types/employee.schema"
 import { getEmployeeByIdThunk } from "../thunks/get-employee-by-id.thunk"
+import { updateEmployeeThunk } from "@/Employees/model/thunks/update-employee.thunk"
 
 const initialState: DetailsReduxSchema<Employee> = {
   entityData: { surname: "" },
@@ -62,6 +63,13 @@ export const employeeDetailsSlice = createSlice({
           surname: "",
         }
         state._isInitialized = true
+      })
+      .addCase(updateEmployeeThunk.fulfilled, (state, action) => {
+        state.isFetching = false
+        state.isSaving = false
+        state.error = ""
+        state.entityData = action.payload.data!
+        state.entityFormData = action.payload.data!
       })
     // .addCase(upsertEmployeeThunk.pending, (state, action) => {
     //   state.isFetching = false

@@ -5,6 +5,7 @@ import { EmployeeFilters } from "../types/employee.filters"
 import { TAKE } from "@/config/app"
 import { getEmployeesThunk } from "../thunks/get-employees.thunk"
 import { employeeAdapter } from "../adapter/employee.adapter"
+import { updateEmployeeThunk } from "@/Employees/model/thunks/update-employee.thunk"
 
 const initialState: ListReduxSchema<Employee, EmployeeFilters> = {
   ids: [],
@@ -89,6 +90,10 @@ export const employeesSlice = createSlice({
         state.error = action.payload
 
         state._isInitialized = true
+      })
+      // Обновление работника
+      .addCase(updateEmployeeThunk.fulfilled, (state, action) => {
+        employeeAdapter.upsertOne(state, action.payload.data!)
       })
   },
 })

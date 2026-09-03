@@ -14,6 +14,7 @@ import { generateWorkspaceRoutes } from "@/config/workspace-routes"
 import { useAuth } from "@/app/(public)/(auth)/model/hooks/useAuth"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { HeaderMenuSeparator } from "@/components/AppHeader/components/header-menu/header-menu-separator"
 
 export const HeaderMenuWorkspaceItems = memo((_) => {
   const { activeWorkspace } = useAuth()
@@ -33,26 +34,33 @@ export const HeaderMenuWorkspaceItems = memo((_) => {
     return found?.name ?? null
   }, [path, workspaceRoutes])
 
+  if (!currentRouteName) {
+    return null
+  }
+
   return (
-    <BreadcrumbItem>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <button className="flex items-center gap-1">
-            {currentRouteName ?? activeWorkspace?.name ?? "NO NAME"}
-            <ChevronDownIcon data-icon="inline-end" className="size-3.5" />
-          </button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="start">
-          <DropdownMenuGroup>
-            {workspaceRoutes &&
-              Object.entries(workspaceRoutes).map(([key, wsRoute]) => (
-                <DropdownMenuItem key={key} asChild>
-                  <Link href={wsRoute.href}>{wsRoute.name}</Link>
-                </DropdownMenuItem>
-              ))}
-          </DropdownMenuGroup>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </BreadcrumbItem>
+    <>
+      <HeaderMenuSeparator />
+      <BreadcrumbItem>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button className="flex items-center gap-1">
+              {currentRouteName ?? "NO NAME"}
+              <ChevronDownIcon data-icon="inline-end" className="size-3.5" />
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start">
+            <DropdownMenuGroup>
+              {workspaceRoutes &&
+                Object.entries(workspaceRoutes).map(([key, wsRoute]) => (
+                  <DropdownMenuItem key={key} asChild>
+                    <Link href={wsRoute.href}>{wsRoute.name}</Link>
+                  </DropdownMenuItem>
+                ))}
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </BreadcrumbItem>
+    </>
   )
 })
