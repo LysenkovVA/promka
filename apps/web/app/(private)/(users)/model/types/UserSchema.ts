@@ -7,6 +7,7 @@ import {
   ZOD_VALUE_REQUIRED,
 } from "@/lib/zod/commonErrors"
 import { TeamMemberSchema } from "@/TeamMember/model/types/TeamMemberSchema"
+import { stripTimezone } from "@/lib/date/utils"
 
 /**
  * Схема валидации UserEntity
@@ -96,7 +97,9 @@ export const UserSchema = z.object(
     //         : ZOD_INVALID_DATETIME_TYPE,
     //   })
     //   .nullish(),
-    birthDate: z.coerce.date().nullish(),
+    birthDate: z.coerce.date()
+      .transform((val) => stripTimezone(val))
+      .nullish(),
     teamMembers: z
       .array(
         // Для устранения ошибок с циклическими зависимостями

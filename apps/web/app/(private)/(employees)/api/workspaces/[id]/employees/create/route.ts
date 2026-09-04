@@ -30,6 +30,13 @@ export async function POST(
       data: {
         surname: validatedData.surname,
         name: validatedData.name ?? Prisma.skip,
+        patronymic: validatedData.patronymic ?? Prisma.skip,
+        birthDate: validatedData.birthDate ?? Prisma.skip,
+        snils: validatedData.snils ?? Prisma.skip,
+        hireDate: validatedData.hireDate ?? Prisma.skip,
+        firedDate: validatedData.firedDate ?? Prisma.skip,
+        phoneNumber: validatedData.phoneNumber ?? Prisma.skip,
+        email: validatedData.email ?? Prisma.skip,
         workspace: {
           connect: { id: id },
         },

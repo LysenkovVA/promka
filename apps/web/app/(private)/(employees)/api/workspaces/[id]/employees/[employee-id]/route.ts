@@ -19,6 +19,9 @@ export async function GET(
 
     const candidate = await prisma.employee.findFirst({
       where: { id: employeeId },
+      include: {
+        workspace: { include: { company: true } },
+      },
     })
 
     if (!candidate)
@@ -49,6 +52,13 @@ export async function PATCH(
       data: {
         surname: validatedData.surname ?? Prisma.skip,
         name: validatedData.name ?? Prisma.skip,
+        patronymic: validatedData.patronymic ?? Prisma.skip,
+        birthDate: validatedData.birthDate ?? Prisma.skip,
+        snils: validatedData.snils ?? Prisma.skip,
+        hireDate: validatedData.hireDate ?? Prisma.skip,
+        firedDate: validatedData.firedDate ?? Prisma.skip,
+        phoneNumber: validatedData.phoneNumber ?? Prisma.skip,
+        email: validatedData.email ?? Prisma.skip,
       },
       where: { id: employeeId },
     })

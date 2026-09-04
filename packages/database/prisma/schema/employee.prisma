@@ -2,9 +2,26 @@
  * Сотрудник
  */
 model Employee {
-  id      String  @id @default(cuid())
-  surname String
-  name    String?
+  id         String    @id @default(cuid())
+  // Фамилия
+  surname    String
+  // Имя
+  name       String?
+  // Отчество
+  patronymic String?
+  // Дата рождения
+  birthDate  DateTime?
+
+  // Дата приема на работу
+  hireDate    DateTime?
+  // Дата увольнения
+  firedDate   DateTime?
+  // СНИЛС
+  snils       String?
+  // Номер телефона
+  phoneNumber String?
+  // Электронная почта
+  email       String?
 
   // Рабочее пространство
   workspace   Workspace? @relation(name: "workspace-employees", fields: [workspaceId], references: [id], onDelete: Cascade)

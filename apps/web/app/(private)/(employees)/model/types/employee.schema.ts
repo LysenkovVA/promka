@@ -1,10 +1,13 @@
 import { z } from "zod/v4"
 import {
   ZOD_INVALID_CUID_FORMAT,
+  ZOD_INVALID_DATETIME_TYPE,
   ZOD_INVALID_OBJECT_TYPE,
   ZOD_INVALID_STRING_TYPE,
   ZOD_VALUE_REQUIRED,
 } from "@/lib/zod/commonErrors"
+import { WorkspaceSchema } from "@/Workspaces"
+import { stripTimezone } from "@/lib/date/utils"
 
 /**
  * Схема валидации EmployeeSchema
@@ -43,6 +46,87 @@ export const EmployeeSchema = z.object(
         },
       })
       .nullish(),
+    patronymic: z
+      .string({
+        error: (issue) => {
+          switch (issue.code) {
+            case "invalid_type":
+              return ZOD_INVALID_STRING_TYPE
+          }
+        },
+      })
+      .nullish(),
+    birthDate: z.coerce
+      .date({
+        error: (issue) => {
+          switch (issue.code) {
+            case "invalid_type":
+              return ZOD_INVALID_DATETIME_TYPE
+          }
+        },
+      })
+      .transform((val) => stripTimezone(val))
+      .nullish(),
+    hireDate: z.coerce
+      .date({
+        error: (issue) => {
+          switch (issue.code) {
+            case "invalid_type":
+              return ZOD_INVALID_DATETIME_TYPE
+          }
+        },
+      })
+      .transform((val) => stripTimezone(val))
+      .nullish(),
+    firedDate: z.coerce
+      .date({
+        error: (issue) => {
+          switch (issue.code) {
+            case "invalid_type":
+              return ZOD_INVALID_DATETIME_TYPE
+          }
+        },
+      })
+      .transform((val) => stripTimezone(val))
+      .nullish(),
+    snils: z
+      .string({
+        error: (issue) => {
+          switch (issue.code) {
+            case "invalid_type":
+              return ZOD_INVALID_STRING_TYPE
+          }
+        },
+      })
+      .nullish(),
+    phoneNumber: z
+      .string({
+        error: (issue) => {
+          switch (issue.code) {
+            case "invalid_type":
+              return ZOD_INVALID_STRING_TYPE
+          }
+        },
+      })
+      .nullish(),
+    email: z
+      .string({
+        error: (issue) => {
+          switch (issue.code) {
+            case "invalid_type":
+              return ZOD_INVALID_STRING_TYPE
+          }
+        },
+      })
+      .nullish(),
+    workspace:
+      // Для устранения ошибок с циклическими зависимостями
+      z
+        .lazy<typeof WorkspaceSchema>(() => {
+          const { WorkspaceSchema } = require("@/Workspaces")
+          return WorkspaceSchema
+        })
+        .nullish(),
   },
   /**
    * Параметры объекта

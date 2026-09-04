@@ -9,7 +9,7 @@ export const ZOD_INVALID_BOOLEAN_TYPE =
 export const ZOD_INVALID_CUID_FORMAT = (value: any) =>
   `Идентификатор CUID указан некорректно. Значение '${value}' не может быть CUID`
 export const ZOD_INVALID_DATETIME_FORMAT =
-  "Значение поля должно быть датой в формате UTC"
+  "Значение поля должно быть датой"
 export const ZOD_INVALID_EMAIL_FORMAT =
   "Адрес электронной почты указан некорректно"
 export const ZOD_TO_SMALL_ARRAY = (minimum: number | bigint) =>

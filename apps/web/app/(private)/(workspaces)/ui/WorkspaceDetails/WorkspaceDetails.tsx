@@ -61,7 +61,7 @@ export const WorkspaceDetails = memo((props: WorkspaceDetailsProps) => {
               src={"/logo.png"}
               alt={"pic"}
               // size={"xs"}
-              style={{ width: 200, height: 100, border: "1px solid gray" }}
+              style={{ width: 200, height: 150, border: "1px solid gray" }}
             />
             <div
               className={

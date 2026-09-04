@@ -19,6 +19,26 @@ import { deleteEmployeeThunk } from "../../model/thunks/delete-employee.thunk"
 import { useAuth } from "@/app/(public)/(auth)"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
+import { EmployeeHelper } from "@/Employees/helpers/employee-helper"
+import {
+  Marker,
+  MarkerContent,
+  MarkerIcon,
+} from "@workspace/ui/components/marker"
+import {
+  IconAddressBook,
+  IconCalendar,
+  IconId,
+  IconMail,
+  IconPhone,
+} from "@tabler/icons-react"
+import {
+  Item,
+  ItemContent,
+  ItemDescription,
+  ItemMedia,
+} from "@workspace/ui/components/item"
+import dayjs from "dayjs"
 
 export interface EmployeeDetailsProps {
   employeeId?: string
@@ -67,7 +87,7 @@ export const EmployeeDetails = memo((props: EmployeeDetailsProps) => {
         style: { color: "tomato" },
       })
     }
-  }, [auth.activeWorkspace.id, data?.surname, dispatch, employeeId, router])
+  }, [auth.activeWorkspace?.id, data?.surname, dispatch, employeeId, router])
 
   return (
     <DynamicModuleLoader
@@ -100,9 +120,87 @@ export const EmployeeDetails = memo((props: EmployeeDetailsProps) => {
               <div style={{ fontSize: 30, fontWeight: "bold" }}>
                 {data?.surname}
               </div>
-              <div style={{ fontSize: 20 }}>{data?.name}</div>
+              <div style={{ fontSize: 20 }}>
+                {EmployeeHelper.getFullName(data)}
+              </div>
+              {/*<div style={{ fontSize: 20 }}>{data?.patronymic}</div>*/}
+              {data?.workspace?.company?.id && (
+                <div>{data?.workspace?.company.name}</div>
+              )}
             </div>
           </div>
+          {data?.birthDate && (
+            <Item variant={"muted"}>
+              <ItemMedia variant={"icon"}>
+                <IconCalendar />
+              </ItemMedia>
+              <ItemContent>
+                <ItemDescription> {"Дата рождения"}</ItemDescription>
+                {dayjs(data.birthDate).format("DD.MM.YYYY")}
+              </ItemContent>
+            </Item>
+          )}
+          {data?.snils && (
+            <Item variant={"muted"}>
+              <ItemMedia variant={"icon"}>
+                <IconId />
+              </ItemMedia>
+              <ItemContent>
+                <ItemDescription> {"СНИЛС"}</ItemDescription>
+                {data.snils}
+              </ItemContent>
+            </Item>
+          )}
+          {data?.hireDate && (
+            <Item variant={"muted"}>
+              <ItemMedia variant={"icon"}>
+                <IconCalendar />
+              </ItemMedia>
+              <ItemContent>
+                <ItemDescription> {"Принят на работу"}</ItemDescription>
+                {dayjs(data.hireDate).format("DD.MM.YYYY")}
+              </ItemContent>
+            </Item>
+          )}
+          {data?.firedDate && (
+            <Item variant={"muted"}>
+              <ItemMedia variant={"icon"}>
+                <IconCalendar />
+              </ItemMedia>
+              <ItemContent>
+                <ItemDescription> {"Уволен"}</ItemDescription>
+                {dayjs(data.firedDate).format("DD.MM.YYYY")}
+              </ItemContent>
+            </Item>
+          )}
+          <Marker variant="border">
+            <MarkerIcon>
+              <IconAddressBook />
+            </MarkerIcon>
+            <MarkerContent>Контакты</MarkerContent>
+          </Marker>
+          {data?.phoneNumber && (
+            <Item variant={"muted"}>
+              <ItemMedia variant={"icon"}>
+                <IconPhone />
+              </ItemMedia>
+              <ItemContent>
+                <ItemDescription> {"Телефон"}</ItemDescription>
+                {data.phoneNumber}
+              </ItemContent>
+            </Item>
+          )}
+          {data?.email && (
+            <Item variant={"muted"}>
+              <ItemMedia variant={"icon"}>
+                <IconMail />
+              </ItemMedia>
+              <ItemContent>
+                <ItemDescription> {"E-mail"}</ItemDescription>
+                {data.email}
+              </ItemContent>
+            </Item>
+          )}
         </div>
       </div>
     </DynamicModuleLoader>
