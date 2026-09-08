@@ -10,7 +10,7 @@ export const WorkspacesList = memo(() => {
   return (
     <>
       <div style={{ fontSize: 20, marginBottom: 16 }}>{`Мои организации`}</div>
-      <div className={"flex flex-col items-center justify-center gap-3"}>
+      <div className={"grid grid-cols-3 gap-4"}>
         {authData.user?.teamMembers?.map((teamMember) => (
           <WorkspaceCard
             key={teamMember?.id}

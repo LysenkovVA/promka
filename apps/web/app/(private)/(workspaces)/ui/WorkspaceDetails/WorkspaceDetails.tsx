@@ -77,11 +77,7 @@ export const WorkspaceDetails = memo((props: WorkspaceDetailsProps) => {
             </div>
           </div>
           {/*Виджеты*/}
-          <div
-            className={
-              "m-auto flex w-full flex-row items-center justify-center gap-3"
-            }
-          >
+          <div className={"grid w-full grid-cols-3 gap-4"}>
             <Link
               href={`/workspaces/${workspaceId}/employees`}
               className={"w-full cursor-pointer"}
