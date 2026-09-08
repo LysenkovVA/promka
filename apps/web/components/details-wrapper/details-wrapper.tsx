@@ -1,15 +1,15 @@
 "use client"
 
-import { memo } from "react"
-import { ButtonGroup } from "@workspace/ui/components/button-group"
+import { memo, useMemo } from "react"
 import { Button } from "@workspace/ui/components/button"
 import {
   IconArrowLeft,
+  IconDeviceFloppy,
   IconEditFilled,
   IconTrashFilled,
 } from "@tabler/icons-react"
+import { ButtonGroup } from "@workspace/ui/components/button-group"
 import { Separator } from "@workspace/ui/components/separator"
-import { useRouter } from "next/navigation"
 import {
   Dialog,
   DialogClose,
@@ -21,42 +21,73 @@ import {
   DialogTrigger,
 } from "@workspace/ui/components/dialog"
 
-export interface DetailsHeaderProps {
+export interface DetailsWrapperProps {
   children?: React.ReactNode
+  isEdit: boolean
+  onBackClick?: () => void
   onEditClick?: () => void
-  onDeleteClick?: () => void
+  onSaveClick?: () => void
   deleteMessage?: string
+  onDeleteClick?: () => void
+  error?: string
 }
 
-export const DetailsHeader = memo((props: DetailsHeaderProps) => {
+/**
+ * Обертка для редактирования записи
+ * с кнопками
+ */
+export const DetailsWrapper = memo((props: DetailsWrapperProps) => {
   const {
     children,
+    isEdit,
+    onBackClick,
     onEditClick,
+    onSaveClick,
+    deleteMessage = "Вы действительно хотите удалить запись?",
     onDeleteClick,
-    deleteMessage = "Вы действительно хотите удалить эту запись со всеми связанными данными?",
+    error,
   } = props
 
-  const router = useRouter()
+  const buttonsContent = useMemo(() => {
+    if (error) {
+      return null
+    }
+
+    return isEdit ? (
+      <ButtonGroup>
+        <Button variant={"default"} onClick={onSaveClick}>
+          <IconDeviceFloppy />
+          {"Сохранить"}
+        </Button>
+      </ButtonGroup>
+    ) : (
+      <ButtonGroup>
+        <Button variant={"secondary"} onClick={onEditClick}>
+          <IconEditFilled />
+          {"Редактировать"}
+        </Button>
+      </ButtonGroup>
+    )
+  }, [error, isEdit, onEditClick, onSaveClick])
 
   return (
-    <>
+    <div className={"flex w-full flex-col gap-4"}>
+      {/*Кнопки*/}
       <div className={"flex flex-row items-center justify-between gap-3"}>
         <ButtonGroup>
-          <Button
-            variant="outline"
-            aria-label="Go Back"
-            onClick={() => router.back()}
-          >
+          <Button variant="outline" onClick={onBackClick}>
             <IconArrowLeft />
             {"Назад"}
           </Button>
         </ButtonGroup>
-        <ButtonGroup className={"gap-1"}>
-          <Button variant={"secondary"} onClick={onEditClick}>
-            <IconEditFilled />
-            {"Изменить"}
-          </Button>
-
+        {buttonsContent}
+      </div>
+      {/*Контент или ошибка*/}
+      {error ? <div className={"text-destructive"}>{error}</div> : children}
+      {/*Кнопка удаления в режиме редактирования без ошибки*/}
+      {!error && isEdit && onDeleteClick && (
+        <>
+          <Separator />
           <Dialog>
             <DialogTrigger asChild>
               <Button variant={"destructive"}>
@@ -81,10 +112,8 @@ export const DetailsHeader = memo((props: DetailsHeaderProps) => {
               </DialogFooter>
             </DialogContent>
           </Dialog>
-        </ButtonGroup>
-      </div>
-      <Separator />
-      {children}
-    </>
+        </>
+      )}
+    </div>
   )
 })

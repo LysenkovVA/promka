@@ -29,7 +29,7 @@ export const EmployeesList = memo(() => {
     >
       <div
         style={{ fontSize: 20, marginBottom: 16 }}
-      >{`Сотрудники \"${auth.activeWorkspace.company.name}\"`}</div>
+      >{`Сотрудники \"${auth.activeWorkspace?.company?.name}\"`}</div>
       {(!data || data.length === 0) && <div>Список сотрудников пуст</div>}
       {data && data.length > 0 && (
         <div className={"grid grid-cols-3 gap-3"}>

@@ -8,6 +8,7 @@ import {
 } from "@/lib/zod/commonErrors"
 import { WorkspaceSchema } from "@/Workspaces"
 import { stripTimezone } from "@/lib/date/utils"
+import { BerthSchema } from "@/Berthes"
 
 /**
  * Схема валидации EmployeeSchema
@@ -125,6 +126,14 @@ export const EmployeeSchema = z.object(
         .lazy<typeof WorkspaceSchema>(() => {
           const { WorkspaceSchema } = require("@/Workspaces")
           return WorkspaceSchema
+        })
+        .nullish(),
+    berth:
+      // Для устранения ошибок с циклическими зависимостями
+      z
+        .lazy<typeof BerthSchema>(() => {
+          const { BerthSchema } = require("@/Berthes")
+          return BerthSchema
         })
         .nullish(),
   },

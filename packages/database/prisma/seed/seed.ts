@@ -49,6 +49,14 @@ async function main() {
                       name: "First company",
                     },
                   },
+                  berthes: {
+                    create: [
+                      {
+                        name: "Стропальщик",
+                      },
+                      { name: "Маркшейдер" },
+                    ],
+                  },
                 },
               },
               workspacePermissions: {

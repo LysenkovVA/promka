@@ -14,6 +14,8 @@ model Workspace {
 
   // Сотрудники компании
   employees Employee[] @relation(name: "workspace-employees")
+  // Должности компании
+  berthes   Berth[]    @relation(name: "workspace-berthes")
 
   @@map("workspaces")
 }

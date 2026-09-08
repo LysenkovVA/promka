@@ -24,6 +24,10 @@ model Employee {
   email       String?
 
   // Рабочее пространство
+  berth   Berth?  @relation(name: "berth-employees", fields: [berthId], references: [id], onDelete: Cascade)
+  berthId String?
+
+  // Рабочее пространство
   workspace   Workspace? @relation(name: "workspace-employees", fields: [workspaceId], references: [id], onDelete: Cascade)
   workspaceId String?
 

@@ -1,0 +1,16 @@
+/**
+ * Должность сотрудника
+ */
+model Berth {
+  id   String @id @default(cuid())
+  name String
+
+  // Рабочее пространство
+  workspace   Workspace? @relation(name: "workspace-berthes", fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId String?
+
+  employees Employee[] @relation("berth-employees")
+
+  @@index([name])
+  @@map("berthes")
+}

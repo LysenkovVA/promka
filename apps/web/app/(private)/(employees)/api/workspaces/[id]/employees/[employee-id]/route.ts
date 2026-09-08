@@ -21,6 +21,7 @@ export async function GET(
       where: { id: employeeId },
       include: {
         workspace: { include: { company: true } },
+        berth: true,
       },
     })
 
@@ -59,8 +60,17 @@ export async function PATCH(
         firedDate: validatedData.firedDate ?? Prisma.skip,
         phoneNumber: validatedData.phoneNumber ?? Prisma.skip,
         email: validatedData.email ?? Prisma.skip,
+        ...(validatedData.berth?.id
+          ? {
+              berth: { connect: { id: validatedData.berth?.id } },
+            }
+          : { berth: { disconnect: true } }),
       },
       where: { id: employeeId },
+      include: {
+        workspace: { include: { company: true } },
+        berth: true,
+      },
     })
 
     if (!updatedData)

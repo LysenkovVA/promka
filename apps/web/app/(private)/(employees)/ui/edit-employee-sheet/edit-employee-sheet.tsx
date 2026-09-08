@@ -18,7 +18,12 @@ import {
 } from "@workspace/ui/components/sheet"
 import { Button } from "@workspace/ui/components/button"
 import { toast } from "sonner"
-import { Field, FieldLabel } from "@workspace/ui/components/field"
+import {
+  Field,
+  FieldDescription,
+  FieldLabel,
+  FieldSet,
+} from "@workspace/ui/components/field"
 import {
   getEmployeeDetailsFormData,
   getEmployeeDetailsIsFetching,
@@ -32,6 +37,7 @@ import {
 import { getAuthData } from "@/app/(public)/(auth)/model/selectors/authSelectors"
 import { updateEmployeeThunk } from "../../model/thunks/update-employee.thunk"
 import { FieldDatePicker } from "@/components/field-date-picker/field-date-picker"
+import { FieldBerth } from "@/Berthes"
 
 export interface EditEmployeeSheetProps {
   employeeId?: string
@@ -39,6 +45,9 @@ export interface EditEmployeeSheetProps {
   handleOpenChange: (isOpen: boolean) => void
 }
 
+/**
+ * @deprecated
+ */
 export const EditEmployeeSheet = memo((props: EditEmployeeSheetProps) => {
   const { employeeId, isOpen, handleOpenChange } = props
   const dispatch = useAppDispatch()
@@ -123,9 +132,9 @@ export const EditEmployeeSheet = memo((props: EditEmployeeSheetProps) => {
           <SheetHeader>
             <SheetTitle>
               <div
-                className={
-                  "m-auto flex w-fit flex-row items-start justify-start gap-1"
-                }
+              // className={
+              //   "m-auto flex w-fit flex-row items-start justify-start gap-1"
+              // }
               >
                 {formData?.id ? (
                   <div>{formData.name}</div>
@@ -179,6 +188,7 @@ export const EditEmployeeSheet = memo((props: EditEmployeeSheetProps) => {
                 }
               />
             </Field>
+
             <FieldDatePicker
               label={"Дата рождения"}
               id={"birthDate"}
@@ -207,34 +217,55 @@ export const EditEmployeeSheet = memo((props: EditEmployeeSheetProps) => {
                 }
               />
             </Field>
-            <FieldDatePicker
-              label={"Принят на работу"}
-              id={"hireDate"}
-              value={
-                formData?.hireDate ? new Date(formData.hireDate) : undefined
-              }
-              onChange={(e) => {
-                dispatch(
-                  employeeDetailsActions.setFormData({
-                    data: { ...formData!, hireDate: e },
-                  })
-                )
-              }}
-            />
-            <FieldDatePicker
-              label={"Уволен"}
-              id={"firedDate"}
-              value={
-                formData?.firedDate ? new Date(formData.firedDate) : undefined
-              }
-              onChange={(e) => {
-                dispatch(
-                  employeeDetailsActions.setFormData({
-                    data: { ...formData!, firedDate: e },
-                  })
-                )
-              }}
-            />
+            <FieldSet>
+              {/*<FieldLegend>Рабочая информация</FieldLegend>*/}
+              <FieldDescription>Информация о работе</FieldDescription>
+              <FieldBerth
+                label={"Должность"}
+                id={"berth"}
+                value={formData?.berth ?? undefined}
+                onChange={(selectedValue) => {
+                  dispatch(
+                    employeeDetailsActions.setFormData({
+                      data: { ...formData!, berth: selectedValue },
+                    })
+                  )
+                  // dispatch(berthesActions.setSearch(""))
+                }}
+              />
+              <div className={"grid grid-cols-2 gap-2"}>
+                <FieldDatePicker
+                  label={"Принят на работу"}
+                  id={"hireDate"}
+                  value={
+                    formData?.hireDate ? new Date(formData.hireDate) : undefined
+                  }
+                  onChange={(e) => {
+                    dispatch(
+                      employeeDetailsActions.setFormData({
+                        data: { ...formData!, hireDate: e },
+                      })
+                    )
+                  }}
+                />
+                <FieldDatePicker
+                  label={"Уволен"}
+                  id={"firedDate"}
+                  value={
+                    formData?.firedDate
+                      ? new Date(formData.firedDate)
+                      : undefined
+                  }
+                  onChange={(e) => {
+                    dispatch(
+                      employeeDetailsActions.setFormData({
+                        data: { ...formData!, firedDate: e },
+                      })
+                    )
+                  }}
+                />
+              </div>
+            </FieldSet>
             <Field>
               <FieldLabel htmlFor="phoneNumber">Телефон</FieldLabel>
               <Input

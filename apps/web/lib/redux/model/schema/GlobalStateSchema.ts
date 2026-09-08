@@ -2,9 +2,9 @@ import { Action, Reducer, ReducersMapObject } from "redux"
 import { DetailsReduxSchema } from "@/lib/redux/model/types/DetailsReduxSchema"
 import { IAuthData } from "@/app/(public)/(auth)"
 import { Workspace } from "@/Workspaces"
-import { Employee } from "@/app/(private)/(employees)"
 import { ListReduxSchema } from "@/lib/redux/model/types/ListReduxSchema"
-import { EmployeeFilters } from "@/Employees/model/types/employee.filters"
+import { Berth, BerthFilters } from "@/Berthes"
+import { Employee, EmployeeFilters } from "@/Employees"
 
 /**
  * Схема глобального состояния
@@ -15,8 +15,12 @@ export interface GlobalStateSchema {
   authSchema: DetailsReduxSchema<IAuthData>
   // Динамические
   workspaceDetailsSchema?: DetailsReduxSchema<Workspace>
+  // Сотрудники
   employeeDetailsSchema?: DetailsReduxSchema<Employee>
   employeesSchema?: ListReduxSchema<Employee, EmployeeFilters>
+  // Должности
+  berthDetailsSchema?: DetailsReduxSchema<Berth>
+  berthesSchema?: ListReduxSchema<Berth, BerthFilters>
 }
 
 /**

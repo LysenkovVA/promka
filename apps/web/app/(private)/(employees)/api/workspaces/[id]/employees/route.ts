@@ -25,8 +25,12 @@ export async function GET(
       where: { workspace: { id: id } },
       take: Number(take),
       skip: Number(skip),
+      include: {
+        berth: true,
+      },
     })
 
+    // @ts-ignore
     return ResponseData.Ok<Employee[]>(data).toNextResponse()
   } catch (error) {
     return ResponseData.InternalServerError(error).toNextResponse()

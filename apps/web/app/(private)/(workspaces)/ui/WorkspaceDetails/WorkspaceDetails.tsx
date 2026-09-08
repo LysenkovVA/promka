@@ -1,6 +1,6 @@
 "use client"
 
-import { memo, useEffect, useState } from "react"
+import { memo, useEffect } from "react"
 import {
   DynamicModuleLoader,
   useAppDispatch,
@@ -20,7 +20,7 @@ import { Picture } from "@/components/picture"
 import { Separator } from "@workspace/ui/components/separator"
 import { InfoWidget } from "@/Workspaces/ui/InfoWidget/InfoWidget"
 import Link from "next/link"
-import { EditEmployeeSheet } from "@/Employees/ui/edit-employee-sheet/edit-employee-sheet"
+import { useRouter } from "next/navigation"
 
 export interface WorkspaceDetailsProps {
   workspaceId: string
@@ -35,7 +35,9 @@ export const WorkspaceDetails = memo((props: WorkspaceDetailsProps) => {
   const error = useAppSelector(getWorkspaceDetailsError)
   const isInitialized = useAppSelector(getWorkspaceDetailsIsInitialized)
 
-  const [employeeSheetIsOpen, setEmployeeSheetIsOpen] = useState(false)
+  const router = useRouter()
+
+  // const [employeeSheetIsOpen, setEmployeeSheetIsOpen] = useState(false)
 
   useEffect(() => {
     if (workspaceId) {
@@ -87,16 +89,18 @@ export const WorkspaceDetails = memo((props: WorkspaceDetailsProps) => {
               <InfoWidget
                 title={"Сотрудники"}
                 count={0}
-                onAddClick={() => setEmployeeSheetIsOpen(true)}
+                onAddClick={() =>
+                  router.push(`/workspaces/${workspaceId}/employees/create`)
+                }
               >
-                <>
-                  <EditEmployeeSheet
-                    isOpen={employeeSheetIsOpen}
-                    handleOpenChange={(isOpen) =>
-                      setEmployeeSheetIsOpen(isOpen)
-                    }
-                  />
-                </>
+                {/*<>*/}
+                {/*  <EditEmployeeSheet*/}
+                {/*    isOpen={employeeSheetIsOpen}*/}
+                {/*    handleOpenChange={(isOpen) =>*/}
+                {/*      setEmployeeSheetIsOpen(isOpen)*/}
+                {/*    }*/}
+                {/*  />*/}
+                {/*</>*/}
               </InfoWidget>
             </Link>
           </div>

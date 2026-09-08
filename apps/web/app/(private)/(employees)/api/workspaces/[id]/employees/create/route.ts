@@ -40,9 +40,17 @@ export async function POST(
         workspace: {
           connect: { id: id },
         },
+        ...(validatedData.berth?.id && {
+          berth: { connect: { id: validatedData.berth?.id } },
+        }),
+      },
+      include: {
+        workspace: { include: { company: true } },
+        berth: true,
       },
     })
 
+    // @ts-ignore
     return ResponseData.Ok<Employee>(createdData).toNextResponse()
   } catch (error) {
     return ResponseData.InternalServerError(error).toNextResponse()
