@@ -97,6 +97,7 @@ export const EmployeeDetailsForm = memo((props: EmployeeDetailsFormProps) => {
               )
             }
           />
+          <FieldDescription>{"11 цифр"}</FieldDescription>
         </Field>
       </FieldSet>
       <FieldSet className={"w-full"}>

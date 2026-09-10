@@ -253,12 +253,14 @@ export const EmployeeDetails = memo((props: EmployeeDetailsProps) => {
                 </ItemContent>
               </Item>
             )}
-            <Marker variant="border">
-              <MarkerIcon>
-                <IconAddressBook />
-              </MarkerIcon>
-              <MarkerContent>Контакты</MarkerContent>
-            </Marker>
+            {(data?.phoneNumber || data?.email) && (
+              <Marker variant="border">
+                <MarkerIcon>
+                  <IconAddressBook />
+                </MarkerIcon>
+                <MarkerContent>Контакты</MarkerContent>
+              </Marker>
+            )}
             {data?.phoneNumber && (
               <Item variant={"muted"}>
                 <ItemMedia variant={"icon"}>

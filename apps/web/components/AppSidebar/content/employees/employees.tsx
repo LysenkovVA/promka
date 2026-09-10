@@ -1,23 +1,19 @@
 "use client"
 
-import { memo, useState } from "react"
+import { memo } from "react"
 import {
   SidebarGroup,
   SidebarGroupContent,
 } from "@workspace/ui/components/sidebar"
 import Link from "next/link"
-import { IconCirclePlusFilled, IconUsers } from "@tabler/icons-react"
-import { Button } from "@workspace/ui/components/button"
+import { IconUsers } from "@tabler/icons-react"
 import { generateWorkspaceRoutes } from "@/config/workspace-routes"
 import { useAuth } from "@/app/(public)/(auth)/model/hooks/useAuth"
-import { EditEmployeeSheet } from "../../../../app/(private)/(employees)/ui/edit-employee-sheet/edit-employee-sheet"
 
 export interface EmployeesProps {}
 
 export const Employees = memo((props: EmployeesProps) => {
   const {} = props
-
-  const [sheetIsOpen, setSheetIsOpen] = useState(false)
 
   const { activeWorkspace } = useAuth()
   const workspaceRoutes = activeWorkspace
@@ -38,16 +34,6 @@ export const Employees = memo((props: EmployeesProps) => {
               <IconUsers className="size-3" />
               <div>{workspaceRoutes.EMPLOYEES.name}</div>
             </Link>
-          )}
-          <Button variant={"ghost"} onClick={() => setSheetIsOpen(true)}>
-            <IconCirclePlusFilled className={"fill-green-500"} />
-          </Button>
-          {sheetIsOpen && (
-            <EditEmployeeSheet
-              isOpen={sheetIsOpen}
-              handleOpenChange={(isOpen) => setSheetIsOpen(isOpen)}
-              employeeId={undefined}
-            />
           )}
         </div>
       </SidebarGroupContent>

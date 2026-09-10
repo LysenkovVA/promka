@@ -18,9 +18,8 @@ import { workspaceDetailsReducer } from "@/Workspaces/model/slice/workspace-deta
 import { Skeleton } from "@workspace/ui/components/skeleton"
 import { Picture } from "@/components/picture"
 import { Separator } from "@workspace/ui/components/separator"
-import { InfoWidget } from "@/Workspaces/ui/InfoWidget/InfoWidget"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { EmployeesWidget } from "@/Employees/ui/employees-widget/employees-widget"
+import { PageWrapper } from "@/components/page-wrapper/page-wrapper"
 
 export interface WorkspaceDetailsProps {
   workspaceId: string
@@ -34,8 +33,6 @@ export const WorkspaceDetails = memo((props: WorkspaceDetailsProps) => {
   const isFetching = useAppSelector(getWorkspaceDetailsIsFetching)
   const error = useAppSelector(getWorkspaceDetailsError)
   const isInitialized = useAppSelector(getWorkspaceDetailsIsInitialized)
-
-  const router = useRouter()
 
   // const [employeeSheetIsOpen, setEmployeeSheetIsOpen] = useState(false)
 
@@ -51,57 +48,39 @@ export const WorkspaceDetails = memo((props: WorkspaceDetailsProps) => {
       reducers={{ workspaceDetailsSchema: workspaceDetailsReducer }}
       removeAfterUnmount
     >
-      {isFetching && <Skeleton className="h-10 w-[250px]" />}
-      {error && <div className={"text-red-400"}>{error}</div>}
-      {!isFetching && !error && (
-        <div
-          className={"flex w-full flex-col items-center justify-center gap-5"}
-        >
-          {/*Логотип и название компании*/}
-          <div className={"flex w-full items-start justify-start gap-3"}>
-            <Picture
-              src={"/logo.png"}
-              alt={"pic"}
-              // size={"xs"}
-              style={{ width: 200, height: 150, border: "1px solid gray" }}
-            />
-            <div
-              className={
-                "flex w-full flex-col items-start justify-center gap-2"
-              }
-            >
+      <PageWrapper>
+        {isFetching && <Skeleton className="h-10 w-[250px]" />}
+        {error && <div className={"text-red-400"}>{error}</div>}
+        {!isFetching && !error && (
+          <div
+            className={"flex w-full flex-col items-center justify-center gap-5"}
+          >
+            {/*Логотип и название компании*/}
+            <div className={"flex w-full items-start justify-start gap-3"}>
+              <Picture
+                src={"/logo.png"}
+                alt={"pic"}
+                // size={"xs"}
+                style={{ width: 200, height: 150, border: "1px solid gray" }}
+              />
               <div
-                style={{ fontSize: 30 }}
-              >{`${workspaceData?.company.name}`}</div>
-              <Separator />
-            </div>
-          </div>
-          {/*Виджеты*/}
-          <div className={"grid w-full grid-cols-3 gap-4"}>
-            <Link
-              href={`/workspaces/${workspaceId}/employees`}
-              className={"w-full cursor-pointer"}
-            >
-              <InfoWidget
-                title={"Сотрудники"}
-                count={0}
-                onAddClick={() =>
-                  router.push(`/workspaces/${workspaceId}/employees/create`)
+                className={
+                  "flex w-full flex-col items-start justify-center gap-2"
                 }
               >
-                {/*<>*/}
-                {/*  <EditEmployeeSheet*/}
-                {/*    isOpen={employeeSheetIsOpen}*/}
-                {/*    handleOpenChange={(isOpen) =>*/}
-                {/*      setEmployeeSheetIsOpen(isOpen)*/}
-                {/*    }*/}
-                {/*  />*/}
-                {/*</>*/}
-              </InfoWidget>
-            </Link>
+                <div
+                  style={{ fontSize: 30 }}
+                >{`${workspaceData?.company.name}`}</div>
+                <Separator />
+              </div>
+            </div>
+            {/*Виджеты*/}
+            <div className={"grid w-full grid-cols-3 gap-4"}>
+              <EmployeesWidget />
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </PageWrapper>
     </DynamicModuleLoader>
   )
 })

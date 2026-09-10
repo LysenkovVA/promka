@@ -3,15 +3,15 @@
 import * as React from "react"
 import { Field, FieldLabel } from "@workspace/ui/components/field"
 import { Berth } from "../../model/types/berth.schema"
-import { BerthSelect } from "@/Berthes/ui/berth-select/berth-select"
+import { BerthSelector } from "@/Berthes/ui/berth-selector/berth-selector"
 import { Badge } from "@workspace/ui/components/badge"
 import { IconEraser } from "@tabler/icons-react"
 
 export interface FieldBerthProps {
   label: string
   id: string
-  value?: Berth | undefined
-  onChange?: (value: Berth | undefined) => void
+  value?: Berth
+  onChange?: (value?: Berth) => void
 }
 
 export const FieldBerth = (props: FieldBerthProps) => {
@@ -29,7 +29,7 @@ export const FieldBerth = (props: FieldBerthProps) => {
           <IconEraser className={"size-3"} style={{ color: "blue" }} />
         </Badge>
       </FieldLabel>
-      <BerthSelect value={value} onChange={(berth) => onChange?.(berth)} />
+      <BerthSelector value={value} onChange={onChange} />
     </Field>
   )
 }

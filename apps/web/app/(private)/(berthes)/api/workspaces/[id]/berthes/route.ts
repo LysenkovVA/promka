@@ -31,6 +31,7 @@ export async function GET(
       },
       take: Number(take),
       skip: Number(skip),
+      orderBy: { name: "asc" },
     })
 
     // @ts-ignore

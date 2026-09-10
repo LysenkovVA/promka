@@ -32,6 +32,12 @@ export const berthesSlice = createSlice({
       state.take = TAKE
       state.skip = 0
     },
+    clearData: (state) => {
+      state.search = ""
+      state.take = TAKE
+      state.skip = 0
+      berthAdapter.removeAll(state)
+    },
     setFilters: (
       state,
       action: PayloadAction<

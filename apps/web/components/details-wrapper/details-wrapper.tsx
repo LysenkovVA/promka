@@ -20,6 +20,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@workspace/ui/components/dialog"
+import { PageWrapper } from "@/components/page-wrapper/page-wrapper"
 
 export interface DetailsWrapperProps {
   children?: React.ReactNode
@@ -73,7 +74,11 @@ export const DetailsWrapper = memo((props: DetailsWrapperProps) => {
   return (
     <div className={"flex w-full flex-col gap-4"}>
       {/*Кнопки*/}
-      <div className={"flex flex-row items-center justify-between gap-3"}>
+      <div
+        className={
+          "flex flex-row items-center justify-between gap-3 bg-muted p-4"
+        }
+      >
         <ButtonGroup>
           <Button variant="outline" onClick={onBackClick}>
             <IconArrowLeft />
@@ -83,37 +88,43 @@ export const DetailsWrapper = memo((props: DetailsWrapperProps) => {
         {buttonsContent}
       </div>
       {/*Контент или ошибка*/}
-      {error ? <div className={"text-destructive"}>{error}</div> : children}
-      {/*Кнопка удаления в режиме редактирования без ошибки*/}
-      {!error && isEdit && onDeleteClick && (
-        <>
-          <Separator />
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant={"destructive"}>
-                <IconTrashFilled />
-                {"Удалить"}
-              </Button>
-            </DialogTrigger>
-            <DialogContent showCloseButton={false}>
-              <DialogHeader>
-                <DialogTitle>{"Удаление"}</DialogTitle>
-                <DialogDescription>{deleteMessage}</DialogDescription>
-              </DialogHeader>
-              <DialogFooter>
-                <DialogClose asChild>
-                  <ButtonGroup>
-                    <Button variant={"secondary"}>{"Отмена"}</Button>
-                    <Button variant={"destructive"} onClick={onDeleteClick}>
-                      {"Удалить"}
-                    </Button>
-                  </ButtonGroup>
-                </DialogClose>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
-        </>
-      )}
+      <PageWrapper>
+        {error ? <div className={"text-destructive"}>{error}</div> : children}
+        {/*Кнопка удаления в режиме редактирования без ошибки*/}
+        {!error && isEdit && onDeleteClick && (
+          <div
+            className={
+              "m-auto mt-4 flex flex-col items-center justify-center gap-3"
+            }
+          >
+            <Separator />
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant={"destructive"}>
+                  <IconTrashFilled />
+                  {"Удалить"}
+                </Button>
+              </DialogTrigger>
+              <DialogContent showCloseButton={false}>
+                <DialogHeader>
+                  <DialogTitle>{"Удаление"}</DialogTitle>
+                  <DialogDescription>{deleteMessage}</DialogDescription>
+                </DialogHeader>
+                <DialogFooter>
+                  <DialogClose asChild>
+                    <ButtonGroup>
+                      <Button variant={"secondary"}>{"Отмена"}</Button>
+                      <Button variant={"destructive"} onClick={onDeleteClick}>
+                        {"Удалить"}
+                      </Button>
+                    </ButtonGroup>
+                  </DialogClose>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </div>
+        )}
+      </PageWrapper>
     </div>
   )
 })

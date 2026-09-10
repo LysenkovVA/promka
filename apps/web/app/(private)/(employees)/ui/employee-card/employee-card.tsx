@@ -1,13 +1,12 @@
 "use client"
 
-import { memo, useState } from "react"
+import { memo } from "react"
 import {
   Item,
   ItemContent,
   ItemDescription,
   ItemTitle,
 } from "@workspace/ui/components/item"
-import { EditEmployeeSheet } from "../edit-employee-sheet/edit-employee-sheet"
 import { Employee } from "../../model/types/employee.schema"
 import { Avatar } from "@workspace/ui/components/avatar"
 import { useAuth } from "@/app/(public)/(auth)"
@@ -19,8 +18,6 @@ export interface EmployeeWidgetProps {
 
 export const EmployeeCard = memo((props: EmployeeWidgetProps) => {
   const { employee } = props
-
-  const [sheetIsOpen, setSheetIsOpen] = useState(false)
 
   const { activeWorkspace } = useAuth()
 
@@ -56,13 +53,6 @@ export const EmployeeCard = memo((props: EmployeeWidgetProps) => {
           </ItemDescription>
         </ItemContent>
       </Item>
-      {sheetIsOpen && (
-        <EditEmployeeSheet
-          isOpen={sheetIsOpen}
-          handleOpenChange={(isOpen) => setSheetIsOpen(isOpen)}
-          employeeId={employee?.id ?? undefined}
-        />
-      )}
     </>
   )
 })
