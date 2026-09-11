@@ -1,6 +1,6 @@
 "use client"
 
-import React, { memo, useCallback, useMemo } from "react"
+import React, { memo, useCallback, useMemo, useState } from "react"
 import { Berth } from "../../model/types/berth.schema"
 import {
   DynamicModuleLoader,
@@ -33,6 +33,7 @@ import {
 } from "@workspace/ui/components/item"
 import { Button } from "@workspace/ui/components/button"
 import { IconPlusFilled } from "@tabler/icons-react"
+import { BerthEditDialog } from "@/Berthes/ui/berth-edit-dialog/berth-edit-dialog"
 
 export interface BerthSelectorProps {
   value?: Berth
@@ -45,6 +46,8 @@ export const BerthSelector = memo((props: BerthSelectorProps) => {
   const dispatch = useAppDispatch()
   const data = useAppSelector(getBerthes.selectAll)
   const search = useAppSelector(getBerthesSearch)
+
+  const [isOpenEditDialog, setIsOpenEditDialog] = useState(false)
 
   const comboBoxData = useMemo(() => {
     if (value && !data?.some((item) => item.id === value.id)) {
@@ -106,10 +109,22 @@ export const BerthSelector = memo((props: BerthSelectorProps) => {
                 className={"flex flex-col items-center justify-center gap-2"}
               >
                 <div>{"Ничего не найдено"}</div>
-                <Button>
+                <Button onClick={() => setIsOpenEditDialog(true)}>
                   <IconPlusFilled />
                   <div>{"Добавить"}</div>
                 </Button>
+                {isOpenEditDialog && (
+                  <BerthEditDialog
+                    isOpen={isOpenEditDialog}
+                    onOpenChange={(isOpen) => setIsOpenEditDialog(isOpen)}
+                    berthId={undefined}
+                    onSubmit={(submittedBerth) => {
+                      onChange?.({ ...submittedBerth })
+                      setIsOpenEditDialog(false)
+                    }}
+                    onClose={() => setIsOpenEditDialog(false)}
+                  />
+                )}
               </div>
             </ComboboxEmpty>
           )}

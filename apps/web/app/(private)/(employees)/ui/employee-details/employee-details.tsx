@@ -59,7 +59,6 @@ export const EmployeeDetails = memo((props: EmployeeDetailsProps) => {
   const [isEdit, setIsEdit] = useState(false)
 
   const auth = useAuth()
-
   const router = useRouter()
 
   useEffect(() => {

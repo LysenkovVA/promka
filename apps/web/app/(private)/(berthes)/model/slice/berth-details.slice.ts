@@ -36,15 +36,15 @@ export const berthDetailsSlice = createSlice({
         state.isFetching = true
         state.isSaving = false
         state.error = ""
-        ;((state.entityData = {
+        state.entityData = {
           name: "",
           workspace: { company: { name: "" } },
-        }),
-          (state.entityFormData = {
-            name: "",
-            workspace: { company: { name: "" } },
-          }),
-          (state._isInitialized = false))
+        }
+        state.entityFormData = {
+          name: "",
+          workspace: { company: { name: "" } },
+        }
+        state._isInitialized = false
       })
       .addCase(getBerthByIdThunk.fulfilled, (state, action) => {
         state.isFetching = false
@@ -58,15 +58,15 @@ export const berthDetailsSlice = createSlice({
         state.isFetching = false
         state.isSaving = false
         state.error = action.payload
-        ;((state.entityData = {
+        state.entityData = {
           name: "",
           workspace: { company: { name: "" } },
-        }),
-          (state.entityFormData = {
-            name: "",
-            workspace: { company: { name: "" } },
-          }),
-          (state._isInitialized = true))
+        }
+        state.entityFormData = {
+          name: "",
+          workspace: { company: { name: "" } },
+        }
+        state._isInitialized = true
       })
       .addCase(updateBerthThunk.fulfilled, (state, action) => {
         state.isFetching = false

@@ -107,14 +107,6 @@ export const EmployeeDetailsForm = memo((props: EmployeeDetailsFormProps) => {
             : "Рабочая информация"}
         </FieldDescription>
         <Separator />
-        {/*{formData?.workspace?.company.id && (*/}
-        {/*  <Field className={"w-fit"}>*/}
-        {/*    <FieldLabel>{"Организация"}</FieldLabel>*/}
-        {/*    <div className={"m-auto w-fit"}>*/}
-        {/*      {formData?.workspace?.company.name}*/}
-        {/*    </div>*/}
-        {/*  </Field>*/}
-        {/*)}*/}
         <FieldBerth
           label={"Должность"}
           id={"berth"}
