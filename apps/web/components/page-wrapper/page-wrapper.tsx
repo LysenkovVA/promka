@@ -1,13 +1,15 @@
 "use client"
 
 import { memo, ReactNode } from "react"
+import { cn } from "@workspace/ui/lib/utils"
 
 export interface PageWrapperProps {
   children: ReactNode
+  className?: string
 }
 
 export const PageWrapper = memo((props: PageWrapperProps) => {
-  const { children } = props
+  const { children, className } = props
 
-  return <div className={"w-full p-4"}>{children}</div>
+  return <div className={cn(`w-full pr-36 pl-36`, className)}>{children}</div>
 })

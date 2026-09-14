@@ -3,12 +3,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { DetailsReduxSchema } from "@/lib/redux/model/types/DetailsReduxSchema"
 import { Berth } from "../types/berth.schema"
+import { CreateBerthRequestSchema } from "../types/create-berth-request.schema"
 import { getBerthByIdThunk } from "../thunks/get-berth-by-id.thunk"
 import { updateBerthThunk } from "../thunks/update-berth.thunk"
 
 const initialState: DetailsReduxSchema<Berth> = {
   entityData: { name: "", workspace: { company: { name: "" } } },
   entityFormData: { name: "", workspace: { company: { name: "" } } },
+  validationErrors: {},
   error: "",
   isFetching: false,
   isSaving: false,
@@ -27,6 +29,20 @@ export const berthDetailsSlice = createSlice({
     },
     setFormData: (state, action: PayloadAction<{ data: Berth }>) => {
       state.entityFormData = action.payload.data
+      // Валидация при изменении данных
+      const result = CreateBerthRequestSchema.safeParse(action.payload.data)
+      if (!result.success) {
+        const errors: Record<string, string> = {}
+        for (const issue of result.error.issues) {
+          if (issue.path.length > 0) {
+            const field = issue.path[0]
+            errors[field as string] = issue.message
+          }
+        }
+        state.validationErrors = errors
+      } else {
+        state.validationErrors = {}
+      }
     },
   },
   extraReducers: (builder) => {

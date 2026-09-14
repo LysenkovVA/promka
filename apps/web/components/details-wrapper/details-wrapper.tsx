@@ -76,7 +76,7 @@ export const DetailsWrapper = memo((props: DetailsWrapperProps) => {
       {/*Кнопки*/}
       <div
         className={
-          "flex flex-row items-center justify-between gap-3 bg-muted p-4"
+          "flex flex-shrink-0 flex-row items-center justify-between gap-3 bg-muted p-4"
         }
       >
         <ButtonGroup>
@@ -88,7 +88,7 @@ export const DetailsWrapper = memo((props: DetailsWrapperProps) => {
         {buttonsContent}
       </div>
       {/*Контент или ошибка*/}
-      <PageWrapper>
+      <PageWrapper className={"flex-1 overflow-y-auto"}>
         {error ? <div className={"text-destructive"}>{error}</div> : children}
         {/*Кнопка удаления в режиме редактирования без ошибки*/}
         {!error && isEdit && onDeleteClick && (

@@ -20,13 +20,15 @@ import {
 } from "../../model/slice/berth-details.slice"
 import { Berth } from "../../model/types/berth.schema"
 import { getBerthByIdThunk } from "@/Berthes/model/thunks/get-berth-by-id.thunk"
-import { getBerthDetailsFormData } from "@/Berthes/model/selectors/berth-details.selectors"
+import {
+  getBerthDetailsFormData,
+  getBerthDetailsValidationErrors,
+} from "@/Berthes/model/selectors/berth-details.selectors"
 import { useAuth } from "@/app/(public)/(auth)"
 import { toast } from "sonner"
 import { createBerthThunk } from "@/Berthes/model/thunks/create-berth.thunk"
 import { updateBerthThunk } from "@/Berthes/model/thunks/update-berth.thunk"
-import { Field, FieldLabel } from "@workspace/ui/components/field"
-import { Input } from "@workspace/ui/components/input"
+import { BerthDetailsForm } from "@/Berthes/ui/berth-details-form/berth-details-form"
 
 export interface BerthEditDialogProps {
   isOpen: boolean
@@ -43,10 +45,13 @@ export const BerthEditDialog = memo((props: BerthEditDialogProps) => {
 
   const dispatch = useAppDispatch()
   const formData = useAppSelector(getBerthDetailsFormData)
+  const validationErrors = useAppSelector(getBerthDetailsValidationErrors)
 
   useEffect(() => {
     if (berthId) {
       dispatch(getBerthByIdThunk({ berthId }))
+    } else {
+      dispatch(berthDetailsActions.setFormData({ data: { name: "" } }))
     }
   }, [berthId, dispatch])
 
@@ -117,23 +122,11 @@ export const BerthEditDialog = memo((props: BerthEditDialogProps) => {
             {/*  <DialogDescription>{description}</DialogDescription>*/}
             {/*)}*/}
           </DialogHeader>
-          <Field>
-            <FieldLabel htmlFor="name">{"Название"}</FieldLabel>
-            <Input
-              id="name"
-              value={formData?.name ?? ""}
-              onChange={(e) =>
-                dispatch(
-                  berthDetailsActions.setFormData({
-                    data: { ...formData!, name: e.target.value },
-                  })
-                )
-              }
-            />
-          </Field>
+          <BerthDetailsForm />
           <DialogFooter>
             <Button
               variant={"default"}
+              disabled={Object.keys(validationErrors).length > 0}
               onClick={async () => {
                 await onSubmitCallback()
               }}

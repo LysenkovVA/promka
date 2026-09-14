@@ -34,3 +34,8 @@ export const getBerthDetailsIsInitialized = createSelector(
   getBerthDetails,
   (schema) => schema?._isInitialized ?? false
 )
+
+export const getBerthDetailsValidationErrors = createSelector(
+  getBerthDetails,
+  (schema) => schema?.validationErrors ?? {}
+)

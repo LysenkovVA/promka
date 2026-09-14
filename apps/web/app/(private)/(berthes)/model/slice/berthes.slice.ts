@@ -104,7 +104,7 @@ export const berthesSlice = createSlice({
       .addCase(updateBerthThunk.fulfilled, (state, action) => {
         berthAdapter.upsertOne(state, action.payload.data!)
       })
-      // Удаление сотрудника
+      // Удаление
       .addCase(deleteBerthThunk.fulfilled, (state, action) => {
         if (action.payload.data?.id) {
           berthAdapter.removeOne(state, action.payload.data?.id)
