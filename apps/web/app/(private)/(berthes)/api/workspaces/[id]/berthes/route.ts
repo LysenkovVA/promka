@@ -32,6 +32,9 @@ export async function GET(
       take: Number(take),
       skip: Number(skip),
       orderBy: { name: "asc" },
+      include: {
+        berthType: true,
+      },
     })
 
     // @ts-ignore

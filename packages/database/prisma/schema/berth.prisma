@@ -9,6 +9,9 @@ model Berth {
   workspace   Workspace? @relation(name: "workspace-berthes", fields: [workspaceId], references: [id], onDelete: Cascade)
   workspaceId String?
 
+  berthType   BerthType @relation(name: "berth-type-berthes", fields: [berthTypeId], references: [id], onDelete: Cascade)
+  berthTypeId String
+
   employees Employee[] @relation("berth-employees")
 
   @@index([name])

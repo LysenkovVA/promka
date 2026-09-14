@@ -26,7 +26,7 @@ export async function GET(
       take: Number(take),
       skip: Number(skip),
       include: {
-        berth: true,
+        berth: { include: { berthType: true } },
       },
     })
 

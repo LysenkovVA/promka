@@ -53,13 +53,12 @@ async function main() {
                     create: [
                       {
                         name: "Стропальщик",
+                        berthType: { create: { name: "Рабочие" } },
                       },
-                      { name: "Маркшейдер" },
-                      { name: "Арматурщик" },
-                      { name: "Бетонщик" },
-                      { name: "Папа Карло" },
-                      { name: "Директор" },
-                      { name: "Начальник службы ОТ и ПБ" },
+                      {
+                        name: "Начальник службы ОТ и ПБ",
+                        berthType: { create: { name: "ИТР" } },
+                      },
                     ],
                   },
                 },

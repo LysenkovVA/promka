@@ -6,6 +6,7 @@ import {
   ZOD_VALUE_REQUIRED,
 } from "@/lib/zod/commonErrors"
 import { WorkspaceSchema } from "@/Workspaces"
+import { BerthTypeSchema } from "@/BerthTypes"
 
 /**
  * Схема валидации BerthSchema
@@ -40,6 +41,14 @@ export const BerthSchema = z.object(
         .lazy<typeof WorkspaceSchema>(() => {
           const { WorkspaceSchema } = require("@/Workspaces")
           return WorkspaceSchema
+        })
+        .nullish(),
+    berthType:
+      // Для устранения ошибок с циклическими зависимостями
+      z
+        .lazy<typeof BerthTypeSchema>(() => {
+          const { BerthTypeSchema } = require("@/BerthTypes")
+          return BerthTypeSchema
         })
         .nullish(),
   },

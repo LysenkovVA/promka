@@ -185,7 +185,9 @@ export const BerthSelector = memo((props: BerthSelectorProps) => {
                           <ItemTitle className="whitespace-nowrap">
                             {berth.name}
                           </ItemTitle>
-                          <ItemDescription>{"Тип должности"}</ItemDescription>
+                          <ItemDescription>
+                            {berth.berthType?.name}
+                          </ItemDescription>
                         </ItemContent>
                       </Item>
                     </div>

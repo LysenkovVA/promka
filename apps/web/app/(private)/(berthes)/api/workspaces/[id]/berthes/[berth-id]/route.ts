@@ -21,6 +21,7 @@ export async function GET(
       where: { id: berthId },
       include: {
         workspace: { include: { company: true } },
+        berthType: true,
       },
     })
 
@@ -55,6 +56,7 @@ export async function PATCH(
       where: { id: berthId },
       include: {
         workspace: { include: { company: true } },
+        berthType: true,
       },
     })
 

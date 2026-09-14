@@ -28,6 +28,7 @@ export async function POST(
         workspace: {
           connect: { id: id },
         },
+        berthType: { connect: { id: validatedData.berthType!.id! } },
       },
       include: {
         workspace: { include: { company: true } },

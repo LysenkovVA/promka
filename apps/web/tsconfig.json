@@ -23,7 +23,9 @@
       "@/Employees": ["./app/(private)/(employees)/index.ts"],
       "@/Employees/*": ["./app/(private)/(employees)/*"],
       "@/Berthes": ["./app/(private)/(berthes)/index.ts"],
-      "@/Berthes/*": ["./app/(private)/(berthes)/*"]
+      "@/Berthes/*": ["./app/(private)/(berthes)/*"],
+      "@/BerthTypes": ["./app/(private)/(berth-types)/index.ts"],
+      "@/BerthTypes/*": ["./app/(private)/(berth-types)/*"]
     },
     "plugins": [
       {

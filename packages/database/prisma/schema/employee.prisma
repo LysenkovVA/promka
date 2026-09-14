@@ -23,7 +23,6 @@ model Employee {
   // Электронная почта
   email       String?
 
-  // Рабочее пространство
   berth   Berth?  @relation(name: "berth-employees", fields: [berthId], references: [id], onDelete: Cascade)
   berthId String?
 
