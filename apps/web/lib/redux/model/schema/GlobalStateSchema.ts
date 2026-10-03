@@ -5,6 +5,8 @@ import { Workspace } from "@/Workspaces"
 import { ListReduxSchema } from "@/lib/redux/model/types/ListReduxSchema"
 import { Berth, BerthFilters } from "@/Berthes"
 import { Employee, EmployeeFilters } from "@/Employees"
+import { BerthType } from "@/BerthTypes"
+import { BerthTypesFilters } from "@/BerthTypes/model/types/berth-type.filters"
 
 /**
  * Схема глобального состояния
@@ -21,6 +23,9 @@ export interface GlobalStateSchema {
   // Должности
   berthDetailsSchema?: DetailsReduxSchema<Berth>
   berthesSchema?: ListReduxSchema<Berth, BerthFilters>
+  // Типы должностей
+  berthTypeDetailsSchema?: DetailsReduxSchema<BerthType>
+  berthTypesSchema?: ListReduxSchema<BerthType, BerthTypesFilters>
 }
 
 /**

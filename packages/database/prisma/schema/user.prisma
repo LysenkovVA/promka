@@ -14,10 +14,13 @@ model User {
   surname              String?
   // Имя
   name                 String?
+  patronymic           String?
   // Дата рождения
   birthDate            DateTime?
   // URL аватара
   avatar               File?     @relation(name: "user-avatar")
+  // Роль
+  userRole             UserRole  @default(USER)
 
   refreshTokens RefreshToken[] @relation(name: "user-refreshTokens")
 
@@ -25,4 +28,14 @@ model User {
 
   @@index([email])
   @@map("users")
+}
+
+/**
+ * Роли пользователей приложения
+ */
+enum UserRole {
+  // Администратор
+  ADMINISTRATOR
+  // Пользователь
+  USER
 }

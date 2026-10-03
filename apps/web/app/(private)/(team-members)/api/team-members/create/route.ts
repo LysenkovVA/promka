@@ -36,7 +36,7 @@ export async function POST(
     const createdData = await prisma.teamMember.create({
       data: {
         user: { connect: { id: userId } },
-        teamMemberRole: validatedData.teamMemberRole,
+        workspaceRole: validatedData.workspaceRole,
         workspace: {
           create: {
             company: {

@@ -23,6 +23,12 @@ async function main() {
       data: {
         email: "admin@mail.ru",
         hashedPassword: bcrypt.hashSync("111", 10),
+        userRole: "ADMINISTRATOR",
+        surname: "Лысенков",
+        name: "Виктор",
+        patronymic: "Андреевич",
+        phoneNumber: "+79263357989",
+        birthDate: dayjs.utc("1986-03-30").toDate(),
       },
     })
   }
@@ -31,66 +37,16 @@ async function main() {
     where: { email: "user@mail.ru" },
   })
   if (!candidate) {
-    await prisma.user.create({
+    const user = await prisma.user.create({
       data: {
         email: "user@mail.ru",
         hashedPassword: bcrypt.hashSync("111", 10),
-        surname: "Лысенков",
-        name: "Виктор",
-        phoneNumber: "+79263357989",
-        birthDate: dayjs.utc("1986-03-30").toDate(),
-        teamMembers: {
-          create: [
-            {
-              workspace: {
-                create: {
-                  company: {
-                    create: {
-                      name: "First company",
-                    },
-                  },
-                  berthes: {
-                    create: [
-                      {
-                        name: "Стропальщик",
-                        berthType: { create: { name: "Рабочие" } },
-                      },
-                      {
-                        name: "Начальник службы ОТ и ПБ",
-                        berthType: { create: { name: "ИТР" } },
-                      },
-                    ],
-                  },
-                },
-              },
-              workspacePermissions: {
-                create: {
-                  canRead: true,
-                  canDelete: true,
-                  canWrite: true,
-                },
-              },
-            },
-            {
-              workspace: {
-                create: {
-                  company: {
-                    create: {
-                      name: "Second company",
-                    },
-                  },
-                },
-              },
-              workspacePermissions: {
-                create: {
-                  canRead: true,
-                  canDelete: true,
-                  canWrite: true,
-                },
-              },
-            },
-          ],
-        },
+        userRole: "USER",
+        surname: "Лысенкова",
+        name: "Диана",
+        patronymic: "Олеговна",
+        phoneNumber: "+79263877681",
+        birthDate: dayjs.utc("1986-11-24").toDate(),
         avatar: {
           create: {
             s3name: "test.jpg",
@@ -99,6 +55,95 @@ async function main() {
             fileName: "test.jpg",
           },
         },
+      },
+    })
+
+    const userWorkspace = await prisma.workspace.create({
+      data: {
+        company: {
+          create: {
+            name: 'ООО "СпецСтройТехнологии-М"',
+          },
+        },
+        berthes: {
+          create: [
+            {
+              name: "Начальник службы ОТ и ПБ",
+              berthType: { create: { name: "ИТР" } },
+            },
+            {
+              name: "Стропальщик",
+              berthType: { create: { name: "Рабочие" } },
+            },
+          ],
+        },
+      },
+    })
+
+    const userTeamMember = await prisma.teamMember.create({
+      data: {
+        user: { connect: { id: user.id } },
+        workspace: { connect: { id: userWorkspace.id } },
+        workspacePermissions: {
+          create: {
+            // БУДУТ СОЗДАНЫ ЗНАЧЕНИЯ ПО УМОЛЧАНИЮ
+          },
+        },
+        workspaceRole: "WS_ADMINISTRATOR",
+      },
+    })
+
+    const userWorkspaceBerthType1 = await prisma.berthType.create({
+      data: {
+        name: "ИТР",
+        workspace: { connect: { id: userWorkspace.id } },
+      },
+    })
+
+    const userWorkspaceBerthType2 = await prisma.berthType.create({
+      data: {
+        name: "Рабочие",
+        workspace: { connect: { id: userWorkspace.id } },
+      },
+    })
+
+    const userWorkspaceBerth1 = await prisma.berth.create({
+      data: {
+        name: "Стропальщик",
+        workspace: { connect: { id: userWorkspace.id } },
+        berthType: { connect: { id: userWorkspaceBerthType2.id } },
+      },
+    })
+
+    const userWorkspaceBerth2 = await prisma.berth.create({
+      data: {
+        name: "Арматурщик",
+        workspace: { connect: { id: userWorkspace.id } },
+        berthType: { connect: { id: userWorkspaceBerthType2.id } },
+      },
+    })
+
+    const userWorkspaceBerth3 = await prisma.berth.create({
+      data: {
+        name: "Бетонщик",
+        workspace: { connect: { id: userWorkspace.id } },
+        berthType: { connect: { id: userWorkspaceBerthType2.id } },
+      },
+    })
+
+    const userWorkspaceBerth4 = await prisma.berth.create({
+      data: {
+        name: "Директор",
+        workspace: { connect: { id: userWorkspace.id } },
+        berthType: { connect: { id: userWorkspaceBerthType1.id } },
+      },
+    })
+
+    const userWorkspaceBerth5 = await prisma.berth.create({
+      data: {
+        name: "Инженер по ОТ и ТБ",
+        workspace: { connect: { id: userWorkspace.id } },
+        berthType: { connect: { id: userWorkspaceBerthType1.id } },
       },
     })
   }

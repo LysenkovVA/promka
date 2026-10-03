@@ -9,7 +9,7 @@ model TeamMember {
   userId String
 
   // Роль участника
-  teamMemberRole TeamMemberRole @default(MEMBER)
+  workspaceRole WorkspaceRole @default(WS_MEMBER)
 
   // Разрешения участника в рабочем пространстве (один-к-одному)
   workspacePermissions WorkspacePermissions?
@@ -24,7 +24,7 @@ model TeamMember {
 /**
  * Роль участника в рабочем пространстве
  */
-enum TeamMemberRole {
-  ADMIN
-  MEMBER
+enum WorkspaceRole {
+  WS_ADMINISTRATOR
+  WS_MEMBER
 }

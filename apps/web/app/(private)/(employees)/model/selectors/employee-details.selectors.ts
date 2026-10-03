@@ -10,10 +10,10 @@ export const getEmployeeDetailsData = createSelector(
   (schema) => schema?.entityData ?? undefined
 )
 
-export const getEmployeeDetailsFormData = createSelector(
-  getEmployeeDetails,
-  (schema) => schema?.entityFormData ?? undefined
-)
+// export const getEmployeeDetailsFormData = createSelector(
+//   getEmployeeDetails,
+//   (schema) => schema?.entityFormData ?? undefined
+// )
 
 export const getEmployeeDetailsIsFetching = createSelector(
   getEmployeeDetails,

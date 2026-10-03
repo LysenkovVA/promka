@@ -8,7 +8,6 @@ import { updateEmployeeThunk } from "../thunks/update-employee.thunk"
 
 const initialState: DetailsReduxSchema<Employee> = {
   entityData: { surname: "" },
-  entityFormData: { surname: "" },
   error: "",
   isFetching: false,
   isSaving: false,
@@ -25,9 +24,6 @@ export const employeeDetailsSlice = createSlice({
     ) => {
       state._isInitialized = action.payload.isInitialized
     },
-    setFormData: (state, action: PayloadAction<{ data: Employee }>) => {
-      state.entityFormData = action.payload.data
-    },
   },
   extraReducers: (builder) => {
     builder
@@ -39,9 +35,6 @@ export const employeeDetailsSlice = createSlice({
         state.entityData = {
           surname: "",
         }
-        state.entityFormData = {
-          surname: "",
-        }
         state._isInitialized = false
       })
       .addCase(getEmployeeByIdThunk.fulfilled, (state, action) => {
@@ -49,7 +42,6 @@ export const employeeDetailsSlice = createSlice({
         state.isSaving = false
         state.error = ""
         state.entityData = action.payload.data!
-        state.entityFormData = action.payload.data!
         state._isInitialized = true
       })
       .addCase(getEmployeeByIdThunk.rejected, (state, action) => {
@@ -59,35 +51,14 @@ export const employeeDetailsSlice = createSlice({
         state.entityData = {
           surname: "",
         }
-        state.entityFormData = {
-          surname: "",
-        }
         state._isInitialized = true
       })
       .addCase(updateEmployeeThunk.fulfilled, (state, action) => {
         state.isFetching = false
         state.isSaving = false
         state.error = ""
-        state.entityData = action.payload.data!
-        state.entityFormData = action.payload.data!
+        state.entityData = action.payload.data
       })
-    // .addCase(upsertEmployeeThunk.pending, (state, action) => {
-    //   state.isFetching = false
-    //   state.isSaving = true
-    //   state.error = ""
-    // })
-    // .addCase(upsertEmployeeThunk.fulfilled, (state, action) => {
-    //   state.isFetching = false
-    //   state.isSaving = false
-    //   state.error = ""
-    //   state.entityData = action.payload.data!
-    //   state.entityFormData = action.payload.data!
-    // })
-    // .addCase(upsertEmployeeThunk.rejected, (state, action) => {
-    //   state.isFetching = false
-    //   state.isSaving = false
-    //   state.error = action.payload
-    // })
   },
 })
 

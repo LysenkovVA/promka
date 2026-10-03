@@ -10,10 +10,10 @@ export const getWorkspaceDetailsData = createSelector(
   (schema) => schema?.entityData ?? undefined
 )
 
-export const getWorkspaceDetailsFormData = createSelector(
-  getWorkspaceDetails,
-  (schema) => schema?.entityFormData ?? undefined
-)
+// export const getWorkspaceDetailsFormData = createSelector(
+//   getWorkspaceDetails,
+//   (schema) => schema?.entityFormData ?? undefined
+// )
 
 export const getWorkspaceDetailsIsFetching = createSelector(
   getWorkspaceDetails,

@@ -1,7 +1,6 @@
 export interface DetailsReduxSchema<EntityType> {
   entityData?: EntityType
-  entityFormData?: EntityType
-  validationErrors?: Record<string, string>
+  // entityFormData?: EntityType
   isFetching: boolean
   isSaving: boolean
   error?: string

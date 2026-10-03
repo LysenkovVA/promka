@@ -1,88 +1,74 @@
 "use client"
 
-import * as React from "react"
-import { useState } from "react"
-import { Field, FieldLabel } from "@workspace/ui/components/field"
-import { Berth } from "../../model/types/berth.schema"
-import { BerthSelector } from "@/Berthes/ui/berth-selector/berth-selector"
+import { memo } from "react"
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldLabel,
+} from "@workspace/ui/components/field"
+import {
+  Controller,
+  FieldPath,
+  FieldValues,
+  UseFormReturn,
+} from "react-hook-form"
+import { IconAsterisk } from "@tabler/icons-react"
+import { Berth } from "@/Berthes"
+import { BerthSelector } from "../berth-selector/berth-selector"
 
-export interface FieldBerthProps {
+export interface FieldBerthProps<
+  TFieldValues extends FieldValues = FieldValues,
+> {
+  form: UseFormReturn<TFieldValues>
+  path: FieldPath<TFieldValues>
   label: string
-  id: string
-  value?: Berth
-  onChange?: (value?: Berth) => void
+  onChange?: (value: Berth | null) => void
+  description?: string
+  required?: boolean
 }
 
-export const FieldBerth = (props: FieldBerthProps) => {
-  const { label, value, onChange, id } = props
-
-  const [isOpenEditDialog, setIsOpenEditDialog] = useState(false)
-  const [editBerthId, setEditBerthId] = useState<string | undefined>(undefined)
+/**
+ * Поле формы BerthType
+ * @param props
+ * @constructor
+ */
+function FieldBerthInner<TFieldValues extends FieldValues>(
+  props: FieldBerthProps<TFieldValues>
+) {
+  const { form, path, label, onChange, description, required = false } = props
 
   return (
-    <>
-      <Field>
-        <FieldLabel htmlFor={id}>
-          <div className={"flex w-full items-center justify-between"}>
-            {label}
-            {/*{value?.id && (*/}
-            {/*  <div className={"flex items-center justify-center gap-1"}>*/}
-            {/*    <Badge*/}
-            {/*      variant={"secondary"}*/}
-            {/*      className={`${value ? "cursor-pointer" : "cursor-default"} rounded-lg border-gray-500`}*/}
-            {/*      onClick={() => onChange?.(undefined)}*/}
-            {/*    >*/}
-            {/*      <IconEraser className={"size-3"} style={{ color: "blue" }} />*/}
-            {/*      <div className={"text-xs font-light text-muted-foreground"}>*/}
-            {/*        {"очистить"}*/}
-            {/*      </div>*/}
-            {/*    </Badge>*/}
-            {/*    <Badge*/}
-            {/*      variant={"secondary"}*/}
-            {/*      className={`${value.id ? "cursor-pointer" : "cursor-default"} rounded-lg border-gray-500`}*/}
-            {/*      onClick={() => {*/}
-            {/*        setEditBerthId(value.id!)*/}
-            {/*        setIsOpenEditDialog(true)*/}
-            {/*      }}*/}
-            {/*    >*/}
-            {/*      <div className={"flex items-center justify-center gap-1"}>*/}
-            {/*        <IconEditFilled*/}
-            {/*          className={"size-3"}*/}
-            {/*          style={{ color: "orange" }}*/}
-            {/*        />*/}
-            {/*        <div className={"text-xs font-light text-muted-foreground"}>*/}
-            {/*          {"правка"}*/}
-            {/*        </div>*/}
-            {/*      </div>*/}
-            {/*    </Badge>*/}
-            {/*  </div>*/}
-            {/*)}*/}
-          </div>
-        </FieldLabel>
-        <div className={"w-full"}>
+    <Controller
+      control={form.control}
+      name={path}
+      render={({ field, fieldState }) => (
+        <Field aria-invalid={fieldState.invalid} className={"w-fit"}>
+          <FieldLabel>
+            <div className={"flex w-full items-center justify-start gap-1"}>
+              {label}
+              {required && (
+                <IconAsterisk className={"size-2 text-destructive"} />
+              )}
+            </div>
+          </FieldLabel>
           <BerthSelector
-            // className={"w-full"}
-            value={value}
-            onChange={onChange}
+            value={field.value ?? null}
+            onChange={(e) => {
+              field.onChange(e)
+              onChange?.(e)
+            }}
           />
-        </div>
-      </Field>
-      {/*{isOpenEditDialog && (*/}
-      {/*  <BerthEditDialog*/}
-      {/*    isOpen={isOpenEditDialog}*/}
-      {/*    onOpenChange={(isOpen) => setIsOpenEditDialog(isOpen)}*/}
-      {/*    berthId={editBerthId}*/}
-      {/*    onSubmit={(submittedBerth) => {*/}
-      {/*      onChange?.({ ...submittedBerth })*/}
-      {/*      setIsOpenEditDialog(false)*/}
-      {/*      setEditBerthId(undefined)*/}
-      {/*    }}*/}
-      {/*    onClose={() => {*/}
-      {/*      setIsOpenEditDialog(false)*/}
-      {/*      setEditBerthId(undefined)*/}
-      {/*    }}*/}
-      {/*  />*/}
-      {/*)}*/}
-    </>
+          {description && <FieldDescription>{description}</FieldDescription>}
+          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+        </Field>
+      )}
+    />
   )
 }
+
+export const FieldBerth = memo(FieldBerthInner) as <
+  TFieldValues extends FieldValues,
+>(
+  props: FieldBerthProps<TFieldValues>
+) => ReturnType<React.FC<FieldBerthProps<TFieldValues>>>

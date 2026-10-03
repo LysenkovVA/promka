@@ -7,7 +7,7 @@ import { getWorkspaceByIdThunk } from "@/Workspaces/model/thunks/get-workspace-b
 
 const initialState: DetailsReduxSchema<Workspace> = {
   entityData: { company: { name: "" } },
-  entityFormData: { company: { name: "" } },
+  // entityFormData: { company: { name: "" } },
   error: "",
   isFetching: false,
   isSaving: false,
@@ -24,9 +24,9 @@ export const workspaceDetailsSlice = createSlice({
     ) => {
       state._isInitialized = action.payload.isInitialized
     },
-    setFormData: (state, action: PayloadAction<{ data: Workspace }>) => {
-      state.entityFormData = action.payload.data
-    },
+    // setFormData: (state, action: PayloadAction<{ data: Workspace }>) => {
+    //   state.entityFormData = action.payload.data
+    // },
   },
   extraReducers: (builder) => {
     builder
@@ -36,7 +36,7 @@ export const workspaceDetailsSlice = createSlice({
         state.isSaving = false
         state.error = ""
         state.entityData = { company: { name: "" } }
-        state.entityFormData = { company: { name: "" } }
+        // state.entityFormData = { company: { name: "" } }
         state._isInitialized = false
       })
       .addCase(getWorkspaceByIdThunk.fulfilled, (state, action) => {
@@ -44,7 +44,7 @@ export const workspaceDetailsSlice = createSlice({
         state.isSaving = false
         state.error = ""
         state.entityData = action.payload.data!
-        state.entityFormData = action.payload.data!
+        // state.entityFormData = action.payload.data!
         state._isInitialized = true
       })
       .addCase(getWorkspaceByIdThunk.rejected, (state, action) => {
@@ -52,7 +52,7 @@ export const workspaceDetailsSlice = createSlice({
         state.isSaving = false
         state.error = action.payload
         state.entityData = { company: { name: "" } }
-        state.entityFormData = { company: { name: "" } }
+        // state.entityFormData = { company: { name: "" } }
         state._isInitialized = true
       })
   },

@@ -39,12 +39,12 @@ export const authSlice = createSlice({
         state.entityData.activeWorkspaceId = action.payload
       }
     },
-    setFormData: (
-      state: DetailsReduxSchema<IAuthData>,
-      action: PayloadAction<IAuthData>
-    ) => {
-      state.entityFormData = action.payload
-    },
+    // setFormData: (
+    //   state: DetailsReduxSchema<IAuthData>,
+    //   action: PayloadAction<IAuthData>
+    // ) => {
+    //   state.entityFormData = action.payload
+    // },
   },
   extraReducers: (builder) => {
     builder
@@ -58,15 +58,15 @@ export const authSlice = createSlice({
           },
           activeWorkspaceId: undefined,
         }
-        state.entityFormData = {
-          user: {
-            email: "",
-            hashedPassword: "",
-            emailConfirmed: false,
-            phoneNumberConfirmed: false,
-          },
-          activeWorkspaceId: undefined,
-        }
+        // state.entityFormData = {
+        //   user: {
+        //     email: "",
+        //     hashedPassword: "",
+        //     emailConfirmed: false,
+        //     phoneNumberConfirmed: false,
+        //   },
+        //   activeWorkspaceId: undefined,
+        // }
         state.error = undefined
         state.isFetching = true
         state.isSaving = false
@@ -79,7 +79,7 @@ export const authSlice = createSlice({
           action: PayloadAction<IAuthData>
         ) => {
           state.entityData = action.payload
-          state.entityFormData = action.payload
+          // state.entityFormData = action.payload
           state.error = undefined
           state.isFetching = false
           state.isSaving = false
@@ -100,14 +100,14 @@ export const authSlice = createSlice({
               phoneNumberConfirmed: false,
             },
           }
-          state.entityFormData = {
-            user: {
-              email: "",
-              hashedPassword: "",
-              emailConfirmed: false,
-              phoneNumberConfirmed: false,
-            },
-          }
+          // state.entityFormData = {
+          //   user: {
+          //     email: "",
+          //     hashedPassword: "",
+          //     emailConfirmed: false,
+          //     phoneNumberConfirmed: false,
+          //   },
+          // }
           state.error =
             typeof action.payload === "string" ? action.payload : undefined
           state.isFetching = false
@@ -124,7 +124,7 @@ export const authSlice = createSlice({
           const userData = action.payload
           if (userData) {
             state.entityData = userData
-            state.entityFormData = userData
+            // state.entityFormData = userData
             state.error = undefined
             state.isFetching = false
             state.isSaving = false
@@ -146,14 +146,14 @@ export const authSlice = createSlice({
               phoneNumberConfirmed: false,
             },
           }
-          state.entityFormData = {
-            user: {
-              email: "",
-              hashedPassword: "",
-              emailConfirmed: false,
-              phoneNumberConfirmed: false,
-            },
-          }
+          // state.entityFormData = {
+          //   user: {
+          //     email: "",
+          //     hashedPassword: "",
+          //     emailConfirmed: false,
+          //     phoneNumberConfirmed: false,
+          //   },
+          // }
           state.error =
             typeof action.payload === "string" ? action.payload : undefined
           state.isFetching = false
@@ -172,14 +172,14 @@ export const authSlice = createSlice({
               phoneNumberConfirmed: false,
             },
           }
-          state.entityFormData = {
-            user: {
-              email: "",
-              hashedPassword: "",
-              emailConfirmed: false,
-              phoneNumberConfirmed: false,
-            },
-          }
+          // state.entityFormData = {
+          //   user: {
+          //     email: "",
+          //     hashedPassword: "",
+          //     emailConfirmed: false,
+          //     phoneNumberConfirmed: false,
+          //   },
+          // }
           state.error = ""
           state.isFetching = false
           state.isSaving = false

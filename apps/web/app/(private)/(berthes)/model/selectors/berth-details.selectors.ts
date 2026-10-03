@@ -10,10 +10,10 @@ export const getBerthDetailsData = createSelector(
   (schema) => schema?.entityData ?? undefined
 )
 
-export const getBerthDetailsFormData = createSelector(
-  getBerthDetails,
-  (schema) => schema?.entityFormData ?? undefined
-)
+// export const getBerthDetailsFormData = createSelector(
+//   getBerthDetails,
+//   (schema) => schema?.entityFormData ?? undefined
+// )
 
 export const getBerthDetailsIsFetching = createSelector(
   getBerthDetails,
@@ -33,9 +33,4 @@ export const getBerthDetailsError = createSelector(
 export const getBerthDetailsIsInitialized = createSelector(
   getBerthDetails,
   (schema) => schema?._isInitialized ?? false
-)
-
-export const getBerthDetailsValidationErrors = createSelector(
-  getBerthDetails,
-  (schema) => schema?.validationErrors ?? {}
 )

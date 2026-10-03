@@ -1,6 +1,6 @@
 "use client"
 
-import { memo, useCallback, useEffect } from "react"
+import { memo, useCallback, useEffect, useRef } from "react"
 import {
   Dialog,
   DialogContent,
@@ -14,21 +14,25 @@ import {
   useAppDispatch,
   useAppSelector,
 } from "@/lib/redux"
-import {
-  berthDetailsActions,
-  berthDetailsReducer,
-} from "../../model/slice/berth-details.slice"
-import { Berth } from "../../model/types/berth.schema"
+import { berthDetailsReducer } from "../../model/slice/berth-details.slice"
+import { Berth, BerthSchema } from "../../model/types/berth.schema"
 import { getBerthByIdThunk } from "@/Berthes/model/thunks/get-berth-by-id.thunk"
+import { Controller, useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
 import {
-  getBerthDetailsFormData,
-  getBerthDetailsValidationErrors,
-} from "@/Berthes/model/selectors/berth-details.selectors"
-import { useAuth } from "@/app/(public)/(auth)"
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@workspace/ui/components/field"
+import { IconAsterisk } from "@tabler/icons-react"
+import { Textarea } from "@workspace/ui/components/textarea"
 import { toast } from "sonner"
 import { createBerthThunk } from "@/Berthes/model/thunks/create-berth.thunk"
+import { getBerthDetailsData } from "@/Berthes/model/selectors/berth-details.selectors"
+import { useAuth } from "@/app/(public)/(auth)"
 import { updateBerthThunk } from "@/Berthes/model/thunks/update-berth.thunk"
-import { BerthDetailsForm } from "@/Berthes/ui/berth-details-form/berth-details-form"
+import { FieldBerthType } from "@/BerthTypes/ui/field-berth-type/field-berth-type"
 
 export interface BerthEditDialogProps {
   isOpen: boolean
@@ -44,68 +48,83 @@ export const BerthEditDialog = memo((props: BerthEditDialogProps) => {
   const auth = useAuth()
 
   const dispatch = useAppDispatch()
-  const formData = useAppSelector(getBerthDetailsFormData)
-  const validationErrors = useAppSelector(getBerthDetailsValidationErrors)
+  const data = useAppSelector(getBerthDetailsData)
+  const hiddenSubmitInputRef = useRef<HTMLInputElement | null>(null)
+
+  const form = useForm<Berth>({
+    resolver: zodResolver(BerthSchema),
+    defaultValues: {
+      name: "",
+      berthType: null,
+    },
+  })
 
   useEffect(() => {
     if (berthId) {
       dispatch(getBerthByIdThunk({ berthId }))
-    } else {
-      dispatch(berthDetailsActions.setFormData({ data: { name: "" } }))
     }
   }, [berthId, dispatch])
 
-  const onSubmitCallback = useCallback(async () => {
-    if (formData) {
-      if (!auth?.activeWorkspace?.id) {
-        toast.error(JSON.stringify("Не удалось определить workspaceId"))
-        return false
-      }
-
-      try {
-        if (!berthId) {
-          const result = await dispatch(
-            createBerthThunk({
-              entityData: formData,
-              workspaceId: auth.activeWorkspace.id,
-            })
-          ).unwrap()
-
-          if (result.isOk) {
-            toast.success("Новая должность добавлена", {
-              position: "top-center",
-              style: {
-                color: "green",
-              },
-            })
-            onSubmit?.(result.data!)
-          }
-        } else {
-          const result = await dispatch(
-            updateBerthThunk({
-              entityData: formData,
-              workspaceId: auth?.activeWorkspace.id,
-            })
-          ).unwrap()
-
-          if (result.isOk) {
-            toast.success("Изменения сохранены", {
-              position: "top-center",
-              style: {
-                color: "green",
-              },
-            })
-            onSubmit?.(result.data!)
-          }
-        }
-      } catch (error) {
-        toast.error((error as string) ?? "Ошибка", {
-          position: "top-center",
-          style: { color: "tomato" },
-        })
-      }
+  useEffect(() => {
+    if (data) {
+      form.reset(data)
     }
-  }, [auth.activeWorkspace.id, berthId, dispatch, formData, onSubmit])
+  }, [data, form, form.reset])
+
+  const onSubmitCallback = useCallback(
+    async (formData: Berth) => {
+      if (formData) {
+        if (!auth?.activeWorkspace?.id) {
+          toast.error(JSON.stringify("Не удалось определить организацию"))
+          return false
+        }
+
+        try {
+          if (!berthId) {
+            const result = await dispatch(
+              createBerthThunk({
+                entityData: formData,
+                workspaceId: auth.activeWorkspace.id,
+              })
+            ).unwrap()
+
+            if (result.isOk) {
+              toast.success("Новая должность добавлена", {
+                position: "top-center",
+                style: {
+                  color: "green",
+                },
+              })
+              onSubmit?.(result.data!)
+            }
+          } else {
+            const result = await dispatch(
+              updateBerthThunk({
+                entityData: formData,
+                workspaceId: auth?.activeWorkspace.id,
+              })
+            ).unwrap()
+
+            if (result.isOk) {
+              toast.success("Изменения сохранены", {
+                position: "top-center",
+                style: {
+                  color: "green",
+                },
+              })
+              onSubmit?.(result.data!)
+            }
+          }
+        } catch (error) {
+          toast.error((error as string) ?? "Ошибка", {
+            position: "top-center",
+            style: { color: "tomato" },
+          })
+        }
+      }
+    },
+    [auth?.activeWorkspace?.id, berthId, dispatch, onSubmit]
+  )
 
   return (
     <DynamicModuleLoader
@@ -118,17 +137,81 @@ export const BerthEditDialog = memo((props: BerthEditDialogProps) => {
             <DialogTitle>
               {berthId ? "Изменение должности" : "Новая должность"}
             </DialogTitle>
-            {/*{description && (*/}
-            {/*  <DialogDescription>{description}</DialogDescription>*/}
-            {/*)}*/}
           </DialogHeader>
-          <BerthDetailsForm />
+          <form
+            id={"berth-type-details-form"}
+            className={"overflow-y no-scrollbar flex w-full flex-col gap-8 p-2"}
+            onSubmit={form.handleSubmit(onSubmitCallback)}
+          >
+            <FieldGroup>
+              <FieldBerthType form={form} path={"berthType"} label={"Тип"} />
+              {/*<Controller*/}
+              {/*  control={control}*/}
+              {/*  name={"berthType"}*/}
+              {/*  render={({ field, fieldState }) => (*/}
+              {/*    <Field aria-invalid={fieldState.invalid} className={"w-fit"}>*/}
+              {/*      <FieldLabel>*/}
+              {/*        <div*/}
+              {/*          className={*/}
+              {/*            "flex w-full items-center justify-start gap-1"*/}
+              {/*          }*/}
+              {/*        >*/}
+              {/*          {"Тип"}*/}
+              {/*          <IconAsterisk className={"size-2 text-destructive"} />*/}
+              {/*        </div>*/}
+              {/*      </FieldLabel>*/}
+              {/*      <BerthTypeSelector*/}
+              {/*        value={field.value ?? null}*/}
+              {/*        onChange={(e) => {*/}
+              {/*          field.onChange(e)*/}
+              {/*          // onChange?.(e)*/}
+              {/*        }}*/}
+              {/*      />*/}
+              {/*      {fieldState.invalid && (*/}
+              {/*        <FieldError errors={[fieldState.error]} />*/}
+              {/*      )}*/}
+              {/*    </Field>*/}
+              {/*  )}*/}
+              {/*/>*/}
+              <Controller
+                {...form.register("name")}
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field aria-invalid={fieldState.invalid}>
+                    <FieldLabel>
+                      <div
+                        className={
+                          "flex w-full items-center justify-start gap-1"
+                        }
+                      >
+                        {"Название"}
+                        <IconAsterisk className={"size-2 text-destructive"} />
+                      </div>
+                    </FieldLabel>
+                    <Textarea
+                      className={"min-h-[100px]"}
+                      {...field}
+                      aria-invalid={fieldState.invalid}
+                      value={field.value}
+                      onChange={(e) => {
+                        field.onChange(e)
+                      }}
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+            </FieldGroup>
+            <input type={"submit"} hidden ref={hiddenSubmitInputRef} />
+          </form>
           <DialogFooter>
             <Button
               variant={"default"}
-              disabled={Object.keys(validationErrors).length > 0}
-              onClick={async () => {
-                await onSubmitCallback()
+              type={"submit"}
+              onClick={() => {
+                hiddenSubmitInputRef.current?.click()
               }}
             >
               {"Сохранить"}

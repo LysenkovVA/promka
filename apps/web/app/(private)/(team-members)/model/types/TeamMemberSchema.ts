@@ -5,7 +5,7 @@ import {
   ZOD_INVALID_STRING_TYPE,
   ZOD_VALUE_REQUIRED,
 } from "@/lib/zod/commonErrors"
-import { TeamMemberRole } from "@workspace/database/prisma/.generated/enums"
+import { WorkspaceRole } from "@workspace/database/prisma/.generated/enums"
 
 /**
  * Схема валидации TeamMemberSchema
@@ -24,9 +24,9 @@ export const TeamMemberSchema = z.object(
         },
       })
       .nullish(),
-    teamMemberRole: z
-      .enum([TeamMemberRole.MEMBER, TeamMemberRole.ADMIN])
-      .default("MEMBER"),
+    workspaceRole: z
+      .enum([WorkspaceRole.WS_ADMINISTRATOR, WorkspaceRole.WS_MEMBER])
+      .default("WS_MEMBER"),
     user:
       // Для устранения ошибок с циклическими зависимостями
       z

@@ -2,14 +2,23 @@
  * Разрешения TeamMember-а рабочего пространства
  */
 model WorkspacePermissions {
-  id        String  @id @default(cuid())
-  canRead   Boolean @default(true)
-  canWrite  Boolean @default(true)
-  canDelete Boolean @default(true)
+  id        String           @id @default(cuid())
+  canRead   PermissionType[] @default([BERTH_TYPE, BERTH, EMPLOYEE])
+  canWrite  PermissionType[] @default([BERTH_TYPE, BERTH, EMPLOYEE])
+  canDelete PermissionType[] @default([BERTH_TYPE, BERTH, EMPLOYEE])
 
   // Участник (один-к-одному)
   teamMember   TeamMember @relation(fields: [teamMemberId], references: [id], onDelete: Cascade)
   teamMemberId String     @unique
 
   @@map("workspace-permissions")
+}
+
+/**
+ * Тип разрешения
+ */
+enum PermissionType {
+  BERTH_TYPE
+  BERTH
+  EMPLOYEE
 }

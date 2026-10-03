@@ -1,6 +1,6 @@
 "use client"
 
-import { memo, useCallback, useEffect, useState } from "react"
+import { memo, useCallback, useEffect, useRef, useState } from "react"
 import {
   DynamicModuleLoader,
   useAppDispatch,
@@ -11,9 +11,9 @@ import { Avatar } from "@workspace/ui/components/avatar"
 import {
   getEmployeeDetailsData,
   getEmployeeDetailsError,
-  getEmployeeDetailsFormData,
+  getEmployeeDetailsIsFetching,
+  getEmployeeDetailsIsInitialized,
 } from "../../model/selectors/employee-details.selectors"
-import { getEmployeeByIdThunk } from "../../model/thunks/get-employee-by-id.thunk"
 import { deleteEmployeeThunk } from "../../model/thunks/delete-employee.thunk"
 import { useAuth } from "@/app/(public)/(auth)"
 import { useRouter } from "next/navigation"
@@ -40,8 +40,7 @@ import {
 import dayjs from "dayjs"
 import { EmployeeDetailsForm } from "@/Employees/ui/employee-details-form/employee-details-form"
 import { DetailsWrapper } from "@/components/details-wrapper/details-wrapper"
-import { createEmployeeThunk } from "@/Employees/model/thunks/create-employee.thunk"
-import { updateEmployeeThunk } from "@/Employees/model/thunks/update-employee.thunk"
+import { getEmployeeByIdThunk } from "@/Employees/model/thunks/get-employee-by-id.thunk"
 
 export interface EmployeeDetailsProps {
   employeeId?: string
@@ -50,72 +49,24 @@ export interface EmployeeDetailsProps {
 export const EmployeeDetails = memo((props: EmployeeDetailsProps) => {
   const { employeeId } = props
 
+  const [isEdit, setIsEdit] = useState(false)
+
   const dispatch = useAppDispatch()
   const data = useAppSelector(getEmployeeDetailsData)
-  const formData = useAppSelector(getEmployeeDetailsFormData)
   const error = useAppSelector(getEmployeeDetailsError)
-
-  // const [editSheetIsOpen, setEditSheetIsOpen] = useState(false)
-  const [isEdit, setIsEdit] = useState(false)
+  const isInitialized = useAppSelector(getEmployeeDetailsIsInitialized)
+  const isLoading = useAppSelector(getEmployeeDetailsIsFetching)
 
   const auth = useAuth()
   const router = useRouter()
 
+  const hiddenSubmitInputRef = useRef<HTMLInputElement | null>(null)
+
   useEffect(() => {
-    if (employeeId) dispatch(getEmployeeByIdThunk({ employeeId: employeeId }))
-  }, [dispatch, employeeId])
-
-  const onSubmit = useCallback(async () => {
-    if (formData) {
-      if (!auth?.activeWorkspace?.id) {
-        toast.error(JSON.stringify("Не удалось определить workspaceId"))
-        return false
-      }
-
-      try {
-        if (!employeeId) {
-          const result = await dispatch(
-            createEmployeeThunk({
-              entityData: formData,
-              workspaceId: auth.activeWorkspace.id,
-            })
-          ).unwrap()
-
-          if (result.isOk) {
-            toast.success("Новый сотрудник добавлен", {
-              position: "top-center",
-              style: {
-                color: "green",
-              },
-            })
-            setIsEdit(false)
-          }
-        } else {
-          const result = await dispatch(
-            updateEmployeeThunk({
-              entityData: formData,
-              workspaceId: auth?.activeWorkspace.id,
-            })
-          ).unwrap()
-
-          if (result.isOk) {
-            toast.success("Изменения сохранены", {
-              position: "top-center",
-              style: {
-                color: "green",
-              },
-            })
-            setIsEdit(false)
-          }
-        }
-      } catch (error) {
-        toast.error((error as string) ?? "Ошибка", {
-          position: "top-center",
-          style: { color: "tomato" },
-        })
-      }
+    if (employeeId && !isInitialized && !isLoading) {
+      dispatch(getEmployeeByIdThunk({ employeeId: employeeId }))
     }
-  }, [auth.activeWorkspace?.id, dispatch, employeeId, formData])
+  }, [dispatch, employeeId, isInitialized, isLoading])
 
   const onDeleteCallback = useCallback(async () => {
     try {
@@ -154,7 +105,7 @@ export const EmployeeDetails = memo((props: EmployeeDetailsProps) => {
         error={error}
         isEdit={isEdit}
         onEditClick={() => setIsEdit(true)}
-        onSaveClick={onSubmit}
+        onSaveClick={() => hiddenSubmitInputRef.current?.click()}
         onBackClick={() => {
           if (isEdit) {
             setIsEdit(false)
@@ -166,7 +117,11 @@ export const EmployeeDetails = memo((props: EmployeeDetailsProps) => {
         onDeleteClick={onDeleteCallback}
       >
         {isEdit ? (
-          <EmployeeDetailsForm />
+          <EmployeeDetailsForm
+            onSubmit={() => setIsEdit(false)}
+            submitRef={hiddenSubmitInputRef}
+            employeeId={employeeId}
+          />
         ) : (
           <div
             className={"flex w-full flex-col items-start justify-start gap-3"}

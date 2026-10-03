@@ -30,15 +30,7 @@ export const BerthTypeSchema = z.object(
           }
         },
       })
-      .min(1, { error: "Название должности обязательно" }),
-    // berth:
-    //   // Для устранения ошибок с циклическими зависимостями
-    //   z
-    //     .lazy<typeof BerthSchema>(() => {
-    //       const { BerthSchema } = require("@/Berthes")
-    //       return BerthSchema
-    //     })
-    //     .nullish(),
+      .min(1, { error: "Пожалуйста, укажите название" }),
     workspace:
       // Для устранения ошибок с циклическими зависимостями
       z
