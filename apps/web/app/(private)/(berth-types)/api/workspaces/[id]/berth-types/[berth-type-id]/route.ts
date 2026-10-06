@@ -10,6 +10,7 @@ import {
   BerthType,
   BerthTypeSchema,
 } from "../../../../../model/types/berth-type.schema"
+import { ServerError } from "@/lib/responses/ServerError"
 
 export async function GET(
   request: NextRequest,
@@ -35,7 +36,7 @@ export async function GET(
     // @ts-ignore
     return ResponseData.Ok<BerthType>(candidate).toNextResponse()
   } catch (error) {
-    return ResponseData.InternalServerError(error).toNextResponse()
+    return ServerError.toNextResponse(error)
   }
 }
 
@@ -71,7 +72,7 @@ export async function PATCH(
     // @ts-ignore
     return ResponseData.Ok<BerthType>(updatedData).toNextResponse()
   } catch (error) {
-    return ResponseData.InternalServerError(error).toNextResponse()
+    return ServerError.toNextResponse(error)
   }
 }
 
@@ -91,6 +92,6 @@ export async function DELETE(
     // @ts-ignore
     return ResponseData.Ok<BerthType>(deletedBerth).toNextResponse()
   } catch (error) {
-    return ResponseData.InternalServerError(error).toNextResponse()
+    return ServerError.toNextResponse(error)
   }
 }

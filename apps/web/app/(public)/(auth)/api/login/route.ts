@@ -9,6 +9,7 @@ import bcrypt from "bcryptjs"
 import { SessionData } from "@/lib/jose/types/sessionData"
 import { createAccessToken, createRefreshToken } from "@/lib/jose/client/tokens"
 import { IAuthData } from "@/app/(public)/(auth)/model/types/IAuthData"
+import { ServerError } from "@/lib/responses/ServerError"
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
@@ -93,6 +94,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     return response
   } catch (error) {
-    return ResponseData.InternalServerError(error).toNextResponse()
+    return ServerError.toNextResponse(error)
   }
 }

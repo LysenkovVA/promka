@@ -5,6 +5,7 @@ import { ResponseData } from "@/lib/responses/ResponseData"
 import { Workspace } from "../../../model/types/workspace.schema"
 import { checkAuthForWorkspace } from "@/app/(public)/(auth)/api/checkAuth"
 import { prisma } from "@workspace/database/prisma"
+import { ServerError } from "@/lib/responses/ServerError"
 
 export async function GET(
   request: NextRequest,
@@ -31,6 +32,6 @@ export async function GET(
 
     return ResponseData.Ok<Workspace>(candidate as Workspace).toNextResponse()
   } catch (error) {
-    return ResponseData.InternalServerError(error).toNextResponse()
+    return ServerError.toNextResponse(error)
   }
 }

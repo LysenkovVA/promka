@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { cookies } from "next/headers"
-import { ResponseData } from "@/lib/responses/ResponseData"
+import { ServerError } from "@/lib/responses/ServerError"
 
 /**
  * Обновление access token
@@ -14,6 +14,6 @@ export async function POST(request: NextRequest) {
 
     return new NextResponse(null, { status: 200 })
   } catch (error) {
-    return ResponseData.InternalServerError(error).toNextResponse()
+    return ServerError.toNextResponse(error)
   }
 }

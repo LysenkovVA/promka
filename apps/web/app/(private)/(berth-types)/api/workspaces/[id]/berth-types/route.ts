@@ -6,6 +6,7 @@ import { checkAuthForWorkspace } from "@/app/(public)/(auth)/api/checkAuth"
 import { prisma } from "@workspace/database/prisma"
 import { TAKE } from "@/config/app"
 import { BerthType } from "../../../../model/types/berth-type.schema"
+import { ServerError } from "@/lib/responses/ServerError"
 
 export async function GET(
   request: NextRequest,
@@ -38,6 +39,6 @@ export async function GET(
     // @ts-ignore
     return ResponseData.Ok<BerthType[]>(data).toNextResponse()
   } catch (error) {
-    return ResponseData.InternalServerError(error).toNextResponse()
+    return ServerError.toNextResponse(error)
   }
 }

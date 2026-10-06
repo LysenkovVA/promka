@@ -7,6 +7,7 @@ import { checkAuthForWorkspace } from "@/app/(public)/(auth)/api/checkAuth"
 import { prisma } from "@workspace/database/prisma"
 import { validateObject } from "@/lib/zod/validateObject"
 import { Prisma } from "@workspace/database/.generated/client"
+import { ServerError } from "@/lib/responses/ServerError"
 
 export async function GET(
   request: NextRequest,
@@ -31,7 +32,7 @@ export async function GET(
     // @ts-ignore
     return ResponseData.Ok<Berth>(candidate).toNextResponse()
   } catch (error) {
-    return ResponseData.InternalServerError(error).toNextResponse()
+    return ServerError.toNextResponse(error)
   }
 }
 
@@ -68,7 +69,7 @@ export async function PATCH(
     // @ts-ignore
     return ResponseData.Ok<Berth>(updatedData).toNextResponse()
   } catch (error) {
-    return ResponseData.InternalServerError(error).toNextResponse()
+    return ServerError.toNextResponse(error)
   }
 }
 
@@ -88,6 +89,6 @@ export async function DELETE(
     // @ts-ignore
     return ResponseData.Ok<Berth>(deletedBerth).toNextResponse()
   } catch (error) {
-    return ResponseData.InternalServerError(error).toNextResponse()
+    return ServerError.toNextResponse(error)
   }
 }

@@ -6,6 +6,7 @@ import { checkAuthForWorkspace } from "@/app/(public)/(auth)/api/checkAuth"
 import { prisma } from "@workspace/database/prisma"
 import { Employee } from "../../../../model/types/employee.schema"
 import { TAKE } from "@/config/app"
+import { ServerError } from "@/lib/responses/ServerError"
 
 export async function GET(
   request: NextRequest,
@@ -33,6 +34,6 @@ export async function GET(
     // @ts-ignore
     return ResponseData.Ok<Employee[]>(data).toNextResponse()
   } catch (error) {
-    return ResponseData.InternalServerError(error).toNextResponse()
+    return ServerError.toNextResponse(error)
   }
 }

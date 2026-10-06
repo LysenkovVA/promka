@@ -9,6 +9,7 @@ import {
 import { checkAuth } from "@/app/(public)/(auth)"
 import { validateObject } from "@/lib/zod/validateObject"
 import { prisma } from "@workspace/database/prisma"
+import { ServerError } from "@/lib/responses/ServerError"
 
 /**
  * Создание новой компании пользователя
@@ -67,6 +68,6 @@ export async function POST(
       createdData
     ).toNextResponse()
   } catch (error) {
-    return ResponseData.InternalServerError(error).toNextResponse()
+    return ServerError.toNextResponse(error)
   }
 }

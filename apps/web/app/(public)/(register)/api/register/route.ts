@@ -10,6 +10,7 @@ import {
 } from "@/Users/model/types/RegisterUserResponseSchema"
 import bcrypt from "bcryptjs"
 import { RegisterUserRequestSchema } from "@/Users/model/types/RegisterUserRequestSchema"
+import { ServerError } from "@/lib/responses/ServerError"
 
 export async function POST(
   request: NextRequest
@@ -47,6 +48,6 @@ export async function POST(
     ).toNextResponse()
   } catch (error) {
     // Неизвестная ошибка в роуте
-    return ResponseData.InternalServerError(error).toNextResponse()
+    return ServerError.toNextResponse(error)
   }
 }

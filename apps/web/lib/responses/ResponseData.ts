@@ -174,6 +174,17 @@ export class ResponseData<T> {
       )
     }
 
+    if (errorInstance instanceof String) {
+      return new ResponseData<undefined>(
+        false,
+        500,
+        undefined,
+        pagination,
+        statusText,
+        [errorInstance.toString()]
+      )
+    }
+
     // Все остальные ошибки
     return new ResponseData<undefined>(
       false,

@@ -65,18 +65,18 @@ async function main() {
             name: 'ООО "СпецСтройТехнологии-М"',
           },
         },
-        berthes: {
-          create: [
-            {
-              name: "Начальник службы ОТ и ПБ",
-              berthType: { create: { name: "ИТР" } },
-            },
-            {
-              name: "Стропальщик",
-              berthType: { create: { name: "Рабочие" } },
-            },
-          ],
-        },
+        // berthes: {
+        //   create: [
+        //     {
+        //       name: "Начальник службы ОТ и ПБ",
+        //       berthType: { create: { name: "ИТР" } },
+        //     },
+        //     {
+        //       name: "Стропальщик",
+        //       berthType: { create: { name: "Рабочие" } },
+        //     },
+        //   ],
+        // },
       },
     })
 

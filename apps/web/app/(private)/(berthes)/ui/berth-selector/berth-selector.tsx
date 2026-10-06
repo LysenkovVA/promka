@@ -1,6 +1,6 @@
 "use client"
 
-import React, { memo, useEffect, useState } from "react"
+import React, { memo, useCallback, useEffect, useState } from "react"
 import {
   DynamicModuleLoader,
   useAppDispatch,
@@ -16,6 +16,9 @@ import {
 import { getBerthesThunk } from "../../model/thunks/get-berthes.thunk"
 import { berthesActions, berthesReducer } from "../../model/slice/berthes.slice"
 import { BerthEditDialog } from "../berth-edit-dialog/berth-edit-dialog"
+import { toast } from "sonner"
+import { useAuth } from "@/app/(public)/(auth)"
+import { deleteBerthThunk } from "@/Berthes/model/thunks/delete-berth.thunk"
 
 export interface BerthSelectorProps {
   value: Berth | null
@@ -29,6 +32,8 @@ export const BerthSelector = memo((props: BerthSelectorProps) => {
   const [isEdit, setIsEdit] = useState(false)
   const [editValueId, setEditValueId] = useState<string | undefined>(undefined)
 
+  const auth = useAuth()
+
   const dispatch = useAppDispatch()
   const data = useAppSelector(getBerthes.selectAll)
   const search = useAppSelector(getBerthesSearch)
@@ -39,6 +44,34 @@ export const BerthSelector = memo((props: BerthSelectorProps) => {
       dispatch(getBerthesThunk({ replaceData: true }))
     }
   }, [dispatch, search])
+
+  const onDeleteCallback = useCallback(async () => {
+    try {
+      if (auth?.activeWorkspace?.id && value?.id) {
+        const result = await dispatch(
+          deleteBerthThunk({
+            berthId: value.id,
+            workspaceId: auth.activeWorkspace.id,
+          })
+        ).unwrap()
+
+        if (result.isOk) {
+          onChange(null)
+          toast.success(`Должность '${value.name}' удалена`, {
+            position: "top-center",
+            style: {
+              color: "green",
+            },
+          })
+        }
+      }
+    } catch (error) {
+      toast.error((error as string) ?? "Ошибка", {
+        position: "top-center",
+        style: { color: "tomato" },
+      })
+    }
+  }, [auth?.activeWorkspace?.id, dispatch, onChange, value?.id, value?.name])
 
   return (
     <DynamicModuleLoader
@@ -79,7 +112,8 @@ export const BerthSelector = memo((props: BerthSelectorProps) => {
           setEditValueId(value?.id ?? undefined)
           setIsEdit(true)
         }}
-        onDeleteClick={() => alert("onDeleteClick")}
+        onDeleteClick={onDeleteCallback}
+        deleteMessage={`Вы действительно хотите удалить должность \"${value?.name}\"?`}
       />
       {isEdit && (
         <BerthEditDialog

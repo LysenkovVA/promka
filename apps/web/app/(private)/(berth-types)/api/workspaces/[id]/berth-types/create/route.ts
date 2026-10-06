@@ -9,6 +9,7 @@ import {
   BerthType,
   BerthTypeSchema,
 } from "../../../../../model/types/berth-type.schema"
+import { ServerError } from "@/lib/responses/ServerError"
 
 export async function POST(
   request: NextRequest,
@@ -40,6 +41,6 @@ export async function POST(
     // @ts-ignore
     return ResponseData.Ok<BerthType>(createdData).toNextResponse()
   } catch (error) {
-    return ResponseData.InternalServerError(error).toNextResponse()
+    return ServerError.toNextResponse(error)
   }
 }

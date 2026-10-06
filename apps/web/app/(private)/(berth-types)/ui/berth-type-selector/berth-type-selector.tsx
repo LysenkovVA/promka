@@ -1,6 +1,6 @@
 "use client"
 
-import React, { memo, useEffect, useState } from "react"
+import React, { memo, useCallback, useEffect, useState } from "react"
 import {
   DynamicModuleLoader,
   useAppDispatch,
@@ -19,6 +19,9 @@ import {
 import { getBerthTypesThunk } from "../../model/thunks/get-berth-types.thunk"
 import { Selector } from "@/components/selector/selector"
 import { BerthTypeEditDialog } from "../berth-type-edit-dialog/berth-type-edit-dialog"
+import { toast } from "sonner"
+import { useAuth } from "@/app/(public)/(auth)"
+import { deleteBerthTypeThunk } from "@/BerthTypes/model/thunks/delete-berth-type.thunk"
 
 export interface BerthTypeSelectorProps {
   value: BerthType | null
@@ -32,6 +35,8 @@ export const BerthTypeSelector = memo((props: BerthTypeSelectorProps) => {
   const [isEdit, setIsEdit] = useState(false)
   const [editValueId, setEditValueId] = useState<string | undefined>(undefined)
 
+  const auth = useAuth()
+
   const dispatch = useAppDispatch()
   const data = useAppSelector(getBerthTypes.selectAll)
   const search = useAppSelector(getBerthTypesSearch)
@@ -42,6 +47,34 @@ export const BerthTypeSelector = memo((props: BerthTypeSelectorProps) => {
       dispatch(getBerthTypesThunk({ replaceData: true }))
     }
   }, [dispatch, search])
+
+  const onDeleteCallback = useCallback(async () => {
+    try {
+      if (auth?.activeWorkspace?.id && value?.id) {
+        const result = await dispatch(
+          deleteBerthTypeThunk({
+            berthTypeId: value.id,
+            workspaceId: auth.activeWorkspace.id,
+          })
+        ).unwrap()
+
+        if (result.isOk) {
+          onChange(null)
+          toast.success(`Тип должности '${value.name}' удалён`, {
+            position: "top-center",
+            style: {
+              color: "green",
+            },
+          })
+        }
+      }
+    } catch (error) {
+      toast.error((error as string) ?? "Ошибка", {
+        position: "top-center",
+        style: { color: "tomato" },
+      })
+    }
+  }, [auth.activeWorkspace.id, dispatch, onChange, value?.id, value?.name])
 
   return (
     <DynamicModuleLoader
@@ -75,7 +108,8 @@ export const BerthTypeSelector = memo((props: BerthTypeSelectorProps) => {
           setEditValueId(value?.id ?? undefined)
           setIsEdit(true)
         }}
-        onDeleteClick={() => alert("onDeleteClick")}
+        onDeleteClick={onDeleteCallback}
+        deleteMessage={`Вы действительно хотите удалить тип должности \"${value?.name}\"?`}
       />
       {isEdit && (
         <BerthTypeEditDialog

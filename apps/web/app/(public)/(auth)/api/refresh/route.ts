@@ -5,6 +5,7 @@ import { createAccessToken, verifyRefreshToken } from "@/lib/jose/client/tokens"
 import { SessionData } from "@/lib/jose/types/sessionData"
 import { prisma } from "@workspace/database/prisma"
 import { IAuthData } from "@/app/(public)/(auth)/model/types/IAuthData"
+import { ServerError } from "@/lib/responses/ServerError"
 
 /**
  * Обновление access token
@@ -80,6 +81,6 @@ export async function POST(request: NextRequest) {
 
     return response
   } catch (error) {
-    return ResponseData.InternalServerError(error).toNextResponse()
+    return ServerError.toNextResponse(error)
   }
 }

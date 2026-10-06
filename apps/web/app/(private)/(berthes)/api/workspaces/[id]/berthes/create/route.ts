@@ -6,6 +6,7 @@ import { checkAuthForWorkspace } from "@/app/(public)/(auth)/api/checkAuth"
 import { validateObject } from "@/lib/zod/validateObject"
 import { prisma } from "@workspace/database/prisma"
 import { Berth, BerthSchema } from "../../../../../model/types/berth.schema"
+import { ServerError } from "@/lib/responses/ServerError"
 
 export async function POST(
   request: NextRequest,
@@ -38,6 +39,6 @@ export async function POST(
     // @ts-ignore
     return ResponseData.Ok<Berth>(createdData).toNextResponse()
   } catch (error) {
-    return ResponseData.InternalServerError(error).toNextResponse()
+    return ServerError.toNextResponse(error)
   }
 }
