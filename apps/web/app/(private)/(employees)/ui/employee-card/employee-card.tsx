@@ -11,6 +11,7 @@ import { Employee } from "../../model/types/employee.schema"
 import { Avatar } from "@workspace/ui/components/avatar"
 import { useAuth } from "@/app/(public)/(auth)"
 import { useRouter } from "next/navigation"
+import { EmployeeHelper } from "@/Employees/helpers/employee-helper"
 
 export interface EmployeeWidgetProps {
   employee: Employee
@@ -46,10 +47,10 @@ export const EmployeeCard = memo((props: EmployeeWidgetProps) => {
               "align-center flex w-full justify-center text-center text-xl font-light"
             }
           >
-            {employee.surname}
+            {EmployeeHelper.getFullName(employee)}
           </ItemTitle>
           <ItemDescription className={"text-md text-start font-light"}>
-            {employee.name}
+            {employee.berth?.name}
           </ItemDescription>
         </ItemContent>
       </Item>

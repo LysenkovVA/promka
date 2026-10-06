@@ -11,5 +11,7 @@ export interface PageWrapperProps {
 export const PageWrapper = memo((props: PageWrapperProps) => {
   const { children, className } = props
 
-  return <div className={cn(`w-full pr-36 pl-36`, className)}>{children}</div>
+  return (
+    <div className={cn(`w-full pt-4 pr-36 pl-36`, className)}>{children}</div>
+  )
 })

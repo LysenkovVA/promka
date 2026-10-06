@@ -8,13 +8,15 @@ export interface InfoWidgetProps {
   className?: string
   title: string
   count: number
+  error?: string
   onAddClick?: () => void
   children?: React.ReactNode
   onClick?: () => void
 }
 
 export const InfoWidget = memo((props: InfoWidgetProps) => {
-  const { className, title, count, onAddClick, children, onClick } = props
+  const { className, title, count, onAddClick, children, onClick, error } =
+    props
 
   return (
     <div
@@ -26,7 +28,12 @@ export const InfoWidget = memo((props: InfoWidgetProps) => {
     >
       <div className={"flex w-full flex-col items-center justify-center gap-3"}>
         <div style={{ fontSize: 20, fontWeight: "lighter" }}>{title}</div>
-        <div style={{ fontSize: 30, fontWeight: "bold" }}>{count}</div>
+        {!error && (
+          <div style={{ fontSize: 30, fontWeight: "bold" }}>{count}</div>
+        )}
+        {error && (
+          <div className={"text-xs font-light text-destructive"}>{error}</div>
+        )}
         {children}
         <Button
           onClick={(e) => {

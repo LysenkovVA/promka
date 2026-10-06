@@ -10,13 +10,14 @@ import {
   useAppDispatch,
   useAppSelector,
 } from "@/lib/redux"
-import { employeesReducer } from "@/Employees/model/slice/employees.slice"
-import { getEmployeesThunk } from "@/Employees/model/thunks/get-employees.thunk"
+import { employeesStatisticsReducer } from "../../model/slice/employees-statistics.slice"
 import {
-  getEmployeesIsInitialized,
-  getEmployeesIsLoading,
-  getEmployeesTotalCount,
-} from "@/Employees/model/selectors/employees.selectors"
+  getEmployeeStatisticsData,
+  getEmployeeStatisticsError,
+  getEmployeeStatisticsIsFetching,
+  getEmployeeStatisticsIsInitialized,
+} from "../../model/selectors/employees-statistics.selectors"
+import { getEmployeesStatisticsThunk } from "../../model/thunks/get-employees-statistics.thunk"
 
 export interface EmployeesWidgetProps {}
 
@@ -25,21 +26,22 @@ export const EmployeesWidget = memo((props: EmployeesWidgetProps) => {
 
   const dispatch = useAppDispatch()
 
-  const isInitialized = useAppSelector(getEmployeesIsInitialized)
-  const isFetching = useAppSelector(getEmployeesIsLoading)
-  const totalCount = useAppSelector(getEmployeesTotalCount)
+  const isInitialized = useAppSelector(getEmployeeStatisticsIsInitialized)
+  const isFetching = useAppSelector(getEmployeeStatisticsIsFetching)
+  const data = useAppSelector(getEmployeeStatisticsData)
+  const error = useAppSelector(getEmployeeStatisticsError)
 
   const auth = useAuth()
   const router = useRouter()
 
   useEffect(() => {
-    if (!isInitialized && !isFetching)
-      dispatch(getEmployeesThunk({ replaceData: true }))
-  }, [dispatch, isFetching, isInitialized])
+    if (!isInitialized && !isFetching && auth?.activeWorkspace?.id)
+      dispatch(getEmployeesStatisticsThunk({ replaceData: true }))
+  }, [dispatch, isFetching, isInitialized, auth?.activeWorkspace?.id])
 
   return (
     <DynamicModuleLoader
-      reducers={{ employeesSchema: employeesReducer }}
+      reducers={{ employeesStatisticsSchema: employeesStatisticsReducer }}
       removeAfterUnmount={false}
     >
       <Link
@@ -48,7 +50,8 @@ export const EmployeesWidget = memo((props: EmployeesWidgetProps) => {
       >
         <InfoWidget
           title={"Сотрудники"}
-          count={totalCount}
+          count={data?.count ?? 0}
+          error={error}
           onAddClick={() =>
             router.push(
               `/workspaces/${auth?.activeWorkspace?.id}/employees/create`

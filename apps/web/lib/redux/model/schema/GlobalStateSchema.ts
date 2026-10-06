@@ -7,6 +7,7 @@ import { Berth, BerthFilters } from "@/Berthes"
 import { Employee, EmployeeFilters } from "@/Employees"
 import { BerthType } from "@/BerthTypes"
 import { BerthTypesFilters } from "@/BerthTypes/model/types/berth-type.filters"
+import { EmployeesStatistics } from "@/Employees/model/types/employees-statistics"
 
 /**
  * Схема глобального состояния
@@ -20,6 +21,7 @@ export interface GlobalStateSchema {
   // Сотрудники
   employeeDetailsSchema?: DetailsReduxSchema<Employee>
   employeesSchema?: ListReduxSchema<Employee, EmployeeFilters>
+  employeesStatisticsSchema?: DetailsReduxSchema<EmployeesStatistics>
   // Должности
   berthDetailsSchema?: DetailsReduxSchema<Berth>
   berthesSchema?: ListReduxSchema<Berth, BerthFilters>

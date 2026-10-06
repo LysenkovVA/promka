@@ -6,7 +6,6 @@ import {
   useAppDispatch,
   useAppSelector,
 } from "@/lib/redux"
-import { authActions } from "@/app/(public)/(auth)"
 import {
   getWorkspaceDetailsData,
   getWorkspaceDetailsError,
@@ -20,6 +19,9 @@ import { Picture } from "@/components/picture"
 import { Separator } from "@workspace/ui/components/separator"
 import { EmployeesWidget } from "@/Employees/ui/employees-widget/employees-widget"
 import { PageWrapper } from "@/components/page-wrapper/page-wrapper"
+import { authActions } from "@/app/(public)/(auth)"
+import { Button } from "@workspace/ui/components/button"
+import { IconSettings } from "@tabler/icons-react"
 
 export interface WorkspaceDetailsProps {
   workspaceId: string
@@ -38,8 +40,8 @@ export const WorkspaceDetails = memo((props: WorkspaceDetailsProps) => {
 
   useEffect(() => {
     if (workspaceId) {
-      dispatch(getWorkspaceByIdThunk({ id: workspaceId }))
       dispatch(authActions.setActiveWorkspaceId(workspaceId))
+      dispatch(getWorkspaceByIdThunk({ id: workspaceId }))
     }
   }, [workspaceId, dispatch])
 
@@ -68,9 +70,18 @@ export const WorkspaceDetails = memo((props: WorkspaceDetailsProps) => {
                   "flex w-full flex-col items-start justify-center gap-2"
                 }
               >
-                <div
-                  style={{ fontSize: 30 }}
-                >{`${workspaceData?.company.name}`}</div>
+                <div className={"flex w-full items-center justify-between"}>
+                  <div
+                    className={"text-2xl"}
+                  >{`${workspaceData?.company.name}`}</div>
+                  <Button
+                    variant={"outline"}
+                    onClick={() => alert("В разработке")}
+                  >
+                    <IconSettings />
+                  </Button>
+                </div>
+
                 <Separator />
               </div>
             </div>
