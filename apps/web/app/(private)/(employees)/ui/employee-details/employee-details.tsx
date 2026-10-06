@@ -105,7 +105,10 @@ export const EmployeeDetails = memo((props: EmployeeDetailsProps) => {
         error={error}
         isEdit={isEdit}
         onEditClick={() => setIsEdit(true)}
-        onSaveClick={() => hiddenSubmitInputRef.current?.click()}
+        onSaveClick={() => {
+          console.log("Employee details form REF clicked...")
+          hiddenSubmitInputRef.current?.click()
+        }}
         onBackClick={() => {
           if (isEdit) {
             setIsEdit(false)
@@ -118,7 +121,10 @@ export const EmployeeDetails = memo((props: EmployeeDetailsProps) => {
       >
         {isEdit ? (
           <EmployeeDetailsForm
-            onSubmit={() => setIsEdit(false)}
+            onSubmit={() => {
+              console.log("Employee details form submitted")
+              setIsEdit(false)
+            }}
             submitRef={hiddenSubmitInputRef}
             employeeId={employeeId}
           />
@@ -241,29 +247,5 @@ export const EmployeeDetails = memo((props: EmployeeDetailsProps) => {
         )}
       </DetailsWrapper>
     </DynamicModuleLoader>
-
-    // ---------------------------------------------------------
-
-    // return (
-    //   <DynamicModuleLoader
-    //     reducers={{ employeeDetailsSchema: employeeDetailsReducer }}
-    //     removeAfterUnmount={true}
-    //   >
-    //     <div className={"flex w-full flex-col gap-4"}>
-    //       <DetailsHeader
-    //         // onEditClick={() => setEditSheetIsOpen(true)}
-    //         onEditClick={() => setIsEdit(!isEdit)}
-    //         onDeleteClick={onDeleteCallback}
-    //         deleteMessage={`Вы действительно хотите удалить '${data?.surname}' со всеми связанными данными?`}
-    //       >
-    //         <EditEmployeeSheet
-    //           isOpen={editSheetIsOpen}
-    //           handleOpenChange={(e) => setEditSheetIsOpen(e)}
-    //           employeeId={employeeId}
-    //         />
-    //       </DetailsHeader>
-    //
-    //     </div>
-    //   </DynamicModuleLoader>
   )
 })

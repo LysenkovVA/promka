@@ -9,15 +9,16 @@ import {
 import {
   berthTypesActions,
   berthTypesReducer,
-} from "@/BerthTypes/model/slice/berth-types.slice"
-import { BerthType } from "@/BerthTypes"
+} from "../../model/slice/berth-types.slice"
+import { BerthType } from "../../model/types/berth-type.schema"
 import {
   getBerthTypes,
   getBerthTypesIsLoading,
   getBerthTypesSearch,
-} from "@/BerthTypes/model/selectors/berth-types.selectors"
-import { getBerthTypesThunk } from "@/BerthTypes/model/thunks/get-berth-types.thunk"
+} from "../../model/selectors/berth-types.selectors"
+import { getBerthTypesThunk } from "../../model/thunks/get-berth-types.thunk"
 import { Selector } from "@/components/selector/selector"
+import { BerthTypeEditDialog } from "../berth-type-edit-dialog/berth-type-edit-dialog"
 
 export interface BerthTypeSelectorProps {
   value: BerthType | null
@@ -27,17 +28,14 @@ export interface BerthTypeSelectorProps {
 export const BerthTypeSelector = memo((props: BerthTypeSelectorProps) => {
   const { value, onChange } = props
 
-  // const [selectedValue, setSelectedValue] = useState<BerthType | null>(value)
   const [isOpen, setIsOpen] = useState(false)
+  const [isEdit, setIsEdit] = useState(false)
+  const [editValueId, setEditValueId] = useState<string | undefined>(undefined)
 
   const dispatch = useAppDispatch()
   const data = useAppSelector(getBerthTypes.selectAll)
   const search = useAppSelector(getBerthTypesSearch)
   const isLoading = useAppSelector(getBerthTypesIsLoading)
-
-  // useEffect(() => {
-  //   setSelectedValue(value)
-  // }, [value])
 
   useEffect(() => {
     if (search) {
@@ -54,9 +52,9 @@ export const BerthTypeSelector = memo((props: BerthTypeSelectorProps) => {
         items={data}
         isOpen={isOpen}
         onOpenChange={setIsOpen}
-        selectedValue={value}
+        selectedValue={value?.id ? value : null}
         onRenderSelectedValue={() => {
-          if (value) {
+          if (value?.id) {
             return <div>{value?.name}</div>
           }
 
@@ -69,10 +67,24 @@ export const BerthTypeSelector = memo((props: BerthTypeSelectorProps) => {
         }}
         isSearching={isLoading}
         onRenderItem={(item: BerthType) => <div>{item.name}</div>}
-        onAddClick={() => alert("onAddClick")}
-        onEditClick={() => alert("onEditClick")}
+        onAddClick={() => {
+          setEditValueId(undefined)
+          setIsEdit(true)
+        }}
+        onEditClick={() => {
+          setEditValueId(value?.id ?? undefined)
+          setIsEdit(true)
+        }}
         onDeleteClick={() => alert("onDeleteClick")}
       />
+      {isEdit && (
+        <BerthTypeEditDialog
+          isOpen={isEdit}
+          onOpenChange={(isOpen) => setIsEdit(isOpen)}
+          berthTypeId={editValueId}
+          onSubmit={(data) => onChange(data)}
+        />
+      )}
     </DynamicModuleLoader>
   )
 })

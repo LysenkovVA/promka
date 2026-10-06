@@ -3,7 +3,6 @@ import {
   ZOD_INVALID_CUID_FORMAT,
   ZOD_INVALID_OBJECT_TYPE,
   ZOD_INVALID_STRING_TYPE,
-  ZOD_VALUE_REQUIRED,
 } from "@/lib/zod/commonErrors"
 import { WorkspaceSchema } from "@/Workspaces"
 import { BerthTypeSchema } from "@/BerthTypes"
@@ -34,7 +33,7 @@ export const BerthSchema = z.object(
           }
         },
       })
-      .min(1, { error: "Название должности обязательно" }),
+      .min(1, { error: "Название не указано" }),
     workspace:
       // Для устранения ошибок с циклическими зависимостями
       z
@@ -45,19 +44,19 @@ export const BerthSchema = z.object(
         .nullish(),
     berthType:
       // Для устранения ошибок с циклическими зависимостями
-      z
-        .lazy<typeof BerthTypeSchema>(() => {
-          const { BerthTypeSchema } = require("@/BerthTypes")
-          return BerthTypeSchema
-        })
-        .nullish(),
+      z.lazy<typeof BerthTypeSchema>(() => {
+        const { BerthTypeSchema } = require("@/BerthTypes")
+        return BerthTypeSchema
+      }),
   },
   /**
    * Параметры объекта
    */
   {
     error: (issue) =>
-      issue.input === undefined ? ZOD_VALUE_REQUIRED : ZOD_INVALID_OBJECT_TYPE,
+      issue.input === undefined
+        ? "Должность не указана"
+        : ZOD_INVALID_OBJECT_TYPE,
   }
 )
 

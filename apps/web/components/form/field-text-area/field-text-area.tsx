@@ -61,7 +61,7 @@ function FieldTextAreaInner<TFieldValues extends FieldValues>(
             </div>
           </FieldLabel>
           <Textarea
-            className={"min-h-[100px]"}
+            className={"min-h-[70px]"}
             {...field}
             id={`${path}`}
             aria-invalid={fieldState.invalid}

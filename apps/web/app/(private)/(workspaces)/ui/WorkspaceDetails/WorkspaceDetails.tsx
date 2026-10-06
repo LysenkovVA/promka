@@ -1,6 +1,6 @@
 "use client"
 
-import { memo, useEffect, useState } from "react"
+import { memo, useEffect } from "react"
 import {
   DynamicModuleLoader,
   useAppDispatch,
@@ -20,10 +20,6 @@ import { Picture } from "@/components/picture"
 import { Separator } from "@workspace/ui/components/separator"
 import { EmployeesWidget } from "@/Employees/ui/employees-widget/employees-widget"
 import { PageWrapper } from "@/components/page-wrapper/page-wrapper"
-import { Berth, BerthSchema } from "@/Berthes"
-import { BerthType } from "@/BerthTypes"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
 
 export interface WorkspaceDetailsProps {
   workspaceId: string
@@ -46,17 +42,6 @@ export const WorkspaceDetails = memo((props: WorkspaceDetailsProps) => {
       dispatch(authActions.setActiveWorkspaceId(workspaceId))
     }
   }, [workspaceId, dispatch])
-
-  const [value, setValue] = useState<Berth | null>(null)
-  const [valueBt, setValuebt] = useState<BerthType | null>(null)
-
-  const form = useForm<Berth>({
-    resolver: zodResolver(BerthSchema),
-    defaultValues: {
-      name: "",
-      berthType: { name: "" },
-    },
-  })
 
   return (
     <DynamicModuleLoader

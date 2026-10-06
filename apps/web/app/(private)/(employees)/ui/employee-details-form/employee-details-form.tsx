@@ -5,19 +5,27 @@ import { useForm } from "react-hook-form"
 import { Employee, EmployeeSchema } from "../../model/types/employee.schema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { FieldInput } from "@/components/form/field-input/field-input"
-import { FieldGroup } from "@workspace/ui/components/field"
+import { FieldDescription, FieldGroup } from "@workspace/ui/components/field"
 import { z } from "zod/v4"
 import { getEmployeeByIdThunk } from "@/Employees/model/thunks/get-employee-by-id.thunk"
-import { useAppDispatch, useAppSelector } from "@/lib/redux"
+import {
+  DynamicModuleLoader,
+  useAppDispatch,
+  useAppSelector,
+} from "@/lib/redux"
 import {
   getEmployeeDetailsData,
   getEmployeeDetailsIsFetching,
   getEmployeeDetailsIsInitialized,
-} from "@/Employees/model/selectors/employee-details.selectors"
+} from "../../model/selectors/employee-details.selectors"
 import { toast } from "sonner"
-import { createEmployeeThunk } from "@/Employees/model/thunks/create-employee.thunk"
-import { updateEmployeeThunk } from "@/Employees/model/thunks/update-employee.thunk"
+import { createEmployeeThunk } from "../../model/thunks/create-employee.thunk"
+import { updateEmployeeThunk } from "../../model/thunks/update-employee.thunk"
 import { useAuth } from "@/app/(public)/(auth)"
+import { employeeDetailsReducer } from "../../model/slice/employee-details.slice"
+import { FieldBerth } from "@/Berthes"
+import { FieldDatePicker } from "@/components/form/field-date-picker/field-date-picker"
+import { Separator } from "@workspace/ui/components/separator"
 
 export interface EmployeeDetailsFormProps {
   submitRef: RefObject<HTMLInputElement | null>
@@ -35,14 +43,38 @@ export const EmployeeDetailsForm = memo((props: EmployeeDetailsFormProps) => {
   const isInitialized = useAppSelector(getEmployeeDetailsIsInitialized)
   const isLoading = useAppSelector(getEmployeeDetailsIsFetching)
 
+  /**
+   * If your schema uses .default(...) on a field,
+   * that field becomes optional on the schema's input type (z.input)
+   * but stays required on its output type (z.output/z.infer) —
+   * the default only fills it in after validation. Passing a single
+   * generic to useForm<T> pins both to the same type and will conflict
+   * with zodResolver, which infers input and output separately.
+   * Either omit the generic and let it infer from resolver, or specify all three explicitly
+   */
+  const form = useForm<
+    z.input<typeof EmployeeSchema>,
+    any,
+    z.output<typeof EmployeeSchema>
+  >({
+    resolver: zodResolver(EmployeeSchema),
+    defaultValues: data,
+  })
+
   useEffect(() => {
     if (employeeId && !isInitialized && !isLoading) {
       dispatch(getEmployeeByIdThunk({ employeeId: employeeId }))
     }
   }, [dispatch, employeeId, isInitialized, isLoading])
 
+  useEffect(() => {
+    form.reset(data)
+  }, [data, form])
+
   const onSubmitForm = useCallback(
     async (formData: Employee) => {
+      console.log("Employee details form onSubmitForm callback fired")
+
       if (formData) {
         if (!auth?.activeWorkspace?.id) {
           toast.error(JSON.stringify("Не удалось определить workspaceId"))
@@ -96,40 +128,90 @@ export const EmployeeDetailsForm = memo((props: EmployeeDetailsFormProps) => {
     [auth?.activeWorkspace?.id, dispatch, employeeId, onSubmit]
   )
 
-  /**
-   * If your schema uses .default(...) on a field,
-   * that field becomes optional on the schema's input type (z.input)
-   * but stays required on its output type (z.output/z.infer) —
-   * the default only fills it in after validation. Passing a single
-   * generic to useForm<T> pins both to the same type and will conflict
-   * with zodResolver, which infers input and output separately.
-   * Either omit the generic and let it infer from resolver, or specify all three explicitly
-   */
-  const form = useForm<
-    z.input<typeof EmployeeSchema>,
-    any,
-    z.output<typeof EmployeeSchema>
-  >({
-    resolver: zodResolver(EmployeeSchema),
-    defaultValues: data,
-  })
-
   return (
-    <form
-      id={"berth-type-details-form"}
-      className={"overflow-y no-scrollbar flex w-full flex-col gap-8 p-2"}
-      onSubmit={form.handleSubmit(onSubmitForm)}
+    <DynamicModuleLoader
+      reducers={{ employeeDetailsSchema: employeeDetailsReducer }}
+      removeAfterUnmount={false}
     >
-      <FieldGroup>
-        <FieldInput
-          required={true}
-          form={form}
-          path={"surname"}
-          label={"Фамилия"}
-          placeholder={"Укажите фамилию"}
-        />
-      </FieldGroup>
-      <input type={"submit"} hidden ref={submitRef} />
-    </form>
+      <form
+        id={"employee-details-form"}
+        className={"overflow-y no-scrollbar flex w-full flex-col gap-8 p-2"}
+        onSubmit={(e) => {
+          e.preventDefault()
+          e.stopPropagation()
+          form.handleSubmit(onSubmitForm)(e)
+        }}
+      >
+        <FieldGroup>
+          <FieldInput
+            required={true}
+            form={form}
+            path={"surname"}
+            label={"Фамилия"}
+            placeholder={"Укажите фамилию"}
+          />
+          <div className={"grid grid-cols-2 gap-2"}>
+            <FieldInput
+              form={form}
+              path={"name"}
+              label={"Имя"}
+              placeholder={"Укажите имя"}
+            />
+            <FieldInput
+              form={form}
+              path={"patronymic"}
+              label={"Отчество"}
+              placeholder={"Укажите отчество"}
+            />
+          </div>
+          <div className={"grid grid-cols-2 gap-2"}>
+            <FieldDatePicker
+              form={form}
+              path={"birthDate"}
+              label={"Дата рождения"}
+            />
+            <FieldInput
+              form={form}
+              path={"snils"}
+              label={"СНИЛС"}
+              placeholder={"Укажите СНИЛС"}
+            />
+          </div>
+        </FieldGroup>
+        <FieldGroup>
+          <FieldDescription>
+            {form.getValues()["workspace"]?.company.name?.toUpperCase()}
+          </FieldDescription>
+          <Separator />
+          <FieldBerth form={form} path={"berth"} label={"Должность"} />
+          <div className={"grid grid-cols-2 gap-2"}>
+            <FieldDatePicker
+              form={form}
+              path={"hireDate"}
+              label={"Принят на работу"}
+            />
+          </div>
+        </FieldGroup>
+        <FieldGroup>
+          <FieldDescription>{"Контакты"}</FieldDescription>
+          <Separator />
+          <div className={"grid grid-cols-2 gap-2"}>
+            <FieldInput
+              form={form}
+              path={"phoneNumber"}
+              label={"Телефон"}
+              placeholder={"Укажите телефон"}
+            />
+            <FieldInput
+              form={form}
+              path={"email"}
+              label={"E-mail"}
+              placeholder={"Укажите e-mail"}
+            />
+          </div>
+        </FieldGroup>
+        <input type={"submit"} hidden ref={submitRef} />
+      </form>
+    </DynamicModuleLoader>
   )
 })

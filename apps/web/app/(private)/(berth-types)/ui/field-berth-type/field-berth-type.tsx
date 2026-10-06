@@ -43,7 +43,7 @@ function FieldBerthTypeInner<TFieldValues extends FieldValues>(
       control={form.control}
       name={path}
       render={({ field, fieldState }) => (
-        <Field aria-invalid={fieldState.invalid} className={"w-fit"}>
+        <Field aria-invalid={fieldState.invalid} className={"w-full"}>
           <FieldLabel>
             <div className={"flex w-full items-center justify-start gap-1"}>
               {label}

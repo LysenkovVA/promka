@@ -9,14 +9,8 @@ import { updateBerthThunk } from "../thunks/update-berth.thunk"
 const initialState: DetailsReduxSchema<Berth> = {
   entityData: {
     name: "",
-    workspace: { company: { name: "" } },
     berthType: { name: "" },
   },
-  // entityFormData: {
-  //   name: "",
-  //   workspace: { company: { name: "" } },
-  //   berthType: { name: "" },
-  // },
   error: "",
   isFetching: false,
   isSaving: false,
@@ -33,9 +27,6 @@ export const berthDetailsSlice = createSlice({
     ) => {
       state._isInitialized = action.payload.isInitialized
     },
-    // setFormData: (state, action: PayloadAction<{ data: Berth }>) => {
-    //   state.entityFormData = action.payload.data
-    // },
   },
   extraReducers: (builder) => {
     builder
@@ -46,14 +37,8 @@ export const berthDetailsSlice = createSlice({
         state.error = ""
         state.entityData = {
           name: "",
-          workspace: { company: { name: "" } },
           berthType: { name: "" },
         }
-        // state.entityFormData = {
-        //   name: "",
-        //   workspace: { company: { name: "" } },
-        //   berthType: { name: "" },
-        // }
         state._isInitialized = false
       })
       .addCase(getBerthByIdThunk.fulfilled, (state, action) => {
@@ -61,7 +46,6 @@ export const berthDetailsSlice = createSlice({
         state.isSaving = false
         state.error = ""
         state.entityData = action.payload.data!
-        // state.entityFormData = action.payload.data!
         state._isInitialized = true
       })
       .addCase(getBerthByIdThunk.rejected, (state, action) => {
@@ -70,14 +54,8 @@ export const berthDetailsSlice = createSlice({
         state.error = action.payload
         state.entityData = {
           name: "",
-          workspace: { company: { name: "" } },
           berthType: { name: "" },
         }
-        // state.entityFormData = {
-        //   name: "",
-        //   workspace: { company: { name: "" } },
-        //   berthType: { name: "" },
-        // }
         state._isInitialized = true
       })
       .addCase(updateBerthThunk.fulfilled, (state, action) => {
@@ -85,7 +63,6 @@ export const berthDetailsSlice = createSlice({
         state.isSaving = false
         state.error = ""
         state.entityData = action.payload.data!
-        // state.entityFormData = action.payload.data!
       })
   },
 })

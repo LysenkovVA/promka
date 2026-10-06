@@ -84,14 +84,17 @@ export function Selector<TValue>(props: SelectorProps<TValue>) {
   const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false)
 
   return (
-    <div className={"flex w-full flex-row items-center justify-start gap-2"}>
+    <div
+      className={"flex w-full shrink flex-row items-center justify-start gap-2"}
+    >
       <Popover open={isOpen} onOpenChange={onOpenChange}>
-        <PopoverTrigger className={"w-full"} asChild>
+        <PopoverTrigger className={"w-full shrink"} asChild>
           <Button
             className={
               "flex w-full items-center justify-between text-start text-gray-600"
             }
             variant={"outline"}
+            type={"button"}
           >
             {onRenderSelectedValue()}
             <div className={"flex items-center justify-center gap-2"}>
@@ -132,7 +135,7 @@ export function Selector<TValue>(props: SelectorProps<TValue>) {
           {items?.map((value, index) => (
             <div
               className={
-                "flex w-full cursor-pointer items-center justify-start gap-2 rounded-lg border-2 bg-muted p-1"
+                "flex w-full cursor-pointer items-center justify-start gap-2 rounded-lg border-2 bg-muted p-2"
               }
               key={Object(value)?.["id"] ?? index}
               onClick={() => {
@@ -158,7 +161,16 @@ export function Selector<TValue>(props: SelectorProps<TValue>) {
         </PopoverContent>
       </Popover>
       <div className={"flex flex-row items-center justify-center gap-0"}>
-        <Button variant={"default"} size={"icon"} onClick={onAddClick}>
+        <Button
+          variant={"outline"}
+          type={"button"}
+          size={"sm"}
+          onClick={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            onAddClick?.()
+          }}
+        >
           <IconPlusFilled />
         </Button>
         {/*Кнопка с точками*/}
@@ -166,6 +178,7 @@ export function Selector<TValue>(props: SelectorProps<TValue>) {
           <DropdownMenuTrigger asChild>
             <Button
               variant={"secondary"}
+              type={"button"}
               disabled={Object(selectedValue)?.["id"] === undefined}
             >
               <IconDotsVertical />
@@ -193,8 +206,13 @@ export function Selector<TValue>(props: SelectorProps<TValue>) {
               <DropdownMenuItem asChild>
                 <Button
                   variant={"secondary"}
+                  type={"button"}
                   size={"sm"}
-                  onClick={() => onEditClick?.(selectedValue)}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    onEditClick?.(selectedValue)
+                  }}
                 >
                   <IconEditFilled />
                 </Button>
@@ -202,8 +220,13 @@ export function Selector<TValue>(props: SelectorProps<TValue>) {
               <DropdownMenuItem variant={"destructive"} asChild>
                 <Button
                   variant={"secondary"}
+                  type={"button"}
                   size={"sm"}
-                  onClick={() => setIsOpenDeleteDialog(true)}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    setIsOpenDeleteDialog(true)
+                  }}
                 >
                   <IconTrashFilled />
                 </Button>
@@ -226,7 +249,10 @@ export function Selector<TValue>(props: SelectorProps<TValue>) {
               <ButtonGroup>
                 <Button
                   variant={"secondary"}
-                  onClick={() => {
+                  type={"button"}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
                     setIsOpenDeleteDialog(false)
                   }}
                 >
@@ -234,7 +260,10 @@ export function Selector<TValue>(props: SelectorProps<TValue>) {
                 </Button>
                 <Button
                   variant={"destructive"}
-                  onClick={async () => {
+                  type={"button"}
+                  onClick={async (e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
                     onDeleteClick(selectedValue)
                     setIsOpenDeleteDialog(false)
                   }}
