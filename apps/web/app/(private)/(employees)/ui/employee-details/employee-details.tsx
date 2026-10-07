@@ -166,6 +166,13 @@ export const EmployeeDetails = memo((props: EmployeeDetailsProps) => {
                       {data?.berth?.name}
                     </div>
                   )}
+                  {data?.department?.id && (
+                    <div
+                      className={"rounded-lg bg-muted p-1 text-sm font-light"}
+                    >
+                      {data?.department?.name}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

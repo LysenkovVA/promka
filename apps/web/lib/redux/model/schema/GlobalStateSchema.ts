@@ -8,6 +8,8 @@ import { Employee, EmployeeFilters } from "@/Employees"
 import { BerthType } from "@/BerthTypes"
 import { BerthTypesFilters } from "@/BerthTypes/model/types/berth-type.filters"
 import { EmployeesStatistics } from "@/Employees/model/types/employees-statistics"
+import { Department } from "@/Departments"
+import { DepartmentFilters } from "@/Departments/model/types/department.filters"
 
 /**
  * Схема глобального состояния
@@ -28,6 +30,9 @@ export interface GlobalStateSchema {
   // Типы должностей
   berthTypeDetailsSchema?: DetailsReduxSchema<BerthType>
   berthTypesSchema?: ListReduxSchema<BerthType, BerthTypesFilters>
+  // Подразделения
+  departmentDetailsSchema?: DetailsReduxSchema<Department>
+  departmentsSchema?: ListReduxSchema<Department, DepartmentFilters>
 }
 
 /**

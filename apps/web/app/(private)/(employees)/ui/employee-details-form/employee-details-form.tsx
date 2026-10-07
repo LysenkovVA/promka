@@ -26,6 +26,7 @@ import { employeeDetailsReducer } from "../../model/slice/employee-details.slice
 import { FieldBerth } from "@/Berthes"
 import { FieldDatePicker } from "@/components/form/field-date-picker/field-date-picker"
 import { Separator } from "@workspace/ui/components/separator"
+import { FieldDepartment } from "@/Departments"
 
 export interface EmployeeDetailsFormProps {
   submitRef: RefObject<HTMLInputElement | null>
@@ -184,6 +185,11 @@ export const EmployeeDetailsForm = memo((props: EmployeeDetailsFormProps) => {
           </FieldDescription>
           <Separator />
           <FieldBerth form={form} path={"berth"} label={"Должность"} />
+          <FieldDepartment
+            form={form}
+            path={"department"}
+            label={"Подразделение"}
+          />
           <div className={"grid grid-cols-2 gap-2"}>
             <FieldDatePicker
               form={form}

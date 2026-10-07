@@ -28,6 +28,7 @@ export async function GET(
       skip: Number(skip),
       include: {
         berth: { include: { berthType: true } },
+        department: true,
       },
     })
 

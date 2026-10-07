@@ -1,5 +1,5 @@
 /**
- * Должность сотрудника
+ * Тип должности сотрудника
  */
 model BerthType {
   id   String @id @default(cuid())

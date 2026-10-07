@@ -1,0 +1,16 @@
+/**
+ * Подразделение
+ */
+model Department {
+  id   String @id @default(cuid())
+  name String
+
+  // Рабочее пространство
+  workspace   Workspace? @relation(name: "workspace-departments", fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId String?
+
+  employees Employee[] @relation("department-employees")
+
+  @@index([name])
+  @@map("departments")
+}

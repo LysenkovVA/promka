@@ -25,7 +25,9 @@
       "@/Berthes": ["./app/(private)/(berthes)/index.ts"],
       "@/Berthes/*": ["./app/(private)/(berthes)/*"],
       "@/BerthTypes": ["./app/(private)/(berth-types)/index.ts"],
-      "@/BerthTypes/*": ["./app/(private)/(berth-types)/*"]
+      "@/BerthTypes/*": ["./app/(private)/(berth-types)/*"],
+      "@/Departments": ["./app/(private)/(departments)/index.ts"],
+      "@/Departments/*": ["./app/(private)/(departments)/*"]
     },
     "plugins": [
       {

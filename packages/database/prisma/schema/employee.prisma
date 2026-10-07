@@ -26,6 +26,9 @@ model Employee {
   berth   Berth?  @relation(name: "berth-employees", fields: [berthId], references: [id], onDelete: SetNull)
   berthId String?
 
+  department   Department? @relation(name: "department-employees", fields: [departmentId], references: [id], onDelete: Restrict)
+  departmentId String?
+
   // Рабочее пространство
   workspace   Workspace? @relation(name: "workspace-employees", fields: [workspaceId], references: [id], onDelete: Cascade)
   workspaceId String?

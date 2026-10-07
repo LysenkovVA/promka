@@ -44,10 +44,14 @@ export async function POST(
         ...(validatedData.berth?.id && {
           berth: { connect: { id: validatedData.berth?.id } },
         }),
+        ...(validatedData.department?.id && {
+          department: { connect: { id: validatedData.department?.id } },
+        }),
       },
       include: {
         workspace: { include: { company: true } },
         berth: true,
+        department: true,
       },
     })
 

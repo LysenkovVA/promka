@@ -9,6 +9,7 @@ import {
 import { WorkspaceSchema } from "@/Workspaces"
 import { stripTimezone } from "@/lib/date/utils"
 import { BerthSchema } from "@/Berthes"
+import { DepartmentSchema } from "@/Departments"
 
 /**
  * Схема валидации EmployeeSchema
@@ -134,6 +135,14 @@ export const EmployeeSchema = z.object(
         .lazy<typeof BerthSchema>(() => {
           const { BerthSchema } = require("@/Berthes")
           return BerthSchema
+        })
+        .nullish(),
+    department:
+      // Для устранения ошибок с циклическими зависимостями
+      z
+        .lazy<typeof DepartmentSchema>(() => {
+          const { DepartmentSchema } = require("@/Departments")
+          return DepartmentSchema
         })
         .nullish(),
   },

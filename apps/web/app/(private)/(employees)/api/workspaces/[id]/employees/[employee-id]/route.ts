@@ -23,6 +23,7 @@ export async function GET(
       include: {
         workspace: { include: { company: true } },
         berth: { include: { berthType: true } },
+        department: true,
       },
     })
 
@@ -66,11 +67,17 @@ export async function PATCH(
               berth: { connect: { id: validatedData.berth?.id } },
             }
           : { berth: { disconnect: true } }),
+        ...(validatedData.department?.id
+          ? {
+              department: { connect: { id: validatedData.department?.id } },
+            }
+          : { department: { disconnect: true } }),
       },
       where: { id: employeeId },
       include: {
         workspace: { include: { company: true } },
         berth: { include: { berthType: true } },
+        department: true,
       },
     })
 
