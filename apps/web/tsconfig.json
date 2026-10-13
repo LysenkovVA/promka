@@ -27,7 +27,11 @@
       "@/BerthTypes": ["./app/(private)/(berth-types)/index.ts"],
       "@/BerthTypes/*": ["./app/(private)/(berth-types)/*"],
       "@/Departments": ["./app/(private)/(departments)/index.ts"],
-      "@/Departments/*": ["./app/(private)/(departments)/*"]
+      "@/Departments/*": ["./app/(private)/(departments)/*"],
+      "@/CertificateTypes": ["./app/(private)/(certificate-types)/index.ts"],
+      "@/CertificateTypes/*": ["./app/(private)/(certificate-types)/*"],
+      "@/Certificates": ["./app/(private)/(certificates)/index.ts"],
+      "@/Certificates/*": ["./app/(private)/(certificates)/*"]
     },
     "plugins": [
       {
@@ -42,5 +46,5 @@
     "**/*.tsx",
     ".next/types/**/*.ts"
   ],
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules"]
 }

@@ -10,6 +10,7 @@ import { WorkspaceSchema } from "@/Workspaces"
 import { stripTimezone } from "@/lib/date/utils"
 import { BerthSchema } from "@/Berthes"
 import { DepartmentSchema } from "@/Departments"
+import { CertificateSchema } from "@/Certificates"
 
 /**
  * Схема валидации EmployeeSchema
@@ -145,6 +146,23 @@ export const EmployeeSchema = z.object(
           return DepartmentSchema
         })
         .nullish(),
+    certificates: z
+      .array(
+        // Для устранения ошибок с циклическими зависимостями
+        z.lazy(() => {
+          const { CertificateSchema } = require("@/Certificates")
+          return CertificateSchema
+        }),
+        {
+          error: (issue) => {
+            switch (issue.code) {
+              case "invalid_type":
+                return ZOD_INVALID_OBJECT_TYPE
+            }
+          },
+        }
+      )
+      .nullish(),
   },
   /**
    * Параметры объекта

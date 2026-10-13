@@ -27,8 +27,10 @@ export async function GET(
       take: Number(take),
       skip: Number(skip),
       include: {
-        berth: { include: { berthType: true } },
+        workspace: { include: { company: true } },
+        berth: true,
         department: true,
+        certificates: { include: { certificateType: true } },
       },
     })
 

@@ -10,6 +10,10 @@ import { BerthTypesFilters } from "@/BerthTypes/model/types/berth-type.filters"
 import { EmployeesStatistics } from "@/Employees/model/types/employees-statistics"
 import { Department } from "@/Departments"
 import { DepartmentFilters } from "@/Departments/model/types/department.filters"
+import { CertificateType } from "@/CertificateTypes"
+import { CertificateTypesFilters } from "@/CertificateTypes/model/types/certificate-type.filters"
+import { Certificate } from "@/Certificates"
+import { CertificateFilters } from "@/Certificates/model/types/certificate.filters"
 
 /**
  * Схема глобального состояния
@@ -33,6 +37,15 @@ export interface GlobalStateSchema {
   // Подразделения
   departmentDetailsSchema?: DetailsReduxSchema<Department>
   departmentsSchema?: ListReduxSchema<Department, DepartmentFilters>
+  // Типы удостоверений
+  certificateTypeDetailsSchema?: DetailsReduxSchema<CertificateType>
+  certificateTypesSchema?: ListReduxSchema<
+    CertificateType,
+    CertificateTypesFilters
+  >
+  // Удостоверения
+  certificateDetailsSchema?: DetailsReduxSchema<Certificate>
+  certificatesSchema?: ListReduxSchema<Certificate, CertificateFilters>
 }
 
 /**

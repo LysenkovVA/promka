@@ -1,0 +1,24 @@
+/**
+ * Удостоверение
+ */
+model Certificate {
+  id     String   @id @default(cuid())
+  number String
+  date   DateTime
+  group  String?
+
+  // Рабочее пространство
+  workspace   Workspace @relation(name: "workspace-certificates", fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId String
+
+  // Тип удостоверения
+  certificateType   CertificateType @relation(name: "certificate-type-certificates", fields: [certificateTypeId], references: [id], onDelete: Restrict)
+  certificateTypeId String
+
+  // Сотрудник
+  employee   Employee? @relation(name: "employee-certificates", fields: [employeeId], references: [id], onDelete: Cascade)
+  employeeId String?
+
+  @@index([number])
+  @@map("certificates")
+}

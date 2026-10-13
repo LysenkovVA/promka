@@ -2,16 +2,17 @@
  * Сотрудник
  */
 model Employee {
-  id         String    @id @default(cuid())
+  id          String    @id @default(cuid())
+  // URL аватара
+  avatar      File?     @relation(name: "employee-avatar")
   // Фамилия
-  surname    String
+  surname     String
   // Имя
-  name       String?
+  name        String?
   // Отчество
-  patronymic String?
+  patronymic  String?
   // Дата рождения
-  birthDate  DateTime?
-
+  birthDate   DateTime?
   // Дата приема на работу
   hireDate    DateTime?
   // Дата увольнения
@@ -30,8 +31,11 @@ model Employee {
   departmentId String?
 
   // Рабочее пространство
-  workspace   Workspace? @relation(name: "workspace-employees", fields: [workspaceId], references: [id], onDelete: Cascade)
-  workspaceId String?
+  workspace   Workspace @relation(name: "workspace-employees", fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId String
+
+  // Удостоверения
+  certificates Certificate[] @relation(name: "employee-certificates")
 
   @@index([surname, name])
   @@map("employees")

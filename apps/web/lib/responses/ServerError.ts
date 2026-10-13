@@ -37,8 +37,13 @@ export class ServerError {
 
     // 2. Ошибка валидации (неверные типы данных перед отправкой в БД)
     if (errorInstance instanceof Prisma.PrismaClientValidationError) {
+      console.log(
+        "SERVER ERROR:",
+        `Prisma: Ошибка валидации данных Prisma: ${errorInstance.message.replace(/\n/g, " ").trim()}`
+      )
       return ResponseData.InternalServerError(
-        `Prisma: Ошибка валидации данных Prisma: ${errorInstance.message}`
+        `Prisma: Ошибка валидации данных Prisma: ${JSON.stringify(errorInstance)}`
+        // `Prisma: Ошибка валидации данных Prisma: ${errorInstance.message.replace(/\n/g, " ").trim()}`
       ).toNextResponse()
     }
 

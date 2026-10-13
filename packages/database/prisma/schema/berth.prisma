@@ -6,8 +6,8 @@ model Berth {
   name String
 
   // Рабочее пространство
-  workspace   Workspace? @relation(name: "workspace-berthes", fields: [workspaceId], references: [id], onDelete: Cascade)
-  workspaceId String?
+  workspace   Workspace @relation(name: "workspace-berthes", fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId String
 
   berthType   BerthType @relation(name: "berth-type-berthes", fields: [berthTypeId], references: [id], onDelete: Restrict)
   berthTypeId String

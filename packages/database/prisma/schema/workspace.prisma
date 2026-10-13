@@ -13,13 +13,17 @@ model Workspace {
   teamMembers TeamMember[] @relation(name: "workspace-team-members")
 
   // Сотрудники компании
-  employees   Employee[]   @relation(name: "workspace-employees")
+  employees        Employee[]        @relation(name: "workspace-employees")
   // Должности компании
-  berthes     Berth[]      @relation(name: "workspace-berthes")
+  berthes          Berth[]           @relation(name: "workspace-berthes")
   // Типы должностей компании
-  berthTypes  BerthType[]  @relation(name: "workspace-berth-types")
+  berthTypes       BerthType[]       @relation(name: "workspace-berth-types")
   // Подразделения
-  departments Department[] @relation(name: "workspace-departments")
+  departments      Department[]      @relation(name: "workspace-departments")
+  // Типы удостоверений
+  certificateTypes CertificateType[] @relation(name: "workspace-certificate-types")
+  // Удостоверения
+  certificates     Certificate[]     @relation(name: "workspace-certificates")
 
   @@map("workspaces")
 }

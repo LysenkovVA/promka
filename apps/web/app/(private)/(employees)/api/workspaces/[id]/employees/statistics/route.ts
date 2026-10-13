@@ -14,8 +14,6 @@ export async function GET(
   try {
     const { id } = await props.params
 
-    console.log("Workspace id = ", id)
-
     // Проверяем доступы пользователя
     await checkAuthForWorkspace(id)
 

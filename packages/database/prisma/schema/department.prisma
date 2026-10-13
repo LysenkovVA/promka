@@ -6,8 +6,8 @@ model Department {
   name String
 
   // Рабочее пространство
-  workspace   Workspace? @relation(name: "workspace-departments", fields: [workspaceId], references: [id], onDelete: Cascade)
-  workspaceId String?
+  workspace   Workspace @relation(name: "workspace-departments", fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId String
 
   employees Employee[] @relation("department-employees")
 

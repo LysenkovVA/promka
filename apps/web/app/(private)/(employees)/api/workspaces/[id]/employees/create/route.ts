@@ -47,11 +47,29 @@ export async function POST(
         ...(validatedData.department?.id && {
           department: { connect: { id: validatedData.department?.id } },
         }),
+        certificates: {
+          create: validatedData.certificates
+            ? validatedData.certificates.map((item) => {
+                return {
+                  certificateType: {
+                    connect: { id: item.certificateType.id! },
+                  },
+                  number: item.number,
+                  date: item.date ?? Prisma.skip,
+                  group: item.group ?? Prisma.skip,
+                  workspace: {
+                    connect: { id: id },
+                  },
+                }
+              })
+            : Prisma.skip,
+        },
       },
       include: {
         workspace: { include: { company: true } },
         berth: true,
         department: true,
+        certificates: { include: { certificateType: true } },
       },
     })
 

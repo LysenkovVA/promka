@@ -1,0 +1,19 @@
+/**
+ * Тип удостоверения
+ */
+model CertificateType {
+  id               String  @id @default(cuid())
+  name             String
+  hasGroups        Boolean @default(false)
+  // 0 - Безлимитно
+  durationAtMonths Int     @default(0)
+
+  // Рабочее пространство
+  workspace   Workspace @relation(name: "workspace-certificate-types", fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId String
+
+  certificates Certificate[] @relation("certificate-type-certificates")
+
+  @@index([name])
+  @@map("certificate-types")
+}

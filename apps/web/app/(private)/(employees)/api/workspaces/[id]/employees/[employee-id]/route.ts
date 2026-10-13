@@ -24,6 +24,7 @@ export async function GET(
         workspace: { include: { company: true } },
         berth: { include: { berthType: true } },
         department: true,
+        certificates: { include: { certificateType: true } },
       },
     })
 
@@ -51,6 +52,29 @@ export async function PATCH(
 
     const validatedData = await validateObject(EmployeeSchema, entityToSave)
 
+    // Получаем существующую запись, чтобы понять что делать с удостоверениями
+    const existingData = await prisma.employee.findFirst({
+      where: { id: employeeId },
+      include: {
+        workspace: { include: { company: true } },
+        berth: { include: { berthType: true } },
+        department: true,
+        certificates: { include: { certificateType: true } },
+      },
+    })
+
+    // Новые удостоверения
+    const itemsToCreate = validatedData.certificates?.filter((item) => !item.id)
+    // Удостоверения для обновления
+    const itemsToUpdate = validatedData.certificates?.filter((item) => item.id)
+    const existingItemIds =
+      existingData?.certificates?.map((item) => item.id) || []
+    const providedItemIds = itemsToUpdate?.map((item) => item.id!)
+    // Удостоверения для удаления
+    const itemsToDelete = existingItemIds.filter(
+      (id) => !providedItemIds?.includes(id!)
+    )
+
     const updatedData = await prisma.employee.update({
       data: {
         surname: validatedData.surname ?? Prisma.skip,
@@ -72,12 +96,51 @@ export async function PATCH(
               department: { connect: { id: validatedData.department?.id } },
             }
           : { department: { disconnect: true } }),
+        certificates: {
+          create:
+            itemsToCreate && itemsToCreate.length > 0
+              ? itemsToCreate.map((item) => {
+                  return {
+                    certificateType: {
+                      connect: { id: item.certificateType.id! },
+                    },
+                    number: item.number,
+                    date: item.date ?? Prisma.skip,
+                    group: item.group ?? Prisma.skip,
+                    workspace: {
+                      connect: { id: validatedData.workspace!.id! },
+                    },
+                  }
+                })
+              : Prisma.skip,
+          update:
+            itemsToUpdate && itemsToUpdate.length > 0
+              ? itemsToUpdate.map((item) => {
+                  return {
+                    data: {
+                      certificateType: {
+                        connect: { id: item.certificateType.id },
+                      },
+                      number: item.number ?? Prisma.skip,
+                      date: item.date ?? Prisma.skip,
+                      group: item.group ?? Prisma.skip,
+                    },
+                    where: { id: item.id },
+                  }
+                })
+              : Prisma.skip,
+          delete:
+            itemsToDelete && itemsToDelete.length > 0
+              ? itemsToDelete.map((itemId) => ({ id: itemId }))
+              : Prisma.skip,
+        },
       },
       where: { id: employeeId },
       include: {
         workspace: { include: { company: true } },
         berth: { include: { berthType: true } },
         department: true,
+        certificates: { include: { certificateType: true } },
       },
     })
 

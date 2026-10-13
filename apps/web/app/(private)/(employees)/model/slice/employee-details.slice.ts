@@ -5,6 +5,7 @@ import { DetailsReduxSchema } from "@/lib/redux/model/types/DetailsReduxSchema"
 import { Employee } from "../types/employee.schema"
 import { getEmployeeByIdThunk } from "../thunks/get-employee-by-id.thunk"
 import { updateEmployeeThunk } from "../thunks/update-employee.thunk"
+import { createCertificateThunk } from "@/Certificates/model/thunks/create-certificate.thunk"
 
 const initialState: DetailsReduxSchema<Employee> = {
   entityData: { surname: "" },
@@ -58,6 +59,24 @@ export const employeeDetailsSlice = createSlice({
         state.isSaving = false
         state.error = ""
         state.entityData = action.payload.data
+      })
+      .addCase(createCertificateThunk.fulfilled, (state, action) => {
+        state.isFetching = false
+        state.isSaving = false
+        state.error = ""
+        if (
+          state?.entityData?.id === action.payload.data?.employee?.id &&
+          action.payload.data?.id
+        ) {
+          state.entityData = {
+            ...state.entityData!,
+            certificates:
+              state?.entityData?.certificates &&
+              state.entityData.certificates.length > 0
+                ? [...state!.entityData!.certificates!, action.payload.data]
+                : [action.payload.data],
+          }
+        }
       })
   },
 })

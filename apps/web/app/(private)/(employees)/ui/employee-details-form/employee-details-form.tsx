@@ -1,7 +1,7 @@
 "use client"
 
 import { memo, RefObject, useCallback, useEffect } from "react"
-import { useForm } from "react-hook-form"
+import { useFieldArray, useForm } from "react-hook-form"
 import { Employee, EmployeeSchema } from "../../model/types/employee.schema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { FieldInput } from "@/components/form/field-input/field-input"
@@ -27,6 +27,9 @@ import { FieldBerth } from "@/Berthes"
 import { FieldDatePicker } from "@/components/form/field-date-picker/field-date-picker"
 import { Separator } from "@workspace/ui/components/separator"
 import { FieldDepartment } from "@/Departments"
+import { Button } from "@workspace/ui/components/button"
+import { IconPlusFilled, IconTrash } from "@tabler/icons-react"
+import { FieldCertificateType } from "@/CertificateTypes"
 
 export interface EmployeeDetailsFormProps {
   submitRef: RefObject<HTMLInputElement | null>
@@ -62,6 +65,12 @@ export const EmployeeDetailsForm = memo((props: EmployeeDetailsFormProps) => {
     defaultValues: data,
   })
 
+  // Работа со списком удостоверений
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "certificates",
+  })
+
   useEffect(() => {
     if (employeeId && !isInitialized && !isLoading) {
       dispatch(getEmployeeByIdThunk({ employeeId: employeeId }))
@@ -74,8 +83,6 @@ export const EmployeeDetailsForm = memo((props: EmployeeDetailsFormProps) => {
 
   const onSubmitForm = useCallback(
     async (formData: Employee) => {
-      console.log("Employee details form onSubmitForm callback fired")
-
       if (formData) {
         if (!auth?.activeWorkspace?.id) {
           toast.error(JSON.stringify("Не удалось определить workspaceId"))
@@ -215,6 +222,68 @@ export const EmployeeDetailsForm = memo((props: EmployeeDetailsFormProps) => {
               placeholder={"Укажите e-mail"}
             />
           </div>
+        </FieldGroup>
+        <FieldGroup>
+          <FieldDescription>{"Удостоверения"}</FieldDescription>
+          <Separator />
+          {fields.map((field, index) => (
+            <div key={field.id ?? index} className={"w-full"}>
+              <div
+                className={"flex flex-row items-center justify-center gap-2"}
+              >
+                <Button
+                  size={"icon"}
+                  variant={"outline"}
+                  onClick={() => remove(index)}
+                >
+                  <IconTrash className={"text-destructive"} />
+                </Button>
+                <div
+                  className={
+                    "flex w-full flex-col items-center justify-center gap-2 rounded-lg border p-4"
+                  }
+                >
+                  <FieldCertificateType
+                    required={true}
+                    form={form}
+                    path={`certificates.${index}.certificateType`}
+                    label={"Тип"}
+                  />
+                  <FieldInput
+                    required={true}
+                    form={form}
+                    path={`certificates.${index}.number`}
+                    label={"Номер"}
+                  />
+                  <FieldDatePicker
+                    form={form}
+                    path={`certificates.${index}.date`}
+                    label={"Дата"}
+                  />
+                  {form.watch(`certificates.${index}.certificateType`)?.id &&
+                    form.watch(`certificates.${index}.certificateType`)
+                      ?.hasGroups && (
+                      <FieldInput
+                        required={true}
+                        form={form}
+                        path={`certificates.${index}.group`}
+                        label={"Группа"}
+                        placeholder={"Укажите группу"}
+                      />
+                    )}
+                </div>
+              </div>
+            </div>
+          ))}
+          <Button
+            type={"button"}
+            onClick={() => {
+              append({ number: "", date: new Date() })
+            }}
+          >
+            <IconPlusFilled />
+            {"Добавить"}
+          </Button>
         </FieldGroup>
         <input type={"submit"} hidden ref={submitRef} />
       </form>

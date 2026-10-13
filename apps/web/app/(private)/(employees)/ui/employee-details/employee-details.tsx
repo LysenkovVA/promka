@@ -41,6 +41,7 @@ import dayjs from "dayjs"
 import { EmployeeDetailsForm } from "@/Employees/ui/employee-details-form/employee-details-form"
 import { DetailsWrapper } from "@/components/details-wrapper/details-wrapper"
 import { getEmployeeByIdThunk } from "@/Employees/model/thunks/get-employee-by-id.thunk"
+import { CertificatesList } from "@/Certificates/ui/certificates-list/certificates-list"
 
 export interface EmployeeDetailsProps {
   employeeId?: string
@@ -249,6 +250,9 @@ export const EmployeeDetails = memo((props: EmployeeDetailsProps) => {
                   {data?.email}
                 </ItemContent>
               </Item>
+            )}
+            {data?.id && (
+              <CertificatesList certificates={data?.certificates ?? null} />
             )}
           </div>
         )}
