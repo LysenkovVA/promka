@@ -13,6 +13,8 @@ export interface CertificatesListProps {
 export const CertificatesList = memo((props: CertificatesListProps) => {
   const { certificates } = props
 
+  if (!certificates) return null
+
   return (
     <>
       <FieldDescription className={"mt-4"}>{"Удостоверения"}</FieldDescription>

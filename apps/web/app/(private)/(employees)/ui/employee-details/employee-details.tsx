@@ -19,18 +19,7 @@ import { useAuth } from "@/app/(public)/(auth)"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { EmployeeHelper } from "@/Employees/helpers/employee-helper"
-import {
-  Marker,
-  MarkerContent,
-  MarkerIcon,
-} from "@workspace/ui/components/marker"
-import {
-  IconAddressBook,
-  IconCalendar,
-  IconId,
-  IconMail,
-  IconPhone,
-} from "@tabler/icons-react"
+import { IconCalendar, IconId, IconMail, IconPhone } from "@tabler/icons-react"
 import {
   Item,
   ItemContent,
@@ -133,48 +122,74 @@ export const EmployeeDetails = memo((props: EmployeeDetailsProps) => {
           <div
             className={"flex w-full flex-col items-start justify-start gap-3"}
           >
-            <div
-              className={
-                "flex w-full flex-row items-center justify-center gap-4"
-              }
-            >
-              <Avatar style={{ width: 100, height: 100 }} />
+            <div className={"flex w-full flex-row items-start justify-between"}>
               <div
                 className={
-                  "flex w-full flex-col items-start justify-center gap-1"
+                  "flex w-full flex-row items-center justify-center gap-4"
                 }
               >
-                <div style={{ fontSize: 26, fontWeight: "bold" }}>
-                  {data?.surname}
-                </div>
-                <div style={{ fontSize: 18 }}>
-                  {EmployeeHelper.getNameAndPatronymic(data)}
-                </div>
+                <Avatar style={{ width: 100, height: 100 }} />
                 <div
-                  className={"flex flex-row items-center justify-center gap-2"}
+                  className={
+                    "flex w-full flex-col items-start justify-center gap-1"
+                  }
                 >
-                  {data?.workspace?.company?.id && (
-                    <div
-                      className={"rounded-lg bg-muted p-1 text-sm font-light"}
-                    >
-                      {data?.workspace?.company.name}
-                    </div>
-                  )}
-                  {data?.berth?.id && (
-                    <div
-                      className={"rounded-lg bg-muted p-1 text-sm font-light"}
-                    >
-                      {data?.berth?.name}
-                    </div>
-                  )}
-                  {data?.department?.id && (
-                    <div
-                      className={"rounded-lg bg-muted p-1 text-sm font-light"}
-                    >
-                      {data?.department?.name}
-                    </div>
-                  )}
+                  <div style={{ fontSize: 26, fontWeight: "bold" }}>
+                    {data?.surname}
+                  </div>
+                  <div style={{ fontSize: 18 }}>
+                    {EmployeeHelper.getNameAndPatronymic(data)}
+                  </div>
+                  <div
+                    className={
+                      "flex flex-row items-center justify-center gap-2"
+                    }
+                  >
+                    {data?.workspace?.company?.id && (
+                      <div
+                        className={"rounded-lg bg-muted p-1 text-sm font-light"}
+                      >
+                        {data?.workspace?.company.name}
+                      </div>
+                    )}
+                    {data?.berth?.id && (
+                      <div
+                        className={"rounded-lg bg-muted p-1 text-sm font-light"}
+                      >
+                        {data?.berth?.name}
+                      </div>
+                    )}
+                    {data?.department?.id && (
+                      <div
+                        className={"rounded-lg bg-muted p-1 text-sm font-light"}
+                      >
+                        {data?.department?.name}
+                      </div>
+                    )}
+                  </div>
                 </div>
+              </div>
+              <div className={"flex flex-col items-end justify-center gap-2"}>
+                {data?.phoneNumber && (
+                  <div
+                    className={
+                      "flex flex-row items-center justify-center gap-1"
+                    }
+                  >
+                    <IconPhone className={"size-4"} />
+                    <div className={"text-sm"}>{data?.phoneNumber}</div>
+                  </div>
+                )}
+                {data?.email && (
+                  <div
+                    className={
+                      "flex flex-row items-center justify-center gap-1"
+                    }
+                  >
+                    <IconMail className={"size-4"} />
+                    <div className={"text-sm"}>{data?.email}</div>
+                  </div>
+                )}
               </div>
             </div>
             {data?.birthDate && (
@@ -221,36 +236,36 @@ export const EmployeeDetails = memo((props: EmployeeDetailsProps) => {
                 </ItemContent>
               </Item>
             )}
-            {(data?.phoneNumber || data?.email) && (
-              <Marker variant="border">
-                <MarkerIcon>
-                  <IconAddressBook />
-                </MarkerIcon>
-                <MarkerContent>Контакты</MarkerContent>
-              </Marker>
-            )}
-            {data?.phoneNumber && (
-              <Item variant={"muted"}>
-                <ItemMedia variant={"icon"}>
-                  <IconPhone />
-                </ItemMedia>
-                <ItemContent>
-                  <ItemDescription> {"Телефон"}</ItemDescription>
-                  {data?.phoneNumber}
-                </ItemContent>
-              </Item>
-            )}
-            {data?.email && (
-              <Item variant={"muted"}>
-                <ItemMedia variant={"icon"}>
-                  <IconMail />
-                </ItemMedia>
-                <ItemContent>
-                  <ItemDescription> {"E-mail"}</ItemDescription>
-                  {data?.email}
-                </ItemContent>
-              </Item>
-            )}
+            {/*{(data?.phoneNumber || data?.email) && (*/}
+            {/*  <Marker variant="border">*/}
+            {/*    <MarkerIcon>*/}
+            {/*      <IconAddressBook />*/}
+            {/*    </MarkerIcon>*/}
+            {/*    <MarkerContent>Контакты</MarkerContent>*/}
+            {/*  </Marker>*/}
+            {/*)}*/}
+            {/*{data?.phoneNumber && (*/}
+            {/*  <Item variant={"muted"}>*/}
+            {/*    <ItemMedia variant={"icon"}>*/}
+            {/*      <IconPhone />*/}
+            {/*    </ItemMedia>*/}
+            {/*    <ItemContent>*/}
+            {/*      <ItemDescription> {"Телефон"}</ItemDescription>*/}
+            {/*      {data?.phoneNumber}*/}
+            {/*    </ItemContent>*/}
+            {/*  </Item>*/}
+            {/*)}*/}
+            {/*{data?.email && (*/}
+            {/*  <Item variant={"muted"}>*/}
+            {/*    <ItemMedia variant={"icon"}>*/}
+            {/*      <IconMail />*/}
+            {/*    </ItemMedia>*/}
+            {/*    <ItemContent>*/}
+            {/*      <ItemDescription> {"E-mail"}</ItemDescription>*/}
+            {/*      {data?.email}*/}
+            {/*    </ItemContent>*/}
+            {/*  </Item>*/}
+            {/*)}*/}
             {data?.id && (
               <CertificatesList certificates={data?.certificates ?? null} />
             )}
