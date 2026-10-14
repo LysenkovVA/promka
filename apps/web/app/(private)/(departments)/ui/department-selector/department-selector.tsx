@@ -74,7 +74,7 @@ export const DepartmentSelector = memo((props: DepartmentSelectorProps) => {
         style: { color: "tomato" },
       })
     }
-  }, [auth.activeWorkspace.id, dispatch, onChange, value?.id, value?.name])
+  }, [auth?.activeWorkspace?.id, dispatch, onChange, value?.id, value?.name])
 
   return (
     <DynamicModuleLoader

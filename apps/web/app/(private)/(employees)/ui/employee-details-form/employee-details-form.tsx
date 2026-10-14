@@ -30,6 +30,7 @@ import { FieldDepartment } from "@/Departments"
 import { Button } from "@workspace/ui/components/button"
 import { IconPlusFilled, IconTrash } from "@tabler/icons-react"
 import { FieldCertificateType } from "@/CertificateTypes"
+import { FieldSnils } from "@/Employees/ui/field-snils/field-snils"
 
 export interface EmployeeDetailsFormProps {
   submitRef: RefObject<HTMLInputElement | null>
@@ -89,11 +90,14 @@ export const EmployeeDetailsForm = memo((props: EmployeeDetailsFormProps) => {
           return false
         }
 
+        // Отправляем на бэкэнд чистые цифры или строку с маской
+        const rawDigits = formData?.snils?.replace(/\D/g, "")
+
         try {
           if (!employeeId) {
             const result = await dispatch(
               createEmployeeThunk({
-                entityData: formData,
+                entityData: { ...formData, snils: rawDigits },
                 workspaceId: auth.activeWorkspace.id,
               })
             ).unwrap()
@@ -110,7 +114,7 @@ export const EmployeeDetailsForm = memo((props: EmployeeDetailsFormProps) => {
           } else {
             const result = await dispatch(
               updateEmployeeThunk({
-                entityData: formData,
+                entityData: { ...formData, snils: rawDigits },
                 workspaceId: auth?.activeWorkspace.id,
               })
             ).unwrap()
@@ -178,7 +182,7 @@ export const EmployeeDetailsForm = memo((props: EmployeeDetailsFormProps) => {
               path={"birthDate"}
               label={"Дата рождения"}
             />
-            <FieldInput
+            <FieldSnils
               form={form}
               path={"snils"}
               label={"СНИЛС"}
@@ -229,6 +233,9 @@ export const EmployeeDetailsForm = memo((props: EmployeeDetailsFormProps) => {
           {fields.map((field, index) => (
             <div key={field.id ?? index} className={"w-full"}>
               <div
+                className={"ml-10 text-xl font-bold"}
+              >{`# ${index + 1}`}</div>
+              <div
                 className={"flex flex-row items-center justify-center gap-2"}
               >
                 <Button
@@ -276,13 +283,14 @@ export const EmployeeDetailsForm = memo((props: EmployeeDetailsFormProps) => {
             </div>
           ))}
           <Button
+            className={"ml-10 w-fit"}
             type={"button"}
             onClick={() => {
               append({ number: "", date: new Date() })
             }}
           >
             <IconPlusFilled />
-            {"Добавить"}
+            {"Добавить удостоверение"}
           </Button>
         </FieldGroup>
         <input type={"submit"} hidden ref={submitRef} />

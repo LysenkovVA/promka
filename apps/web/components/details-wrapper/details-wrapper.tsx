@@ -72,11 +72,11 @@ export const DetailsWrapper = memo((props: DetailsWrapperProps) => {
   }, [error, isEdit, onEditClick, onSaveClick])
 
   return (
-    <div className={"flex w-full flex-col gap-4"}>
+    <div className={"flex h-full w-full flex-col gap-4"}>
       {/*Кнопки*/}
       <div
         className={
-          "flex flex-shrink-0 flex-row items-center justify-between gap-3 bg-muted p-4"
+          "flex min-h-16 flex-shrink-0 flex-row items-center justify-between gap-3 bg-muted p-4"
         }
       >
         <ButtonGroup>
@@ -88,21 +88,21 @@ export const DetailsWrapper = memo((props: DetailsWrapperProps) => {
         {buttonsContent}
       </div>
       {/*Контент или ошибка*/}
-      <PageWrapper className={"flex-1 overflow-y-auto"}>
+      <PageWrapper className={`flex-1 overflow-y-auto`}>
         {error ? <div className={"text-destructive"}>{error}</div> : children}
         {/*Кнопка удаления в режиме редактирования без ошибки*/}
         {!error && isEdit && onDeleteClick && (
           <div
             className={
-              "m-auto mt-4 flex flex-col items-center justify-center gap-3"
+              "mt-8 mb-8 flex flex-col items-center justify-center gap-3"
             }
           >
             <Separator />
             <Dialog>
               <DialogTrigger asChild>
-                <Button variant={"destructive"}>
+                <Button className={"w-full"} variant={"destructive"}>
                   <IconTrashFilled />
-                  {"Удалить"}
+                  {"Удалить запись"}
                 </Button>
               </DialogTrigger>
               <DialogContent showCloseButton={false}>

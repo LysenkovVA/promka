@@ -31,6 +31,7 @@ import { EmployeeDetailsForm } from "@/Employees/ui/employee-details-form/employ
 import { DetailsWrapper } from "@/components/details-wrapper/details-wrapper"
 import { getEmployeeByIdThunk } from "@/Employees/model/thunks/get-employee-by-id.thunk"
 import { CertificatesList } from "@/Certificates/ui/certificates-list/certificates-list"
+import { formatSnils } from "@/Employees/ui/field-snils/field-snils"
 
 export interface EmployeeDetailsProps {
   employeeId?: string
@@ -210,7 +211,7 @@ export const EmployeeDetails = memo((props: EmployeeDetailsProps) => {
                 </ItemMedia>
                 <ItemContent>
                   <ItemDescription> {"СНИЛС"}</ItemDescription>
-                  {data?.snils}
+                  {formatSnils(data?.snils)}
                 </ItemContent>
               </Item>
             )}
