@@ -32,6 +32,7 @@ import { DetailsWrapper } from "@/components/details-wrapper/details-wrapper"
 import { getEmployeeByIdThunk } from "@/Employees/model/thunks/get-employee-by-id.thunk"
 import { CertificatesList } from "@/Certificates/ui/certificates-list/certificates-list"
 import { formatSnils } from "@/Employees/ui/field-snils/field-snils"
+import { formatPhoneNumberIntl } from "react-phone-number-input"
 
 export interface EmployeeDetailsProps {
   employeeId?: string
@@ -113,7 +114,6 @@ export const EmployeeDetails = memo((props: EmployeeDetailsProps) => {
         {isEdit ? (
           <EmployeeDetailsForm
             onSubmit={() => {
-              console.log("Employee details form submitted")
               setIsEdit(false)
             }}
             submitRef={hiddenSubmitInputRef}
@@ -125,9 +125,7 @@ export const EmployeeDetails = memo((props: EmployeeDetailsProps) => {
           >
             <div className={"flex w-full flex-row items-start justify-between"}>
               <div
-                className={
-                  "flex w-full flex-row items-center justify-center gap-4"
-                }
+                className={"flex flex-row items-center justify-center gap-4"}
               >
                 <Avatar style={{ width: 100, height: 100 }} />
                 <div
@@ -171,17 +169,19 @@ export const EmployeeDetails = memo((props: EmployeeDetailsProps) => {
                 </div>
               </div>
               <div className={"flex flex-col items-end justify-center gap-2"}>
-                {data?.phoneNumber && (
+                {data?.phoneNumber && data.phoneNumber.length > 0 && (
                   <div
                     className={
-                      "flex flex-row items-center justify-center gap-1"
+                      "line-clamp-1 flex flex-row items-center justify-center gap-1"
                     }
                   >
                     <IconPhone className={"size-4"} />
-                    <div className={"text-sm"}>{data?.phoneNumber}</div>
+                    <div className={"line-clamp-1 text-sm"}>
+                      {formatPhoneNumberIntl(data?.phoneNumber)}
+                    </div>
                   </div>
                 )}
-                {data?.email && (
+                {data?.email && data.email.length > 0 && (
                   <div
                     className={
                       "flex flex-row items-center justify-center gap-1"

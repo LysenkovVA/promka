@@ -31,6 +31,7 @@ import { Button } from "@workspace/ui/components/button"
 import { IconPlusFilled, IconTrash } from "@tabler/icons-react"
 import { FieldCertificateType } from "@/CertificateTypes"
 import { FieldSnils } from "@/Employees/ui/field-snils/field-snils"
+import { FieldPhone } from "@/Employees/ui/field-phone/field-phone"
 
 export interface EmployeeDetailsFormProps {
   submitRef: RefObject<HTMLInputElement | null>
@@ -187,6 +188,7 @@ export const EmployeeDetailsForm = memo((props: EmployeeDetailsFormProps) => {
               path={"snils"}
               label={"СНИЛС"}
               placeholder={"Укажите СНИЛС"}
+              description={"Введите 11 цифр"}
             />
           </div>
         </FieldGroup>
@@ -213,11 +215,12 @@ export const EmployeeDetailsForm = memo((props: EmployeeDetailsFormProps) => {
           <FieldDescription>{"Контакты"}</FieldDescription>
           <Separator />
           <div className={"grid grid-cols-2 gap-2"}>
-            <FieldInput
+            <FieldPhone
               form={form}
               path={"phoneNumber"}
               label={"Телефон"}
               placeholder={"Укажите телефон"}
+              description={"Только цифры без кода страны"}
             />
             <FieldInput
               form={form}

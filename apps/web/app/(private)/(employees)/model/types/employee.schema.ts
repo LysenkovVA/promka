@@ -10,7 +10,7 @@ import { WorkspaceSchema } from "@/Workspaces"
 import { stripTimezone } from "@/lib/date/utils"
 import { BerthSchema } from "@/Berthes"
 import { DepartmentSchema } from "@/Departments"
-import { CertificateSchema } from "@/Certificates"
+import { isValidPhoneNumber } from "react-phone-number-input/input"
 
 // Функция валидации контрольной суммы СНИЛС
 const validateSnils = (snils: string) => {
@@ -135,7 +135,6 @@ export const EmployeeSchema = z.object(
           }
         },
       })
-      // .min(11, { message: "Введите СНИЛС полностью" }) // длина строки с дефисами и пробелом
       .refine(validateSnils, { message: "Неверный контрольный номер СНИЛС" })
       .nullish(),
     phoneNumber: z
@@ -146,6 +145,9 @@ export const EmployeeSchema = z.object(
               return ZOD_INVALID_STRING_TYPE
           }
         },
+      })
+      .refine((val) => !val || isValidPhoneNumber(val), {
+        message: "Неверный формат номера телефона",
       })
       .nullish(),
     email: z
