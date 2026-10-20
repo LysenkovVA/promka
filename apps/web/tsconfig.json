@@ -31,7 +31,9 @@
       "@/CertificateTypes": ["./app/(private)/(certificate-types)/index.ts"],
       "@/CertificateTypes/*": ["./app/(private)/(certificate-types)/*"],
       "@/Certificates": ["./app/(private)/(certificates)/index.ts"],
-      "@/Certificates/*": ["./app/(private)/(certificates)/*"]
+      "@/Certificates/*": ["./app/(private)/(certificates)/*"],
+      "@/Protocols": ["./app/(private)/(protocols)/index.ts"],
+      "@/Protocols/*": ["./app/(private)/(protocols)/*"]
     },
     "plugins": [
       {

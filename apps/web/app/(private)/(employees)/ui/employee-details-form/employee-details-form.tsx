@@ -188,7 +188,6 @@ export const EmployeeDetailsForm = memo((props: EmployeeDetailsFormProps) => {
               path={"snils"}
               label={"СНИЛС"}
               placeholder={"Укажите СНИЛС"}
-              description={"Введите 11 цифр"}
             />
           </div>
         </FieldGroup>
@@ -220,7 +219,6 @@ export const EmployeeDetailsForm = memo((props: EmployeeDetailsFormProps) => {
               path={"phoneNumber"}
               label={"Телефон"}
               placeholder={"Укажите телефон"}
-              description={"Только цифры без кода страны"}
             />
             <FieldInput
               form={form}

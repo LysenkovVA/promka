@@ -1,0 +1,21 @@
+/**
+ * Протокол удостоверения
+ */
+model Protocol {
+  id     String    @id @default(cuid())
+  number String?
+  date   DateTime?
+
+  // Рабочее пространство
+  workspace   Workspace @relation(name: "workspace-protocols", fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId String
+
+  // Удостоверения
+  certificates Certificate[] @relation(name: "protocol-certificates")
+
+  // Копии
+  files File[] @relation(name: "protocol-files")
+
+  @@index([number])
+  @@map("protocols")
+}

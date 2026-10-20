@@ -1,6 +1,6 @@
 "use client"
 
-import { memo, useCallback, useEffect, useRef, useState } from "react"
+import React, { memo, useCallback, useEffect, useRef, useState } from "react"
 import {
   DynamicModuleLoader,
   useAppDispatch,
@@ -30,9 +30,11 @@ import dayjs from "dayjs"
 import { EmployeeDetailsForm } from "@/Employees/ui/employee-details-form/employee-details-form"
 import { DetailsWrapper } from "@/components/details-wrapper/details-wrapper"
 import { getEmployeeByIdThunk } from "@/Employees/model/thunks/get-employee-by-id.thunk"
-import { CertificatesList } from "@/Certificates/ui/certificates-list/certificates-list"
 import { formatSnils } from "@/Employees/ui/field-snils/field-snils"
 import { formatPhoneNumberIntl } from "react-phone-number-input"
+import { FieldDescription } from "@workspace/ui/components/field"
+import { Separator } from "@workspace/ui/components/separator"
+import { CertificateCard } from "@/Certificates/ui/certificate-card/certificate-card"
 
 export interface EmployeeDetailsProps {
   employeeId?: string
@@ -98,7 +100,6 @@ export const EmployeeDetails = memo((props: EmployeeDetailsProps) => {
         isEdit={isEdit}
         onEditClick={() => setIsEdit(true)}
         onSaveClick={() => {
-          console.log("Employee details form REF clicked...")
           hiddenSubmitInputRef.current?.click()
         }}
         onBackClick={() => {
@@ -169,14 +170,17 @@ export const EmployeeDetails = memo((props: EmployeeDetailsProps) => {
                 </div>
               </div>
               <div className={"flex flex-col items-end justify-center gap-2"}>
-                {data?.phoneNumber && data.phoneNumber.length > 0 && (
+                {data?.phoneNumber && (
                   <div
                     className={
                       "line-clamp-1 flex flex-row items-center justify-center gap-1"
                     }
                   >
-                    <IconPhone className={"size-4"} />
-                    <div className={"line-clamp-1 text-sm"}>
+                    <IconPhone
+                      className={"size-4 fill-green-300 stroke-green-700"}
+                      stroke={2}
+                    />
+                    <div className={"text-sm font-light"}>
                       {formatPhoneNumberIntl(data?.phoneNumber)}
                     </div>
                   </div>
@@ -187,8 +191,11 @@ export const EmployeeDetails = memo((props: EmployeeDetailsProps) => {
                       "flex flex-row items-center justify-center gap-1"
                     }
                   >
-                    <IconMail className={"size-4"} />
-                    <div className={"text-sm"}>{data?.email}</div>
+                    <IconMail
+                      className={"size-4 fill-blue-200 stroke-blue-700"}
+                      stroke={2}
+                    />
+                    <div className={"text-sm font-light"}>{data?.email}</div>
                   </div>
                 )}
               </div>
@@ -267,8 +274,23 @@ export const EmployeeDetails = memo((props: EmployeeDetailsProps) => {
             {/*    </ItemContent>*/}
             {/*  </Item>*/}
             {/*)}*/}
-            {data?.id && (
-              <CertificatesList certificates={data?.certificates ?? null} />
+            {data?.id && data.certificates && data.certificates.length > 0 && (
+              <>
+                <FieldDescription className={"mt-4"}>
+                  {"Удостоверения"}
+                </FieldDescription>
+                <Separator />
+                <div className={"grid w-full grid-cols-3 gap-2"}>
+                  {!data.certificates && <div>{"Удостоверений нет"}</div>}
+                  {data.certificates?.map((item) => (
+                    <CertificateCard
+                      key={item.id}
+                      certificate={item}
+                      hideEmployee={true}
+                    />
+                  ))}
+                </div>
+              </>
             )}
           </div>
         )}

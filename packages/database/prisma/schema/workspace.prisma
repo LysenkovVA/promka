@@ -24,6 +24,8 @@ model Workspace {
   certificateTypes CertificateType[] @relation(name: "workspace-certificate-types")
   // Удостоверения
   certificates     Certificate[]     @relation(name: "workspace-certificates")
+  // Протоколы удостоверений
+  protocols        Protocol[]        @relation(name: "workspace-protocols")
 
   @@map("workspaces")
 }

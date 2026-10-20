@@ -5,11 +5,21 @@ model File {
   mimeType String
   fileName String
 
+  // Ссылка на пользователя
   user   User?   @relation(name: "user-avatar", fields: [userId], references: [id], onDelete: Cascade)
   userId String? @unique
 
+  // Ссылка на сотрудника
   employee   Employee? @relation(name: "employee-avatar", fields: [employeeId], references: [id], onDelete: Cascade)
   employeeId String?   @unique
+
+  // Ссылка на удостоверение
+  certificate   Certificate? @relation(name: "certificate-files", fields: [certificateId], references: [id], onDelete: Cascade)
+  certificateId String?
+
+  // Ссылка на протокол удостоверения
+  protocol   Protocol? @relation(name: "protocol-files", fields: [protocolId], references: [id], onDelete: Cascade)
+  protocolId String?
 
   @@index([fileName])
   @@map("files")

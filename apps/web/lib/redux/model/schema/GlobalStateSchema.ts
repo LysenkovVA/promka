@@ -14,6 +14,7 @@ import { CertificateType } from "@/CertificateTypes"
 import { CertificateTypesFilters } from "@/CertificateTypes/model/types/certificate-type.filters"
 import { Certificate } from "@/Certificates"
 import { CertificateFilters } from "@/Certificates/model/types/certificate.filters"
+import { InfiniteScrollSchema } from "@/components/inifinite-scroll/model/types/InfiniteScrollSchema"
 
 /**
  * Схема глобального состояния
@@ -22,11 +23,14 @@ export interface GlobalStateSchema {
   // Обязательные составляющие
   // Авторизация
   authSchema: DetailsReduxSchema<IAuthData>
+
+  infiniteScrollSchema: InfiniteScrollSchema
   // Динамические
   workspaceDetailsSchema?: DetailsReduxSchema<Workspace>
   // Сотрудники
   employeeDetailsSchema?: DetailsReduxSchema<Employee>
   employeesSchema?: ListReduxSchema<Employee, EmployeeFilters>
+  employeesSelectorSchema?: ListReduxSchema<Employee, EmployeeFilters>
   employeesStatisticsSchema?: DetailsReduxSchema<EmployeesStatistics>
   // Должности
   berthDetailsSchema?: DetailsReduxSchema<Berth>

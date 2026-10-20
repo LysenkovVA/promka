@@ -9,6 +9,7 @@ import { WorkspaceSchema } from "@/Workspaces"
 import { CertificateTypeSchema } from "@/CertificateTypes"
 import { stripTimezone } from "@/lib/date/utils"
 import { EmployeeSchema } from "@/Employees"
+import { ProtocolSchema } from "@/Protocols"
 
 export const CertificateSchema = z.object(
   {
@@ -62,10 +63,16 @@ export const CertificateSchema = z.object(
       .nullish(),
     employee:
       // Для устранения ошибок с циклическими зависимостями
+      z.lazy<typeof EmployeeSchema>(() => {
+        const { EmployeeSchema } = require("@/Employees")
+        return EmployeeSchema
+      }),
+    protocol:
+      // Для устранения ошибок с циклическими зависимостями
       z
-        .lazy<typeof EmployeeSchema>(() => {
-          const { EmployeeSchema } = require("@/Employees")
-          return EmployeeSchema
+        .lazy<typeof ProtocolSchema>(() => {
+          const { ProtocolSchema } = require("@/Protocols")
+          return ProtocolSchema
         })
         .nullish(),
     workspace:

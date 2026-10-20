@@ -17,7 +17,6 @@ import { workspaceDetailsReducer } from "@/Workspaces/model/slice/workspace-deta
 import { Skeleton } from "@workspace/ui/components/skeleton"
 import { Picture } from "@/components/picture"
 import { Separator } from "@workspace/ui/components/separator"
-import { EmployeesWidget } from "@/Employees/ui/employees-widget/employees-widget"
 import { PageWrapper } from "@/components/page-wrapper/page-wrapper"
 import { authActions } from "@/app/(public)/(auth)"
 import { Button } from "@workspace/ui/components/button"
@@ -63,7 +62,7 @@ export const WorkspaceDetails = memo((props: WorkspaceDetailsProps) => {
                 src={"/logo.png"}
                 alt={"pic"}
                 // size={"xs"}
-                style={{ width: 200, height: 150, border: "1px solid gray" }}
+                style={{ width: 170, height: 110, border: "1px solid gray" }}
               />
               <div
                 className={
@@ -81,13 +80,18 @@ export const WorkspaceDetails = memo((props: WorkspaceDetailsProps) => {
                     <IconSettings />
                   </Button>
                 </div>
-
                 <Separator />
+                <div className={"rounded-lg border bg-muted p-4"}>
+                  {"Здесь будут реквизиты организации"}
+                </div>
               </div>
             </div>
             {/*Виджеты*/}
-            <div className={"grid w-full grid-cols-3 gap-4"}>
-              <EmployeesWidget />
+            {/*<div className={"grid w-full grid-cols-3 gap-4"}>*/}
+            {/*  <EmployeesWidget />*/}
+            {/*</div>*/}
+            <div className={"rounded-lg border bg-muted p-4"}>
+              {"Здесь будет ещё какая-то полезная информация"}
             </div>
           </div>
         )}

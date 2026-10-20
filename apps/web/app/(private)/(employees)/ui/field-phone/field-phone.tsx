@@ -77,13 +77,12 @@ function FieldPhoneInner<TFieldValues extends FieldValues>(
                 : undefined) as Value
             }
             onChange={(e) => {
-              field.onChange(e)
+              field.onChange(e ?? "")
               onChange?.(e ?? "")
             }}
             inputMode="numeric" // Вызывает цифровую клавиатуру на мобильных устройствах
             placeholder={placeholder ?? "Введите номер телефона"}
             // country={parsePhoneNumber(field.value)?.country}
-            // defaultCountry={"RU"}
             // // Разрешаем вводить международный плюс
             // international={true}
             // withCountryCallingCode={true}

@@ -4,22 +4,19 @@ import { memo } from "react"
 import { Certificate } from "../../model/types/certificate.schema"
 import { cn } from "@workspace/ui/lib/utils"
 import { CertificateHelper } from "@/Certificates/model/helpers/certificate-helper"
+import { Avatar } from "@workspace/ui/components/avatar"
+import { EmployeeHelper } from "@/Employees/helpers/employee-helper"
+import { Separator } from "@workspace/ui/components/separator"
 
 export interface CertificateCardProps {
   className?: string
   certificate: Certificate
   onClick?: () => void
+  hideEmployee?: boolean
 }
 
 export const CertificateCard = memo((props: CertificateCardProps) => {
-  const { className, certificate, onClick } = props
-
-  // const bgColor: string = useMemo(() => {
-  //   if (certificate.certificateType.durationAtMonths === 0)
-  //     return "bg-green-100"
-  //
-  //   return "bg-yellow-200"
-  // }, [certificate.certificateType.durationAtMonths])
+  const { className, certificate, onClick, hideEmployee = false } = props
 
   return (
     <div
@@ -46,6 +43,22 @@ export const CertificateCard = memo((props: CertificateCardProps) => {
       >
         {`${CertificateHelper.getEstimatedTimeString(certificate)}`}
       </div>
+      {!hideEmployee && certificate?.employee?.id && (
+        <>
+          <Separator className={"mt-2 mb-2"} />
+          <div className={"flex flex-row items-center justify-center gap-2"}>
+            <Avatar style={{ width: 40, height: 40 }} />
+            <div className={"flex flex-col items-start justify-center gap-0"}>
+              <div className={"text-sm"}>
+                {EmployeeHelper.getFullName(certificate?.employee)}
+              </div>
+              <div className={"text-xs text-muted-foreground"}>
+                {certificate?.employee.berth?.name}
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   )
 })

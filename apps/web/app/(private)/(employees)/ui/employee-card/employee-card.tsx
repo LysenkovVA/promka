@@ -49,9 +49,26 @@ export const EmployeeCard = memo((props: EmployeeWidgetProps) => {
           >
             {EmployeeHelper.getFullName(employee)}
           </ItemTitle>
-          <ItemDescription className={"text-md text-start font-light"}>
-            {employee.berth?.name}
-          </ItemDescription>
+          <div className={"flex flex-row items-center justify-center gap-2"}>
+            {employee.berth?.id && (
+              <ItemDescription
+                className={
+                  "text-md rounded-lg border p-1 text-start font-light"
+                }
+              >
+                {employee.berth?.name}
+              </ItemDescription>
+            )}
+            {employee.department?.id && (
+              <ItemDescription
+                className={
+                  "text-md rounded-lg border p-1 text-start font-light"
+                }
+              >
+                {employee.department?.name}
+              </ItemDescription>
+            )}
+          </div>
         </ItemContent>
       </Item>
     </>

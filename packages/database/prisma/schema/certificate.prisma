@@ -19,6 +19,13 @@ model Certificate {
   employee   Employee? @relation(name: "employee-certificates", fields: [employeeId], references: [id], onDelete: Cascade)
   employeeId String?
 
+  // Копии
+  files File[] @relation(name: "certificate-files")
+
+  // Протокол
+  protocol   Protocol? @relation(name: "protocol-certificates", fields: [protocolId], references: [id], onDelete: SetNull)
+  protocolId String?
+
   @@index([number])
   @@map("certificates")
 }

@@ -22,6 +22,8 @@ import { useAuth } from "@/app/(public)/(auth)/model/hooks/useAuth"
 export const Dashboard = memo(() => {
   const { userWorkspaces } = useAuth()
 
+  const { activeWorkspace } = useAuth()
+
   return (
     <Collapsible defaultOpen className="group/collapsible">
       {/*Группа*/}
@@ -34,7 +36,7 @@ export const Dashboard = memo(() => {
               }
               href={ROUTE.DASHBOARD.href}
             >
-              <IconLayoutDashboard className="size-3" />
+              <IconLayoutDashboard className="size-4" />
               <div className="text-sm">{ROUTE.DASHBOARD.name}</div>
             </Link>
             {userWorkspaces && userWorkspaces?.length > 0 && (
@@ -46,14 +48,16 @@ export const Dashboard = memo(() => {
           <SidebarMenuSub>
             <SidebarMenuSubItem>
               {userWorkspaces?.map((workspace) => (
-                <SidebarMenuSubButton asChild key={workspace.id}>
+                <SidebarMenuSubButton
+                  asChild
+                  key={workspace.id}
+                  // className={`${workspace?.id === activeWorkspace?.id ? "bg-violet-300" : undefined}`}
+                >
                   <Link
-                    className={
-                      "m-auto flex w-full flex-row items-center justify-start gap-1"
-                    }
+                    className={`m-auto flex w-full flex-row items-center justify-start gap-1`}
                     href={`/workspaces/${workspace.id}`}
                   >
-                    <IconBuilding className="size-3" />
+                    <IconBuilding className="size-4" />
                     <div className="text-xs">{workspace?.company.name}</div>
                   </Link>
                 </SidebarMenuSubButton>

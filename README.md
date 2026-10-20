@@ -11,3 +11,7 @@ shadcn add [component-name] -c packages/ui
 ```
 
 This will place the ui components in the `packages/ui/src/components` directory.
+
+
+Dialog width:
+min-w-2xl

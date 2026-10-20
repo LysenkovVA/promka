@@ -44,10 +44,12 @@ export const BerthSchema = z.object(
         .nullish(),
     berthType:
       // Для устранения ошибок с циклическими зависимостями
-      z.lazy<typeof BerthTypeSchema>(() => {
-        const { BerthTypeSchema } = require("@/BerthTypes")
-        return BerthTypeSchema
-      }),
+      z
+        .lazy<typeof BerthTypeSchema>(() => {
+          const { BerthTypeSchema } = require("@/BerthTypes")
+          return BerthTypeSchema
+        })
+        .nullish(),
   },
   /**
    * Параметры объекта

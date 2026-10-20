@@ -9,6 +9,7 @@ import {
 } from "@reduxjs/toolkit"
 import { createReducerManager } from "./reducerManager"
 import { authReducer } from "@/app/(public)/(auth)/model/slice/authSlice"
+import { InfiniteScrollReducer } from "@/components/inifinite-scroll/model/slices/InfiniteScrollSlice"
 
 /**
  * Центральное хранилище стейта.
@@ -21,6 +22,7 @@ export const createReduxStore = (initialState?: GlobalStateSchema) => {
     // В корневой редюсер добавляются только те редюсеры,
     // которые являются обязательными
     authSchema: authReducer,
+    infiniteScrollSchema: InfiniteScrollReducer,
   })
 
   const store = configureStore<GlobalStateSchema>({

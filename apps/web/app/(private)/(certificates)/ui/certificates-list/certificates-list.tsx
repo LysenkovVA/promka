@@ -1,30 +1,108 @@
 "use client"
 
-import React, { memo } from "react"
-import { Certificate } from "@/Certificates"
-import { Separator } from "@workspace/ui/components/separator"
+import { memo, useCallback, useEffect } from "react"
+import {
+  DynamicModuleLoader,
+  useAppDispatch,
+  useAppSelector,
+} from "@/lib/redux"
+import { useAuth } from "@/app/(public)/(auth)"
+import { useRouter } from "next/navigation"
+import { ListWrapper } from "@/components/list-wrapper/list-wrapper"
+import {
+  getCertificates,
+  getCertificatesHasMore,
+  getCertificatesIsInitialized,
+  getCertificatesIsLoading,
+  getCertificatesTotalCount,
+} from "@/Certificates/model/selectors/certificates.selectors"
+import { getCertificatesThunk } from "@/Certificates/model/thunks/get-certificates.thunk"
+import { certificatesReducer } from "@/Certificates/model/slice/certificates.slice"
 import { CertificateCard } from "@/Certificates/ui/certificate-card/certificate-card"
-import { FieldDescription } from "@workspace/ui/components/field"
+import { IconPlusFilled } from "@tabler/icons-react"
+import { Button } from "@workspace/ui/components/button"
 
-export interface CertificatesListProps {
-  certificates: Certificate[] | null
-}
+export const CertificatesList = memo(() => {
+  const dispatch = useAppDispatch()
 
-export const CertificatesList = memo((props: CertificatesListProps) => {
-  const { certificates } = props
+  const data = useAppSelector(getCertificates.selectAll)
+  const isLoading = useAppSelector(getCertificatesIsLoading)
+  const hasMore = useAppSelector(getCertificatesHasMore)
+  const totalCount = useAppSelector(getCertificatesTotalCount)
+  const isInitialized = useAppSelector(getCertificatesIsInitialized)
 
-  if (!certificates) return null
+  const auth = useAuth()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!isInitialized) {
+      dispatch(getCertificatesThunk({ replaceData: true }))
+    }
+  }, [dispatch, isInitialized])
+
+  const loadNextPart = useCallback(() => {
+    if (isInitialized && hasMore && !isLoading) {
+      dispatch(getCertificatesThunk({}))
+    }
+  }, [dispatch, hasMore, isInitialized, isLoading])
+
+  const header = (
+    <div className={"mb-2 h-16 w-full bg-muted"}>
+      <div
+        className={
+          "mr-16 ml-16 flex h-full flex-row items-center justify-between"
+        }
+      >
+        <div className={"text-xl"}>{"Удостоверения"}</div>
+        <>
+          <Button
+            onClick={() => {
+              router.push(
+                `/workspaces/${auth?.activeWorkspace?.id}/certificates/create`
+              )
+            }}
+          >
+            <IconPlusFilled />
+            {"Добавить"}
+          </Button>
+        </>
+      </div>
+    </div>
+  )
+
+  const footer = (
+    <div
+      className={"mt-2 flex h-16 w-full items-center justify-start bg-muted"}
+    >
+      <div className={"justify-start pl-16 text-center text-lg font-bold"}>
+        {`Всего: ${totalCount}`}
+      </div>
+    </div>
+  )
 
   return (
-    <>
-      <FieldDescription className={"mt-4"}>{"Удостоверения"}</FieldDescription>
-      <Separator />
-      <div className={"grid w-full grid-cols-3 gap-2"}>
-        {!certificates && <div>{"Удостоверений нет"}</div>}
-        {certificates?.map((item) => (
-          <CertificateCard key={item.id} certificate={item} />
-        ))}
-      </div>
-    </>
+    <DynamicModuleLoader
+      reducers={{ certificatesSchema: certificatesReducer }}
+      removeAfterUnmount={false}
+    >
+      <ListWrapper
+        onScrollEnd={loadNextPart}
+        hasMore={hasMore}
+        header={header}
+        footer={footer}
+      >
+        {data && data.length > 0 && (
+          <div className={"grid grid-cols-3 gap-3"}>
+            {data.map((certificate) => (
+              <CertificateCard
+                key={certificate.id}
+                certificate={certificate}
+                hideEmployee={false}
+              />
+            ))}
+          </div>
+        )}
+      </ListWrapper>
+    </DynamicModuleLoader>
   )
 })
