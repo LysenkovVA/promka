@@ -4,9 +4,7 @@ import {
   ZOD_INVALID_DATETIME_TYPE,
   ZOD_INVALID_OBJECT_TYPE,
   ZOD_INVALID_STRING_TYPE,
-  ZOD_VALUE_REQUIRED,
 } from "@/lib/zod/commonErrors"
-import { WorkspaceSchema } from "@/Workspaces"
 import { stripTimezone } from "@/lib/date/utils"
 import { BerthSchema } from "@/Berthes"
 import { DepartmentSchema } from "@/Departments"
@@ -135,7 +133,7 @@ export const EmployeeSchema = z.object(
           }
         },
       })
-      .refine(validateSnils, { message: "Неверный контрольный номер СНИЛС" })
+      .refine(validateSnils, { message: "Неверный номер СНИЛС" })
       .nullish(),
     phoneNumber: z
       .string({
@@ -160,14 +158,14 @@ export const EmployeeSchema = z.object(
         },
       })
       .nullish(),
-    workspace:
-      // Для устранения ошибок с циклическими зависимостями
-      z
-        .lazy<typeof WorkspaceSchema>(() => {
-          const { WorkspaceSchema } = require("@/Workspaces")
-          return WorkspaceSchema
-        })
-        .nullish(),
+    // workspace:
+    //   // Для устранения ошибок с циклическими зависимостями
+    //   z
+    //     .lazy<typeof WorkspaceSchema>(() => {
+    //       const { WorkspaceSchema } = require("@/Workspaces")
+    //       return WorkspaceSchema
+    //     })
+    //     .nullish(),
     berth:
       // Для устранения ошибок с циклическими зависимостями
       z
@@ -207,7 +205,9 @@ export const EmployeeSchema = z.object(
    */
   {
     error: (issue) =>
-      issue.input === undefined ? ZOD_VALUE_REQUIRED : ZOD_INVALID_OBJECT_TYPE,
+      issue.input === undefined
+        ? "Сотрудник не указан"
+        : ZOD_INVALID_OBJECT_TYPE,
   }
 )
 

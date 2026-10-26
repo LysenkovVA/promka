@@ -15,6 +15,8 @@ import { CertificateTypesFilters } from "@/CertificateTypes/model/types/certific
 import { Certificate } from "@/Certificates"
 import { CertificateFilters } from "@/Certificates/model/types/certificate.filters"
 import { InfiniteScrollSchema } from "@/components/inifinite-scroll/model/types/InfiniteScrollSchema"
+import { Protocol } from "@/Protocols"
+import { ProtocolFilters } from "@/Protocols/model/types/protocol.filters"
 
 /**
  * Схема глобального состояния
@@ -50,6 +52,10 @@ export interface GlobalStateSchema {
   // Удостоверения
   certificateDetailsSchema?: DetailsReduxSchema<Certificate>
   certificatesSchema?: ListReduxSchema<Certificate, CertificateFilters>
+  // Протоколы
+  protocolDetailsSchema?: DetailsReduxSchema<Protocol>
+  protocolsSchema?: ListReduxSchema<Protocol, ProtocolFilters>
+  protocolsSelectorSchema?: ListReduxSchema<Protocol, ProtocolFilters>
 }
 
 /**

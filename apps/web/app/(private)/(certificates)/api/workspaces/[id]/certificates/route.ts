@@ -32,7 +32,7 @@ export async function GET(
     const data = await prisma.certificate.findMany({
       where: WHERE,
       include: {
-        workspace: { include: { company: true } },
+        // workspace: { include: { company: true } },
         certificateType: true,
         employee: {
           include: {
@@ -40,6 +40,7 @@ export async function GET(
             berth: { include: { berthType: true } },
           },
         },
+        protocol: true,
       },
       take: Number(take),
       skip: Number(skip),

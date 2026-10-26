@@ -28,9 +28,9 @@ export async function GET(
         workspace: { id: id },
         ...(search && { name: { contains: search, mode: "insensitive" } }),
       },
-      include: {
-        workspace: { include: { company: true } },
-      },
+      // include: {
+      //   workspace: { include: { company: true } },
+      // },
       take: Number(take),
       skip: Number(skip),
       orderBy: { name: "asc" },

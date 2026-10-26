@@ -23,9 +23,9 @@ export async function GET(
 
     const candidate = await prisma.department.findFirst({
       where: { id: departmentId },
-      include: {
-        workspace: { include: { company: true } },
-      },
+      // include: {
+      //   workspace: { include: { company: true } },
+      // },
     })
 
     if (!candidate)
@@ -59,9 +59,9 @@ export async function PATCH(
         name: validatedData.name ?? Prisma.skip,
       },
       where: { id: departmentId },
-      include: {
-        workspace: { include: { company: true } },
-      },
+      // include: {
+      //   workspace: { include: { company: true } },
+      // },
     })
 
     if (!updatedData)

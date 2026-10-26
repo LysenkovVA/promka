@@ -2,12 +2,13 @@
 
 import { NextRequest, NextResponse } from "next/server"
 import { ResponseData } from "@/lib/responses/ResponseData"
-import { Employee, EmployeeSchema } from "@/Employees"
+import { Employee } from "@/Employees"
 import { checkAuthForWorkspace } from "@/app/(public)/(auth)/api/checkAuth"
 import { prisma } from "@workspace/database/prisma"
 import { validateObject } from "@/lib/zod/validateObject"
 import { Prisma } from "@workspace/database/.generated/client"
 import { ServerError } from "@/lib/responses/ServerError"
+import { EmployeeRequestSchema } from "@/Employees/model/types/employee-request.schema"
 
 export async function GET(
   request: NextRequest,
@@ -21,10 +22,10 @@ export async function GET(
     const candidate = await prisma.employee.findFirst({
       where: { id: employeeId },
       include: {
-        workspace: { include: { company: true } },
+        // workspace: { include: { company: true } },
         berth: { include: { berthType: true } },
         department: true,
-        certificates: { include: { certificateType: true } },
+        certificates: { include: { certificateType: true, protocol: true } },
       },
     })
 
@@ -50,16 +51,18 @@ export async function PATCH(
     const formData = await request.formData()
     const entityToSave = JSON.parse(formData.get("entity-data") as string)
 
-    const validatedData = await validateObject(EmployeeSchema, entityToSave)
+    const validatedData = await validateObject(
+      EmployeeRequestSchema,
+      entityToSave
+    )
 
     // Получаем существующую запись, чтобы понять что делать с удостоверениями
     const existingData = await prisma.employee.findFirst({
       where: { id: employeeId },
       include: {
-        workspace: { include: { company: true } },
         berth: { include: { berthType: true } },
         department: true,
-        certificates: { include: { certificateType: true } },
+        certificates: { include: { certificateType: true, protocol: true } },
       },
     })
 
@@ -77,15 +80,15 @@ export async function PATCH(
 
     const updatedData = await prisma.employee.update({
       data: {
-        surname: validatedData.surname ?? Prisma.skip,
-        name: validatedData.name ?? Prisma.skip,
-        patronymic: validatedData.patronymic ?? Prisma.skip,
-        birthDate: validatedData.birthDate ?? Prisma.skip,
-        snils: validatedData.snils ?? Prisma.skip,
-        hireDate: validatedData.hireDate ?? Prisma.skip,
-        firedDate: validatedData.firedDate ?? Prisma.skip,
-        phoneNumber: validatedData.phoneNumber ?? Prisma.skip,
-        email: validatedData.email ?? Prisma.skip,
+        surname: validatedData.surname,
+        name: validatedData.name ?? null,
+        patronymic: validatedData.patronymic ?? null,
+        birthDate: validatedData.birthDate ?? null,
+        snils: validatedData.snils ?? null,
+        hireDate: validatedData.hireDate ?? null,
+        firedDate: validatedData.firedDate ?? null,
+        phoneNumber: validatedData.phoneNumber ?? null,
+        email: validatedData.email ?? null,
         ...(validatedData.berth?.id
           ? {
               berth: { connect: { id: validatedData.berth?.id } },
@@ -108,7 +111,10 @@ export async function PATCH(
                     date: item.date ?? Prisma.skip,
                     group: item.group ?? Prisma.skip,
                     workspace: {
-                      connect: { id: validatedData.workspace!.id! },
+                      connect: { id: id },
+                    },
+                    protocol: {
+                      connect: { id: item.protocol.id! },
                     },
                   }
                 })
@@ -124,8 +130,11 @@ export async function PATCH(
                       number: item.number ?? Prisma.skip,
                       date: item.date ?? Prisma.skip,
                       group: item.group ?? Prisma.skip,
+                      protocol: {
+                        connect: { id: item.protocol.id },
+                      },
                     },
-                    where: { id: item.id },
+                    where: { id: item.id! },
                   }
                 })
               : Prisma.skip,
@@ -137,10 +146,9 @@ export async function PATCH(
       },
       where: { id: employeeId },
       include: {
-        workspace: { include: { company: true } },
         berth: { include: { berthType: true } },
         department: true,
-        certificates: { include: { certificateType: true } },
+        certificates: { include: { certificateType: true, protocol: true } },
       },
     })
 

@@ -7,6 +7,14 @@ import {
   FormState,
   Path,
   useFieldArray,
+  UseFieldArrayAppend,
+  UseFieldArrayInsert,
+  UseFieldArrayMove,
+  UseFieldArrayPrepend,
+  UseFieldArrayRemove,
+  UseFieldArrayReplace,
+  UseFieldArraySwap,
+  UseFieldArrayUpdate,
   UseFormRegister,
 } from "react-hook-form"
 
@@ -19,8 +27,14 @@ interface GenericInnerListProps<TFieldValues extends FieldValues> {
   renderItems: (
     fields: FieldArrayWithId<any, string, "id">[],
     methods: {
-      append: (value: any) => void
-      remove: (index: number) => void
+      append: UseFieldArrayAppend<TFieldValues> //  (value: any) => void
+      remove: UseFieldArrayRemove // (index: number) => void
+      insert: UseFieldArrayInsert<TFieldValues> // (index: number, value: any) => void
+      prepend: UseFieldArrayPrepend<TFieldValues>
+      swap: UseFieldArraySwap
+      replace: UseFieldArrayReplace<TFieldValues>
+      update: UseFieldArrayUpdate<TFieldValues>
+      move: UseFieldArrayMove
       getPath: (index: number, subKey: string) => Path<TFieldValues>
       errors: any
     }
@@ -36,7 +50,17 @@ export function GenericInnerList<TFieldValues extends FieldValues>({
 }: GenericInnerListProps<TFieldValues>) {
   // Приводим control к any только внутри самого хука useFieldArray,
   // чтобы RHF не ругался на динамическое имя массива (string)
-  const { fields, append, remove } = useFieldArray({
+  const {
+    fields,
+    append,
+    remove,
+    insert,
+    prepend,
+    swap,
+    replace,
+    update,
+    move,
+  } = useFieldArray({
     control: control,
     name: name,
   })
@@ -53,5 +77,20 @@ export function GenericInnerList<TFieldValues extends FieldValues>({
     return `${name}.${index}.${subKey}` as Path<TFieldValues>
   }
 
-  return <>{renderItems(fields, { append, remove, getPath, errors })}</>
+  return (
+    <>
+      {renderItems(fields, {
+        append,
+        remove,
+        insert,
+        prepend,
+        swap,
+        replace,
+        update,
+        move,
+        getPath,
+        errors,
+      })}
+    </>
+  )
 }

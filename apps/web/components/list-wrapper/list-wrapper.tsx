@@ -2,11 +2,12 @@
 
 import { memo, ReactNode } from "react"
 import { InfiniteScroll } from "@/components/inifinite-scroll"
-import { IconDatabaseSmile } from "@tabler/icons-react"
+import { IconDatabaseSmile, IconMoodEmpty } from "@tabler/icons-react"
 
 export interface ListWrapperProps {
   children: ReactNode
   onScrollEnd?: () => void
+  itemsCount: number
   hasMore: boolean
   header?: ReactNode
   footer?: ReactNode
@@ -16,7 +17,7 @@ export interface ListWrapperProps {
  * Обёртка для списков
  */
 export const ListWrapper = memo((props: ListWrapperProps) => {
-  const { children, onScrollEnd, hasMore, header, footer } = props
+  const { children, onScrollEnd, hasMore, header, footer, itemsCount } = props
 
   return (
     <div
@@ -30,7 +31,17 @@ export const ListWrapper = memo((props: ListWrapperProps) => {
         onScrollEnd={onScrollEnd}
       >
         {children}
-        {!hasMore && (
+        {!hasMore && itemsCount === 0 && (
+          <div
+            className={
+              "mt-4 flex w-full items-center justify-center gap-2 rounded-lg border bg-muted p-2 text-center"
+            }
+          >
+            <IconMoodEmpty className={"stroke-blue-400"} />
+            <div className={"text-blue-400"}>{"Здесь пока ничего нет"}</div>
+          </div>
+        )}
+        {!hasMore && itemsCount > 0 && (
           <div
             className={
               "mt-4 flex w-full items-center justify-center gap-2 rounded-lg border bg-muted p-2 text-center"

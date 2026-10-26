@@ -32,7 +32,7 @@ export async function POST(
         berthType: { connect: { id: validatedData.berthType!.id! } },
       },
       include: {
-        workspace: { include: { company: true } },
+        berthType: true,
       },
     })
 

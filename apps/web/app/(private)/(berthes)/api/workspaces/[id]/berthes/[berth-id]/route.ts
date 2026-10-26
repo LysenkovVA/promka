@@ -21,7 +21,7 @@ export async function GET(
     const candidate = await prisma.berth.findFirst({
       where: { id: berthId },
       include: {
-        workspace: { include: { company: true } },
+        // workspace: { include: { company: true } },
         berthType: true,
       },
     })
@@ -56,7 +56,7 @@ export async function PATCH(
       },
       where: { id: berthId },
       include: {
-        workspace: { include: { company: true } },
+        // workspace: { include: { company: true } },
         berthType: true,
       },
     })

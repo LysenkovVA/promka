@@ -1,8 +1,8 @@
 "use client"
 
 import { memo, RefObject, useCallback, useEffect } from "react"
-import { useFieldArray, useForm } from "react-hook-form"
-import { Employee, EmployeeSchema } from "../../model/types/employee.schema"
+import { useForm } from "react-hook-form"
+import { Employee } from "../../model/types/employee.schema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { FieldInput } from "@/components/form/field-input/field-input"
 import { FieldDescription, FieldGroup } from "@workspace/ui/components/field"
@@ -28,10 +28,13 @@ import { FieldDatePicker } from "@/components/form/field-date-picker/field-date-
 import { Separator } from "@workspace/ui/components/separator"
 import { FieldDepartment } from "@/Departments"
 import { Button } from "@workspace/ui/components/button"
-import { IconPlusFilled, IconTrash } from "@tabler/icons-react"
+import { IconCirclePlusFilled, IconTrash } from "@tabler/icons-react"
 import { FieldCertificateType } from "@/CertificateTypes"
 import { FieldSnils } from "@/Employees/ui/field-snils/field-snils"
 import { FieldPhone } from "@/Employees/ui/field-phone/field-phone"
+import { EmployeeRequestSchema } from "@/Employees/model/types/employee-request.schema"
+import { GenericInnerList } from "@/components/form/form-generic-inner-list/form-generic-inner-list"
+import { FieldProtocol } from "@/Protocols/ui/field-protocol/field-protocol"
 
 export interface EmployeeDetailsFormProps {
   submitRef: RefObject<HTMLInputElement | null>
@@ -59,18 +62,11 @@ export const EmployeeDetailsForm = memo((props: EmployeeDetailsFormProps) => {
    * Either omit the generic and let it infer from resolver, or specify all three explicitly
    */
   const form = useForm<
-    z.input<typeof EmployeeSchema>,
+    z.input<typeof EmployeeRequestSchema>,
     any,
-    z.output<typeof EmployeeSchema>
+    z.output<typeof EmployeeRequestSchema>
   >({
-    resolver: zodResolver(EmployeeSchema),
-    defaultValues: data,
-  })
-
-  // Работа со списком удостоверений
-  const { fields, append, remove } = useFieldArray({
-    control: form.control,
-    name: "certificates",
+    resolver: zodResolver(EmployeeRequestSchema),
   })
 
   useEffect(() => {
@@ -80,11 +76,25 @@ export const EmployeeDetailsForm = memo((props: EmployeeDetailsFormProps) => {
   }, [dispatch, employeeId, isInitialized, isLoading])
 
   useEffect(() => {
-    form.reset(data)
+    form.reset({
+      id: data?.id,
+      surname: data?.surname,
+      name: data?.name,
+      patronymic: data?.patronymic,
+      birthDate: data?.birthDate,
+      email: data?.email,
+      phoneNumber: data?.phoneNumber,
+      snils: data?.snils,
+      hireDate: data?.hireDate,
+      firedDate: data?.firedDate,
+      berth: null,
+      department: null,
+      certificates: data?.certificates ? [...data?.certificates] : [],
+    })
   }, [data, form])
 
   const onSubmitForm = useCallback(
-    async (formData: Employee) => {
+    async (formData: any) => {
       if (formData) {
         if (!auth?.activeWorkspace?.id) {
           toast.error(JSON.stringify("Не удалось определить workspaceId"))
@@ -152,7 +162,9 @@ export const EmployeeDetailsForm = memo((props: EmployeeDetailsFormProps) => {
         onSubmit={(e) => {
           e.preventDefault()
           e.stopPropagation()
-          form.handleSubmit(onSubmitForm)(e)
+          form.handleSubmit(onSubmitForm, (errors) =>
+            toast.error(JSON.stringify(errors))
+          )(e)
         }}
       >
         <FieldGroup>
@@ -193,7 +205,7 @@ export const EmployeeDetailsForm = memo((props: EmployeeDetailsFormProps) => {
         </FieldGroup>
         <FieldGroup>
           <FieldDescription>
-            {form.getValues()["workspace"]?.company.name?.toUpperCase()}
+            {auth.activeWorkspace?.company.name?.toUpperCase()}
           </FieldDescription>
           <Separator />
           <FieldBerth form={form} path={"berth"} label={"Должность"} />
@@ -229,71 +241,112 @@ export const EmployeeDetailsForm = memo((props: EmployeeDetailsFormProps) => {
           </div>
         </FieldGroup>
         <FieldGroup>
-          <FieldDescription>{"Удостоверения"}</FieldDescription>
-          <Separator />
-          {fields.map((field, index) => (
-            <div key={field.id ?? index} className={"w-full"}>
-              <div
-                className={"ml-10 text-xl font-bold"}
-              >{`# ${index + 1}`}</div>
-              <div
-                className={"flex flex-row items-center justify-center gap-2"}
-              >
-                <Button
-                  size={"icon"}
-                  variant={"outline"}
-                  onClick={() => remove(index)}
-                >
-                  <IconTrash className={"text-destructive"} />
-                </Button>
-                <div
-                  className={
-                    "flex w-full flex-col items-center justify-center gap-2 rounded-lg border p-4"
-                  }
-                >
-                  <FieldCertificateType
-                    required={true}
-                    form={form}
-                    path={`certificates.${index}.certificateType`}
-                    label={"Тип"}
-                  />
-                  <FieldInput
-                    required={true}
-                    form={form}
-                    path={`certificates.${index}.number`}
-                    label={"Номер"}
-                  />
-                  <FieldDatePicker
-                    form={form}
-                    path={`certificates.${index}.date`}
-                    label={"Дата"}
-                  />
-                  {form.watch(`certificates.${index}.certificateType`)?.id &&
-                    form.watch(`certificates.${index}.certificateType`)
-                      ?.hasGroups && (
-                      <FieldInput
-                        required={true}
-                        form={form}
-                        path={`certificates.${index}.group`}
-                        label={"Группа"}
-                        placeholder={"Укажите группу"}
-                      />
-                    )}
+          <GenericInnerList
+            name={"certificates"}
+            // @ts-ignore
+            control={form.control}
+            register={form.register}
+            formState={form.formState}
+            renderItems={(
+              subFields,
+              { append, remove, insert, getPath, errors }
+            ) => (
+              <div className={"w-full"}>
+                <div className={"flex items-center justify-start gap-2"}>
+                  <div className={"text-lg"}>{"Удостоверения"}</div>
+                  <Button
+                    className={"mt-2 mb-2 w-fit"}
+                    variant={"secondary"}
+                    type={"button"}
+                    onClick={() => {
+                      // Добавляем в начало списка
+                      append({
+                        certificateType: undefined,
+                        protocol: undefined,
+                        number: "",
+                        date: new Date(),
+                        group: undefined,
+                      })
+                    }}
+                  >
+                    <IconCirclePlusFilled />
+                    {"Добавить"}
+                  </Button>
                 </div>
+                <Separator className={"mb-4"} />
+
+                {subFields.map((subField, subIndex) => {
+                  return (
+                    <div
+                      key={subIndex}
+                      className={
+                        "mb-4 flex w-full flex-col items-start justify-center gap-2"
+                      }
+                    >
+                      <div
+                        className={
+                          "mb-2 flex flex-row items-center justify-start gap-2"
+                        }
+                      >
+                        <div
+                          className={"text-muted-foreground"}
+                        >{`Удостоверение # ${subIndex + 1}`}</div>
+                        <Button
+                          size={"icon"}
+                          variant={"destructive"}
+                          onClick={() => remove(subIndex)}
+                        >
+                          <IconTrash className={"text-destructive"} />
+                        </Button>
+                      </div>
+                      <div
+                        className={
+                          "grid w-full grid-cols-2 gap-2 rounded-lg border p-4"
+                        }
+                      >
+                        <FieldProtocol
+                          form={form}
+                          path={getPath(subIndex, "protocol")}
+                          label={"Протокол"}
+                          required={true}
+                        />
+                        <FieldCertificateType
+                          required={true}
+                          form={form}
+                          path={getPath(subIndex, "certificateType")}
+                          label={"Тип"}
+                        />
+                        <FieldInput
+                          required={true}
+                          form={form}
+                          path={getPath(subIndex, "number")}
+                          label={"Номер"}
+                        />
+                        <FieldDatePicker
+                          form={form}
+                          path={getPath(subIndex, "date")}
+                          label={"Дата"}
+                        />
+                        {/*{form.watch(getPath(subIndex, "certificateType"))?.id &&*/}
+                        {/*  form.watch(getPath(subIndex, "certificateType"))*/}
+                        {/*    ?.hasGroups && (*/}
+                        {/*    <FieldInput*/}
+                        {/*      required={true}*/}
+                        {/*      form={form}*/}
+                        {/*      path={getPath(subIndex, "group")}*/}
+                        {/*      label={"Группа"}*/}
+                        {/*      placeholder={"Укажите группу"}*/}
+                        {/*    />*/}
+                        {/*  )}*/}
+                      </div>
+                    </div>
+                  )
+                })}
               </div>
-            </div>
-          ))}
-          <Button
-            className={"ml-10 w-fit"}
-            type={"button"}
-            onClick={() => {
-              append({ number: "", date: new Date() })
-            }}
-          >
-            <IconPlusFilled />
-            {"Добавить удостоверение"}
-          </Button>
+            )}
+          />
         </FieldGroup>
+
         <input type={"submit"} hidden ref={submitRef} />
       </form>
     </DynamicModuleLoader>

@@ -23,7 +23,7 @@ export const CompanySchema = z.object(
         },
       })
       .nullish(),
-    name: z.string(),
+    name: z.string().min(1, "Название не указано"),
   },
   /**
    * Параметры объекта

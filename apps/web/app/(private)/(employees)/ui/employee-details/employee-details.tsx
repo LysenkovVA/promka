@@ -145,11 +145,11 @@ export const EmployeeDetails = memo((props: EmployeeDetailsProps) => {
                       "flex flex-row items-center justify-center gap-2"
                     }
                   >
-                    {data?.workspace?.company?.id && (
+                    {auth.activeWorkspace?.company?.id && (
                       <div
                         className={"rounded-lg bg-muted p-1 text-sm font-light"}
                       >
-                        {data?.workspace?.company.name}
+                        {auth.activeWorkspace?.company.name}
                       </div>
                     )}
                     {data?.berth?.id && (

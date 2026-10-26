@@ -22,6 +22,7 @@ import {
 } from "@/Employees/model/slice/employees-selector.slice"
 import { deleteEmployeeThunk } from "@/Employees/model/thunks/delete-employee.thunk"
 import { Employee } from "@/Employees"
+import { EmployeeEditDialog } from "@/Employees/ui/employee-edit-dialog/employee-edit-dialog"
 
 export interface EmployeeSelectorProps {
   value: Employee | null
@@ -110,6 +111,7 @@ export const EmployeeSelector = memo((props: EmployeeSelectorProps) => {
           </div>
         )}
         onAddClick={() => {
+          toast.message("Add employee click")
           setEditValueId(undefined)
           setIsEdit(true)
         }}
@@ -120,14 +122,14 @@ export const EmployeeSelector = memo((props: EmployeeSelectorProps) => {
         onDeleteClick={onDeleteCallback}
         deleteMessage={`Вы действительно хотите удалить сотрудника \"${EmployeeHelper.getFullName(value ?? undefined)}\"?`}
       />
-      {/*{isEdit && (*/}
-      {/*  <EmployeeEditDialog*/}
-      {/*    isOpen={isEdit}*/}
-      {/*    onOpenChange={(isOpen) => setIsEdit(isOpen)}*/}
-      {/*    employeeId={editValueId}*/}
-      {/*    onSubmit={(data) => onChange(data)}*/}
-      {/*  />*/}
-      {/*)}*/}
+      {isEdit && (
+        <EmployeeEditDialog
+          isOpen={isEdit}
+          onOpenChange={(isOpen) => setIsEdit(isOpen)}
+          employeeId={editValueId}
+          onSubmit={(data) => onChange(data)}
+        />
+      )}
     </DynamicModuleLoader>
   )
 })

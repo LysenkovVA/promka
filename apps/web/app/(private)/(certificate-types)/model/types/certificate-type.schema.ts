@@ -6,7 +6,6 @@ import {
   ZOD_INVALID_OBJECT_TYPE,
   ZOD_INVALID_STRING_TYPE,
 } from "@/lib/zod/commonErrors"
-import { WorkspaceSchema } from "@/Workspaces"
 
 export const CertificateTypeSchema = z.object(
   {
@@ -52,14 +51,14 @@ export const CertificateTypeSchema = z.object(
         },
       })
       .default(0),
-    workspace:
-      // Для устранения ошибок с циклическими зависимостями
-      z
-        .lazy<typeof WorkspaceSchema>(() => {
-          const { WorkspaceSchema } = require("@/Workspaces")
-          return WorkspaceSchema
-        })
-        .nullish(),
+    // workspace:
+    //   // Для устранения ошибок с циклическими зависимостями
+    //   z
+    //     .lazy<typeof WorkspaceSchema>(() => {
+    //       const { WorkspaceSchema } = require("@/Workspaces")
+    //       return WorkspaceSchema
+    //     })
+    //     .nullish(),
   },
   /**
    * Параметры объекта

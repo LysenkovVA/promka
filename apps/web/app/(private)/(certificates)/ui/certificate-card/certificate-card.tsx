@@ -1,12 +1,13 @@
 "use client"
 
-import { memo } from "react"
+import React, { memo } from "react"
 import { Certificate } from "../../model/types/certificate.schema"
 import { cn } from "@workspace/ui/lib/utils"
 import { CertificateHelper } from "@/Certificates/model/helpers/certificate-helper"
 import { Avatar } from "@workspace/ui/components/avatar"
 import { EmployeeHelper } from "@/Employees/helpers/employee-helper"
 import { Separator } from "@workspace/ui/components/separator"
+import { IconAlertTriangle } from "@tabler/icons-react"
 
 export interface CertificateCardProps {
   className?: string
@@ -43,6 +44,16 @@ export const CertificateCard = memo((props: CertificateCardProps) => {
       >
         {`${CertificateHelper.getEstimatedTimeString(certificate)}`}
       </div>
+      {!certificate?.protocol?.id && (
+        <div
+          className={
+            "mt-2 flex items-center justify-center gap-1 text-xs text-destructive"
+          }
+        >
+          <IconAlertTriangle className={"size-4"} />
+          <div>{"Нет сведений о протоколе"}</div>
+        </div>
+      )}
       {!hideEmployee && certificate?.employee?.id && (
         <>
           <Separator className={"mt-2 mb-2"} />

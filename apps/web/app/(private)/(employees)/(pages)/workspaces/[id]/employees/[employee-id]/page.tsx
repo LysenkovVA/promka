@@ -12,10 +12,5 @@ export default async function EmployeeDetailsPage({
 }) {
   const { "employee-id": employeeId } = await params
 
-  return (
-    <>
-      {/*{JSON.stringify(await params)*/}
-      <EmployeeDetails employeeId={employeeId} />
-    </>
-  )
+  return <EmployeeDetails employeeId={employeeId} />
 }

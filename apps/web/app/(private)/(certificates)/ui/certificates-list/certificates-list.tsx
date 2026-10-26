@@ -90,6 +90,7 @@ export const CertificatesList = memo(() => {
         hasMore={hasMore}
         header={header}
         footer={footer}
+        itemsCount={data.length}
       >
         {data && data.length > 0 && (
           <div className={"grid grid-cols-3 gap-3"}>

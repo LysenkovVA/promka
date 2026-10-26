@@ -23,9 +23,9 @@ export async function GET(
 
     const candidate = await prisma.certificateType.findFirst({
       where: { id: certificateTypeId },
-      include: {
-        workspace: { include: { company: true } },
-      },
+      // include: {
+      //   workspace: { include: { company: true } },
+      // },
     })
 
     if (!candidate)
@@ -64,9 +64,9 @@ export async function PATCH(
         durationAtMonths: validatedData.durationAtMonths ?? Prisma.skip,
       },
       where: { id: certificateTypeId },
-      include: {
-        workspace: { include: { company: true } },
-      },
+      // include: {
+      //   workspace: { include: { company: true } },
+      // },
     })
 
     if (!updatedData)

@@ -52,10 +52,10 @@ export async function GET(
       take: Number(take),
       skip: Number(skip),
       include: {
-        workspace: { include: { company: true } },
+        // workspace: { include: { company: true } },
         berth: true,
         department: true,
-        certificates: { include: { certificateType: true } },
+        certificates: { include: { certificateType: true, protocol: true } },
       },
     })
 

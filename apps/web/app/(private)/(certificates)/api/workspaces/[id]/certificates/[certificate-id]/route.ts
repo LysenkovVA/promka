@@ -24,9 +24,14 @@ export async function GET(
     const candidate = await prisma.certificate.findFirst({
       where: { id: certificateId },
       include: {
-        workspace: { include: { company: true } },
         certificateType: true,
-        employee: true,
+        employee: {
+          include: {
+            berth: { include: { berthType: true } },
+            department: true,
+          },
+        },
+        protocol: true,
       },
     })
 
@@ -66,9 +71,14 @@ export async function PATCH(
       },
       where: { id: certificateId },
       include: {
-        workspace: { include: { company: true } },
         certificateType: true,
-        employee: true,
+        employee: {
+          include: {
+            berth: { include: { berthType: true } },
+            department: true,
+          },
+        },
+        protocol: true,
       },
     })
 

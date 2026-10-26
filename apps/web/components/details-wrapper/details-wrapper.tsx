@@ -8,7 +8,10 @@ import {
   IconEditFilled,
   IconTrashFilled,
 } from "@tabler/icons-react"
-import { ButtonGroup } from "@workspace/ui/components/button-group"
+import {
+  ButtonGroup,
+  ButtonGroupSeparator,
+} from "@workspace/ui/components/button-group"
 import { Separator } from "@workspace/ui/components/separator"
 import {
   Dialog,
@@ -31,6 +34,7 @@ export interface DetailsWrapperProps {
   deleteMessage?: string
   onDeleteClick?: () => void
   error?: string
+  title?: string
 }
 
 /**
@@ -47,6 +51,7 @@ export const DetailsWrapper = memo((props: DetailsWrapperProps) => {
     deleteMessage = "Вы действительно хотите удалить запись?",
     onDeleteClick,
     error,
+    title = "",
   } = props
 
   const buttonsContent = useMemo(() => {
@@ -79,11 +84,17 @@ export const DetailsWrapper = memo((props: DetailsWrapperProps) => {
           "flex min-h-16 flex-shrink-0 flex-row items-center justify-between gap-3 bg-muted p-4"
         }
       >
-        <ButtonGroup>
+        <ButtonGroup className={"flex items-center justify-center gap-2"}>
           <Button variant="outline" onClick={onBackClick}>
             <IconArrowLeft />
             {"Назад"}
           </Button>
+          <ButtonGroupSeparator orientation={"vertical"} />
+          {title && (
+            <div className={"text-xl font-semibold text-muted-foreground"}>
+              {title}
+            </div>
+          )}
         </ButtonGroup>
         {buttonsContent}
       </div>

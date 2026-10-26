@@ -5,7 +5,6 @@ import {
   ZOD_INVALID_OBJECT_TYPE,
   ZOD_INVALID_STRING_TYPE,
 } from "@/lib/zod/commonErrors"
-import { WorkspaceSchema } from "@/Workspaces"
 import { CertificateTypeSchema } from "@/CertificateTypes"
 import { stripTimezone } from "@/lib/date/utils"
 import { EmployeeSchema } from "@/Employees"
@@ -51,6 +50,7 @@ export const CertificateSchema = z.object(
         },
       })
       .transform((val) => stripTimezone(val)),
+    // TODO Учитывать наличие, если есть группы в типе удостоверения
     group: z
       .string({
         error: (issue) => {
@@ -69,20 +69,18 @@ export const CertificateSchema = z.object(
       }),
     protocol:
       // Для устранения ошибок с циклическими зависимостями
-      z
-        .lazy<typeof ProtocolSchema>(() => {
-          const { ProtocolSchema } = require("@/Protocols")
-          return ProtocolSchema
-        })
-        .nullish(),
-    workspace:
-      // Для устранения ошибок с циклическими зависимостями
-      z
-        .lazy<typeof WorkspaceSchema>(() => {
-          const { WorkspaceSchema } = require("@/Workspaces")
-          return WorkspaceSchema
-        })
-        .nullish(),
+      z.lazy<typeof ProtocolSchema>(() => {
+        const { ProtocolSchema } = require("@/Protocols")
+        return ProtocolSchema
+      }),
+    // workspace:
+    //   // Для устранения ошибок с циклическими зависимостями
+    //   z
+    //     .lazy<typeof WorkspaceSchema>(() => {
+    //       const { WorkspaceSchema } = require("@/Workspaces")
+    //       return WorkspaceSchema
+    //     })
+    //     .nullish(),
   },
   /**
    * Параметры объекта

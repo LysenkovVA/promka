@@ -39,8 +39,14 @@ export async function POST(
         },
       },
       include: {
-        workspace: { include: { company: true } },
         certificateType: true,
+        employee: {
+          include: {
+            berth: { include: { berthType: true } },
+            department: true,
+          },
+        },
+        protocol: true,
       },
     })
 

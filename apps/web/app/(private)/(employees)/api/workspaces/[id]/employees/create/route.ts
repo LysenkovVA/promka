@@ -60,16 +60,19 @@ export async function POST(
                   workspace: {
                     connect: { id: id },
                   },
+                  protocol: {
+                    connect: { id: item.protocol.id! },
+                  },
                 }
               })
             : Prisma.skip,
         },
       },
       include: {
-        workspace: { include: { company: true } },
+        // workspace: { include: { company: true } },
         berth: true,
         department: true,
-        certificates: { include: { certificateType: true } },
+        certificates: { include: { certificateType: true, protocol: true } },
       },
     })
 

@@ -22,8 +22,9 @@ import {
   FieldValues,
   UseFormReturn,
 } from "react-hook-form"
-import { IconAsterisk, IconChevronDown } from "@tabler/icons-react"
+import { IconAsterisk, IconChevronDown, IconCircleX } from "@tabler/icons-react"
 import dayjs from "dayjs"
+import { ru } from "react-day-picker/locale"
 
 export interface FieldDatePickerProps<
   TFieldValues extends FieldValues = FieldValues,
@@ -68,17 +69,32 @@ function FieldDatePickerInner<TFieldValues extends FieldValues>(
           </FieldLabel>
           <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild {...field} id={`${path}`}>
-              <Button variant="outline" className="justify-between font-normal">
+              <Button
+                variant="outline"
+                className="justify-between bg-transparent font-normal hover:bg-transparent"
+              >
                 {field.value
                   ? dayjs(field.value)?.toDate()?.toLocaleDateString()
                   : placeholder}
-                <IconChevronDown />
+                <div className={"flex items-center justify-center gap-1"}>
+                  {form.watch(path) && (
+                    <IconCircleX
+                      stroke={2}
+                      className={"text-gray-400"}
+                      onClick={(e) => {
+                        // TODO
+                      }}
+                    />
+                  )}
+                  <IconChevronDown />
+                </div>
               </Button>
             </PopoverTrigger>
             <PopoverContent align="start">
               <Calendar
                 className={"w-full"}
                 mode="single"
+                locale={ru}
                 selected={field.value}
                 defaultMonth={field.value}
                 captionLayout="dropdown"

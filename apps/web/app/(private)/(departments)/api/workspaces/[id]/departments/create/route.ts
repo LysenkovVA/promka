@@ -33,9 +33,9 @@ export async function POST(
           connect: { id: id },
         },
       },
-      include: {
-        workspace: { include: { company: true } },
-      },
+      // include: {
+      //   workspace: { include: { company: true } },
+      // },
     })
 
     // @ts-ignore

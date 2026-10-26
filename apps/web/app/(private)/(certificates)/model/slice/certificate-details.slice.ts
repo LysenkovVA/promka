@@ -13,6 +13,7 @@ const initialState: DetailsReduxSchema<Certificate> = {
     date: dayjs(new Date()).toDate(),
     certificateType: { name: "", hasGroups: false, durationAtMonths: 0 },
     employee: { surname: "" },
+    protocol: { number: "", date: new Date(), certificates: [] },
   },
   error: "",
   isFetching: false,
@@ -46,6 +47,7 @@ export const certificateDetailsSlice = createSlice({
           date: dayjs(new Date()).toDate(),
           certificateType: { name: "", hasGroups: false, durationAtMonths: 0 },
           employee: { surname: "" },
+          protocol: { number: "", date: new Date(), certificates: [] },
         }
         state._isInitialized = false
       })
@@ -65,6 +67,7 @@ export const certificateDetailsSlice = createSlice({
           date: dayjs(new Date()).toDate(),
           certificateType: { name: "", hasGroups: false, durationAtMonths: 0 },
           employee: { surname: "" },
+          protocol: { number: "", date: new Date(), certificates: [] },
         }
         state._isInitialized = true
       })

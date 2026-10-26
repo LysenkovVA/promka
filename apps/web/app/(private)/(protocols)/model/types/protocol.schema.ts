@@ -5,9 +5,7 @@ import {
   ZOD_INVALID_OBJECT_TYPE,
   ZOD_INVALID_STRING_TYPE,
 } from "@/lib/zod/commonErrors"
-import { WorkspaceSchema } from "@/Workspaces"
 import { stripTimezone } from "@/lib/date/utils"
-import { CertificateSchema } from "@/Certificates"
 
 export const ProtocolSchema = z.object(
   {
@@ -59,15 +57,7 @@ export const ProtocolSchema = z.object(
           },
         }
       )
-      .min(1, "Укажите хотя бы одно удостоверение в протокле"),
-    workspace:
-      // Для устранения ошибок с циклическими зависимостями
-      z
-        .lazy<typeof WorkspaceSchema>(() => {
-          const { WorkspaceSchema } = require("@/Workspaces")
-          return WorkspaceSchema
-        })
-        .nullish(),
+      .min(1, "Отсутствуют данные по удостоверениям"),
   },
   /**
    * Параметры объекта
