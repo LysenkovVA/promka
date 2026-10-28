@@ -53,7 +53,9 @@ export const ProtocolsList = memo(() => {
           "mr-16 ml-16 flex h-full flex-row items-center justify-between"
         }
       >
-        <div className={"text-xl"}>{"Протоколы"}</div>
+        <div
+          className={"text-xl"}
+        >{`Протоколы ${auth?.activeWorkspace?.company?.name}`}</div>
         <>
           <Button
             onClick={() => {

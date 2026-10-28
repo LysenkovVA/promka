@@ -53,7 +53,9 @@ export const CertificatesList = memo(() => {
           "mr-16 ml-16 flex h-full flex-row items-center justify-between"
         }
       >
-        <div className={"text-xl"}>{"Удостоверения"}</div>
+        <div
+          className={"text-xl"}
+        >{`Удостоверения ${auth?.activeWorkspace?.company?.name}`}</div>
         <>
           <Button
             onClick={() => {
@@ -99,6 +101,11 @@ export const CertificatesList = memo(() => {
                 key={certificate.id}
                 certificate={certificate}
                 hideEmployee={false}
+                onClick={() =>
+                  router.push(
+                    `/workspaces/${auth?.activeWorkspace?.id}/certificates/${certificate.id}`
+                  )
+                }
               />
             ))}
           </div>

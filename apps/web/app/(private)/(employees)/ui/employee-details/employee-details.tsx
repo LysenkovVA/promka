@@ -111,6 +111,7 @@ export const EmployeeDetails = memo((props: EmployeeDetailsProps) => {
         }}
         deleteMessage={`Вы действительно хотите удалить "${EmployeeHelper.getFullName(data)}"`}
         onDeleteClick={onDeleteCallback}
+        title={"Сотрудник"}
       >
         {isEdit ? (
           <EmployeeDetailsForm

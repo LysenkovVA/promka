@@ -7,8 +7,12 @@ model Protocol {
   date   DateTime?
 
   // Рабочее пространство
-  workspace   Workspace @relation(name: "workspace-protocols", fields: [workspaceId], references: [id], onDelete: Cascade)
-  workspaceId String
+  workspace   Workspace? @relation(name: "workspace-protocols", fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId String?
+
+  // Пользователь
+  user   User?   @relation(name: "user-protocols", fields: [userId], references: [id], onDelete: Cascade)
+  userId String?
 
   // Удостоверения
   certificates Certificate[] @relation(name: "protocol-certificates")

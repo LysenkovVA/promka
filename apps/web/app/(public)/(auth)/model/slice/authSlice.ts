@@ -4,6 +4,7 @@ import { IAuthData } from "../types/IAuthData"
 import { DetailsReduxSchema } from "@/lib/redux/model/types/DetailsReduxSchema"
 import { refreshThunk } from "@/app/(public)/(auth)/model/thunks/refreshThunk"
 import { logoutThunk } from "@/app/(public)/(auth)/model/thunks/logoutThunk"
+import { updateProfileThunk } from "@/Users/model/thunks/update-profile.thunk"
 
 const initialState: DetailsReduxSchema<IAuthData> = {
   entityData: {
@@ -39,12 +40,6 @@ export const authSlice = createSlice({
         state.entityData.activeWorkspaceId = action.payload
       }
     },
-    // setFormData: (
-    //   state: DetailsReduxSchema<IAuthData>,
-    //   action: PayloadAction<IAuthData>
-    // ) => {
-    //   state.entityFormData = action.payload
-    // },
   },
   extraReducers: (builder) => {
     builder
@@ -58,15 +53,6 @@ export const authSlice = createSlice({
           },
           activeWorkspaceId: undefined,
         }
-        // state.entityFormData = {
-        //   user: {
-        //     email: "",
-        //     hashedPassword: "",
-        //     emailConfirmed: false,
-        //     phoneNumberConfirmed: false,
-        //   },
-        //   activeWorkspaceId: undefined,
-        // }
         state.error = undefined
         state.isFetching = true
         state.isSaving = false
@@ -100,14 +86,6 @@ export const authSlice = createSlice({
               phoneNumberConfirmed: false,
             },
           }
-          // state.entityFormData = {
-          //   user: {
-          //     email: "",
-          //     hashedPassword: "",
-          //     emailConfirmed: false,
-          //     phoneNumberConfirmed: false,
-          //   },
-          // }
           state.error =
             typeof action.payload === "string" ? action.payload : undefined
           state.isFetching = false
@@ -146,14 +124,6 @@ export const authSlice = createSlice({
               phoneNumberConfirmed: false,
             },
           }
-          // state.entityFormData = {
-          //   user: {
-          //     email: "",
-          //     hashedPassword: "",
-          //     emailConfirmed: false,
-          //     phoneNumberConfirmed: false,
-          //   },
-          // }
           state.error =
             typeof action.payload === "string" ? action.payload : undefined
           state.isFetching = false
@@ -172,20 +142,22 @@ export const authSlice = createSlice({
               phoneNumberConfirmed: false,
             },
           }
-          // state.entityFormData = {
-          //   user: {
-          //     email: "",
-          //     hashedPassword: "",
-          //     emailConfirmed: false,
-          //     phoneNumberConfirmed: false,
-          //   },
-          // }
           state.error = ""
           state.isFetching = false
           state.isSaving = false
           state._isInitialized = false
         }
       )
+      .addCase(updateProfileThunk.fulfilled, (state, action) => {
+        if (state.entityData?.user) {
+          state.entityData.user = { ...action.payload.data! }
+        }
+
+        state.error = undefined
+        state.isFetching = false
+        state.isSaving = false
+        state._isInitialized = true
+      })
   },
 })
 

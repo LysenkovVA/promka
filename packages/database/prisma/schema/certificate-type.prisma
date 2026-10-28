@@ -9,10 +9,14 @@ model CertificateType {
   durationAtMonths Int     @default(0)
 
   // Рабочее пространство
-  workspace   Workspace @relation(name: "workspace-certificate-types", fields: [workspaceId], references: [id], onDelete: Cascade)
-  workspaceId String
+  workspace   Workspace? @relation(name: "workspace-certificate-types", fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId String?
 
   certificates Certificate[] @relation("certificate-type-certificates")
+
+  // Пользователь
+  user   User?   @relation(name: "user-certificate-types", fields: [userId], references: [id], onDelete: Cascade)
+  userId String?
 
   @@index([name])
   @@map("certificate-types")

@@ -85,7 +85,7 @@ export const BerthSelector = memo((props: BerthSelectorProps) => {
         selectedValue={value?.id ? value : null}
         onRenderSelectedValue={() => {
           if (value?.id) {
-            return <div>{value?.name}</div>
+            return <div>{value?.name ?? "No name"}</div>
           }
 
           return <div>{"Выберите должность"}</div>

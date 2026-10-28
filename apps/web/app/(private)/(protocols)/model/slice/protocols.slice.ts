@@ -8,6 +8,14 @@ import { deleteProtocolThunk } from "../thunks/delete-protocol.thunk"
 import { Protocol } from "../types/protocol.schema"
 import { ProtocolFilters } from "../types/protocol.filters"
 import { createProtocolThunk } from "@/Protocols/model/thunks/create-protocol.thunk"
+import { createCertificateThunk } from "@/Certificates/model/thunks/create-certificate.thunk"
+import { toast } from "sonner"
+import { updateCertificateThunk } from "@/Certificates/model/thunks/update-certificate.thunk"
+import { deleteCertificateThunk } from "@/Certificates/model/thunks/delete-certificate.thunk"
+import { createEmployeeThunk } from "@/Employees/model/thunks/create-employee.thunk"
+import { updateEmployeeThunk } from "@/Employees/model/thunks/update-employee.thunk"
+import { deleteEmployeeThunk } from "@/Employees/model/thunks/delete-employee.thunk"
+import { logoutThunk } from "@/app/(public)/(auth)/model/thunks/logoutThunk"
 
 const initialState: ListReduxSchema<Protocol, ProtocolFilters> = {
   ids: [],
@@ -59,6 +67,21 @@ export const protocolsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // Logout
+      .addCase(logoutThunk.fulfilled, (state, action) => {
+        // Очистка стейта
+        state.isLoading = false
+        state.error = undefined
+        state.take = TAKE
+        state.skip = 0
+        state.search = undefined
+        state.filters = undefined
+        state.formDataFilters = undefined
+        state.totalCount = 0
+        state.hasMore = false
+        state._isInitialized = false
+        protocolAdapter.removeAll(state)
+      })
       .addCase(getProtocolsThunk.pending, (state, action) => {
         state.isLoading = true
         state.error = undefined
@@ -101,21 +124,45 @@ export const protocolsSlice = createSlice({
 
         state._isInitialized = true
       })
-      // Создание
+      // Создание протокола
       .addCase(createProtocolThunk.fulfilled, (state, action) => {
         protocolAdapter.addOne(state, action.payload.data!)
         state.totalCount += 1
       })
-      // Изменение
+      // Изменение протокола
       .addCase(updateProtocolThunk.fulfilled, (state, action) => {
         protocolAdapter.upsertOne(state, action.payload.data!)
       })
-      // Удаление
+      // Удаление протокола
       .addCase(deleteProtocolThunk.fulfilled, (state, action) => {
         if (action.payload.data?.id) {
           protocolAdapter.removeOne(state, action.payload.data?.id)
           state.totalCount -= 1
         }
+      })
+      // Добавление удостоверения
+      .addCase(createCertificateThunk.fulfilled, (state, action) => {
+        toast.message("createCertificateThunk в protocolsSlice не реализован")
+      })
+      // Обновление удостоверения
+      .addCase(updateCertificateThunk.fulfilled, (state, action) => {
+        toast.message("updateCertificateThunk в protocolsSlice не реализован")
+      })
+      // Удаление удостоверения
+      .addCase(deleteCertificateThunk.fulfilled, (state, action) => {
+        toast.message("deleteCertificateThunk в protocolsSlice не реализован")
+      })
+      // Добавление сотрудника
+      .addCase(createEmployeeThunk.fulfilled, (state, action) => {
+        toast.message("createEmployeeThunk в protocolsSlice не реализован")
+      })
+      // Обновление протокола
+      .addCase(updateEmployeeThunk.fulfilled, (state, action) => {
+        toast.message("updateEmployeeThunk в protocolsSlice не реализован")
+      })
+      // Удаление протокола
+      .addCase(deleteEmployeeThunk.fulfilled, (state, action) => {
+        toast.message("deleteEmployeeThunk в protocolsSlice не реализован")
       })
   },
 })

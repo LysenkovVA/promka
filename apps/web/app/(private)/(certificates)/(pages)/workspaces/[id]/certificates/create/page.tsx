@@ -1,23 +1,35 @@
 "use client"
 
+import { DynamicModuleLoader } from "@/lib/redux"
 import { DetailsWrapper } from "@/components/details-wrapper/details-wrapper"
 import { useRouter } from "next/navigation"
 import { useRef } from "react"
-import { CertificatesListForm } from "../../../../../ui/certificates-list-form/certificates-list-form"
+import { certificateDetailsReducer } from "@/Certificates/model/slice/certificate-details.slice"
+import { CertificateDetailsForm } from "@/Certificates/ui/certificate-details-form/certificate-details-form"
 
-export default function CreateCertificatesPage() {
+export default function CreateCertificatePage() {
   const router = useRouter()
   const hiddenSubmitInputRef = useRef<HTMLInputElement | null>(null)
 
   return (
-    <DetailsWrapper
-      isEdit={true}
-      onBackClick={() => router.back()}
-      onSaveClick={() => {
-        hiddenSubmitInputRef.current?.click()
-      }}
+    <DynamicModuleLoader
+      reducers={{ certificateDetailsSchema: certificateDetailsReducer }}
+      removeAfterUnmount={true}
     >
-      <CertificatesListForm submitRef={hiddenSubmitInputRef} />
-    </DetailsWrapper>
+      <DetailsWrapper
+        isEdit={true}
+        onBackClick={() => router.back()}
+        onSaveClick={() => {
+          hiddenSubmitInputRef.current?.click()
+        }}
+        title={"Новое удостоверение"}
+      >
+        <CertificateDetailsForm
+          submitRef={hiddenSubmitInputRef}
+          onSubmit={() => router.back()}
+          certificateId={undefined}
+        />
+      </DetailsWrapper>
+    </DynamicModuleLoader>
   )
 }

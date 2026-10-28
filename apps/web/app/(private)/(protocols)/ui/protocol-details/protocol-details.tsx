@@ -143,6 +143,7 @@ export const ProtocolDetails = memo((props: ProtocolDetailsProps) => {
                       key={item.id}
                       certificate={item}
                       hideEmployee={false}
+                      hideProtocol={true}
                     />
                   ))}
                 </div>

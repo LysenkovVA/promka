@@ -11,6 +11,10 @@ import { createCertificateThunk } from "@/Certificates/model/thunks/create-certi
 import { createProtocolThunk } from "@/Protocols"
 import { updateProtocolThunk } from "@/Protocols/model/thunks/update-protocol.thunk"
 import { deleteProtocolThunk } from "@/Protocols/model/thunks/delete-protocol.thunk"
+import { createEmployeeThunk } from "@/Employees/model/thunks/create-employee.thunk"
+import { updateEmployeeThunk } from "@/Employees/model/thunks/update-employee.thunk"
+import { deleteEmployeeThunk } from "@/Employees/model/thunks/delete-employee.thunk"
+import { logoutThunk } from "@/app/(public)/(auth)/model/thunks/logoutThunk"
 
 const initialState: ListReduxSchema<Certificate, CertificateFilters> = {
   ids: [],
@@ -62,6 +66,21 @@ export const certificatesSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // Logout
+      .addCase(logoutThunk.fulfilled, (state, action) => {
+        // Очистка стейта
+        state.isLoading = false
+        state.error = undefined
+        state.take = TAKE
+        state.skip = 0
+        state.search = undefined
+        state.filters = undefined
+        state.formDataFilters = undefined
+        state.totalCount = 0
+        state.hasMore = false
+        state._isInitialized = false
+        certificateAdapter.removeAll(state)
+      })
       .addCase(getCertificatesThunk.pending, (state, action) => {
         state.isLoading = true
         state.error = undefined
@@ -104,15 +123,15 @@ export const certificatesSlice = createSlice({
 
         state._isInitialized = true
       })
-      // Создание
+      // Создание удостоверения
       .addCase(createCertificateThunk.fulfilled, (state, action) => {
         certificateAdapter.addOne(state, action.payload.data!)
       })
-      // Обновление
+      // Обновление удостоверения
       .addCase(updateCertificateThunk.fulfilled, (state, action) => {
         certificateAdapter.upsertOne(state, action.payload.data!)
       })
-      // Удаление
+      // Удаление удостоверения
       .addCase(deleteCertificateThunk.fulfilled, (state, action) => {
         if (action.payload.data?.id) {
           certificateAdapter.removeOne(state, action.payload.data?.id)
@@ -127,6 +146,7 @@ export const certificatesSlice = createSlice({
           certificateAdapter.addMany(state, action.payload.data.certificates)
         }
       })
+      // Обновление протокола
       .addCase(updateProtocolThunk.fulfilled, (state, action) => {
         const protocol = action.payload.data!
         const protocolId = protocol.id!
@@ -150,22 +170,9 @@ export const certificatesSlice = createSlice({
         if (protocol.certificates && protocol.certificates.length > 0) {
           certificateAdapter.upsertMany(state, protocol.certificates)
         }
-        // const protocolId = action.payload.data?.id!
-        //
-        // // Удаляем удостоверения у которых нужный protocolId
-        // for (const [key, value] of Object.entries(state.entities)) {
-        //   if (value.protocol.id === protocolId) {
-        //     certificateAdapter.removeOne(state, key)
-        //   }
-        // }
-        // // Добавляем удостоверения protocolId
-        // if (
-        //   action.payload.data?.certificates &&
-        //   action.payload.data?.certificates.length > 0
-        // ) {
-        //   certificateAdapter.addMany(state, action.payload.data.certificates)
-        // }
       })
+      // Удаление протокола
+      // TODO Сделать очистку протокола без удаления
       .addCase(deleteProtocolThunk.fulfilled, (state, action) => {
         const protocol = action.payload.data!
         const protocolId = protocol.id!
@@ -178,6 +185,60 @@ export const certificatesSlice = createSlice({
         const certificatesToRemove = allEntityIds.filter(
           (id) =>
             state.entities[id]?.protocol?.id === protocolId &&
+            !newCertificateIds.has(id)
+        )
+
+        certificatesToRemove.forEach((id) => {
+          certificateAdapter.removeOne(state, id)
+        })
+      })
+      // Создание сотрудника
+      .addCase(createEmployeeThunk.fulfilled, (state, action) => {
+        if (
+          action.payload.data?.certificates &&
+          action.payload.data?.certificates.length > 0
+        ) {
+          certificateAdapter.addMany(state, action.payload.data.certificates)
+        }
+      })
+      // Обновление сотрудника
+      .addCase(updateEmployeeThunk.fulfilled, (state, action) => {
+        const employee = action.payload.data!
+        const employeeId = employee.id!
+        const newCertificateIds = new Set(
+          employee.certificates?.map((cert) => cert.id).filter((id) => id)
+        )
+
+        // Удаляем удостоверения у которых нужный protocolId, но которых нет в новом списке
+        const allEntityIds = Object.keys(state.entities)
+        const certificatesToRemove = allEntityIds.filter(
+          (id) =>
+            state.entities[id]?.protocol?.id === employeeId &&
+            !newCertificateIds.has(id)
+        )
+
+        certificatesToRemove.forEach((id) => {
+          certificateAdapter.removeOne(state, id)
+        })
+
+        // Добавляем удостоверения с новым protocolId
+        if (employee.certificates && employee.certificates.length > 0) {
+          certificateAdapter.upsertMany(state, employee.certificates)
+        }
+      })
+      // Удаление сотрудника
+      .addCase(deleteEmployeeThunk.fulfilled, (state, action) => {
+        const employee = action.payload.data!
+        const employeeId = employee.id!
+        const newCertificateIds = new Set(
+          employee.certificates?.map((cert) => cert.id).filter((id) => id)
+        )
+
+        // Удаляем удостоверения у которых нужный protocolId, но которых нет в новом списке
+        const allEntityIds = Object.keys(state.entities)
+        const certificatesToRemove = allEntityIds.filter(
+          (id) =>
+            state.entities[id]?.protocol?.id === employeeId &&
             !newCertificateIds.has(id)
         )
 

@@ -8,8 +8,12 @@ model Certificate {
   group  String?
 
   // Рабочее пространство
-  workspace   Workspace @relation(name: "workspace-certificates", fields: [workspaceId], references: [id], onDelete: Cascade)
-  workspaceId String
+  workspace   Workspace? @relation(name: "workspace-certificates", fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId String?
+
+  // Пользователь
+  user   User?   @relation(name: "user-certificates", fields: [userId], references: [id], onDelete: Cascade)
+  userId String?
 
   // Тип удостоверения
   certificateType   CertificateType @relation(name: "certificate-type-certificates", fields: [certificateTypeId], references: [id], onDelete: Restrict)

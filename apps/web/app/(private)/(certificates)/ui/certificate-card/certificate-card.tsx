@@ -14,10 +14,17 @@ export interface CertificateCardProps {
   certificate: Certificate
   onClick?: () => void
   hideEmployee?: boolean
+  hideProtocol?: boolean
 }
 
 export const CertificateCard = memo((props: CertificateCardProps) => {
-  const { className, certificate, onClick, hideEmployee = false } = props
+  const {
+    className,
+    certificate,
+    onClick,
+    hideEmployee = false,
+    hideProtocol = false,
+  } = props
 
   return (
     <div
@@ -25,6 +32,7 @@ export const CertificateCard = memo((props: CertificateCardProps) => {
         `flex min-h-28 w-full flex-col items-center justify-center gap-0 rounded-lg border p-2 ${onClick ? "cursor-pointer" : "cursor-default"} ${CertificateHelper.bgColor(certificate)}`,
         className,
       ])}
+      onClick={onClick}
     >
       <div className={"w-full text-center text-lg font-bold"}>
         {certificate.certificateType.name}
@@ -44,7 +52,7 @@ export const CertificateCard = memo((props: CertificateCardProps) => {
       >
         {`${CertificateHelper.getEstimatedTimeString(certificate)}`}
       </div>
-      {!certificate?.protocol?.id && (
+      {!hideProtocol && !certificate?.protocol?.id && (
         <div
           className={
             "mt-2 flex items-center justify-center gap-1 text-xs text-destructive"

@@ -87,8 +87,12 @@ export const EmployeeDetailsForm = memo((props: EmployeeDetailsFormProps) => {
       snils: data?.snils,
       hireDate: data?.hireDate,
       firedDate: data?.firedDate,
-      berth: null,
-      department: null,
+      berth: data?.berth?.id
+        ? { id: data.berth.id, name: data.berth.name }
+        : null,
+      department: data?.department?.id
+        ? { id: data.department.id, name: data.department.name }
+        : null,
       certificates: data?.certificates ? [...data?.certificates] : [],
     })
   }, [data, form])

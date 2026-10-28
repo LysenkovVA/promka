@@ -14,17 +14,29 @@ model User {
   surname              String?
   // Имя
   name                 String?
+  // Отчество
   patronymic           String?
   // Дата рождения
   birthDate            DateTime?
   // URL аватара
   avatar               File?     @relation(name: "user-avatar")
-  // Роль
+  // СНИЛС
+  snils                String?
+  // Роль в БД
   userRole             UserRole  @default(USER)
 
   refreshTokens RefreshToken[] @relation(name: "user-refreshTokens")
 
   teamMembers TeamMember[] @relation(name: "user-team-members")
+
+  // Удостоверения пользователя
+  certificates Certificate[] @relation(name: "user-certificates")
+
+  // Типы удостоверений пользователя
+  certificateTypes CertificateType[] @relation(name: "user-certificate-types")
+
+  // Протоколы удостоверений пользователя
+  protocols Protocol[] @relation(name: "user-protocols")
 
   @@index([email])
   @@map("users")

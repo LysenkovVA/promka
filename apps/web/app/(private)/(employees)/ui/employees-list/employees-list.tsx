@@ -53,7 +53,9 @@ export const EmployeesList = memo(() => {
           "mr-16 ml-16 flex h-full flex-row items-center justify-between"
         }
       >
-        <div className={"text-xl"}>{"Сотрудники"}</div>
+        <div
+          className={"text-xl"}
+        >{`Сотрудники ${auth?.activeWorkspace?.company?.name}`}</div>
         <>
           <Button
             onClick={() => {

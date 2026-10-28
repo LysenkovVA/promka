@@ -169,6 +169,14 @@ export const EmployeeRequestSchema = z.object(
               }
             },
           }),
+          name: z.string({
+            error: (issue) => {
+              switch (issue.code) {
+                case "invalid_type":
+                  return ZOD_INVALID_STRING_TYPE
+              }
+            },
+          }),
         },
         { error: "Укажите должность" }
       )
@@ -183,6 +191,14 @@ export const EmployeeRequestSchema = z.object(
                   return ZOD_INVALID_STRING_TYPE
                 case "invalid_format":
                   return ZOD_INVALID_CUID_FORMAT(issue.input)
+              }
+            },
+          }),
+          name: z.string({
+            error: (issue) => {
+              switch (issue.code) {
+                case "invalid_type":
+                  return ZOD_INVALID_STRING_TYPE
               }
             },
           }),

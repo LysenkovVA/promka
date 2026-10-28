@@ -22,6 +22,7 @@ export default function CreateEmployeePage() {
         onSaveClick={() => {
           hiddenSubmitInputRef.current?.click()
         }}
+        title={"Новый сотрудник"}
       >
         <EmployeeDetailsForm
           submitRef={hiddenSubmitInputRef}

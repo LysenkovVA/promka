@@ -7,6 +7,7 @@ import { protocolAdapter } from "../adapter/protocol.adapter"
 import { updateProtocolThunk } from "../thunks/update-protocol.thunk"
 import { deleteProtocolThunk } from "../thunks/delete-protocol.thunk"
 import { getProtocolsSelectorThunk } from "@/Protocols/model/thunks/get-protocols-selector.thunk"
+import { logoutThunk } from "@/app/(public)/(auth)/model/thunks/logoutThunk"
 
 const initialState: ListReduxSchema<Protocol, ProtocolFilters> = {
   ids: [],
@@ -50,6 +51,21 @@ export const protocolsSelectorSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // Logout
+      .addCase(logoutThunk.fulfilled, (state, action) => {
+        // Очистка стейта
+        state.isLoading = false
+        state.error = undefined
+        state.take = TAKE
+        state.skip = 0
+        state.search = undefined
+        state.filters = undefined
+        state.formDataFilters = undefined
+        state.totalCount = 0
+        state.hasMore = false
+        state._isInitialized = false
+        protocolAdapter.removeAll(state)
+      })
       .addCase(getProtocolsSelectorThunk.pending, (state, action) => {
         state.isLoading = true
         state.error = undefined

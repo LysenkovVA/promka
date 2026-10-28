@@ -2,12 +2,48 @@ import { z } from "zod/v4"
 import {
   ZOD_INVALID_BOOLEAN_TYPE,
   ZOD_INVALID_CUID_FORMAT,
+  ZOD_INVALID_DATETIME_TYPE,
   ZOD_INVALID_OBJECT_TYPE,
   ZOD_INVALID_STRING_TYPE,
   ZOD_VALUE_REQUIRED,
 } from "@/lib/zod/commonErrors"
 import { TeamMemberSchema } from "@/TeamMember/model/types/TeamMemberSchema"
 import { stripTimezone } from "@/lib/date/utils"
+import { isValidPhoneNumber } from "react-phone-number-input/input"
+
+// Функция валидации контрольной суммы СНИЛС
+const validateSnils = (snils: string) => {
+  if (!snils) return true
+
+  // Убираем все символы, кроме цифр
+  const cleanSnils = snils.replace(/\D/g, "")
+
+  if (cleanSnils.length !== 11) return false
+
+  // Проверка на зарезервированные последовательности
+  if (parseInt(cleanSnils.slice(0, 9)) <= 1001998) return true
+
+  const digits = cleanSnils.slice(0, 9).split("").map(Number)
+  const checksum = parseInt(cleanSnils.slice(9, 11))
+
+  let sum = 0
+  for (let i = 0; i < 9; i++) {
+    // @ts-ignore
+    sum += digits[i] * (9 - i)
+  }
+
+  let calculatedChecksum = 0
+  if (sum < 100) {
+    calculatedChecksum = sum
+  } else if (sum === 100 || sum === 101) {
+    calculatedChecksum = 0
+  } else {
+    const remainder = sum % 101
+    calculatedChecksum = remainder === 100 || remainder === 101 ? 0 : remainder
+  }
+
+  return calculatedChecksum === checksum
+}
 
 /**
  * Схема валидации UserEntity
@@ -42,16 +78,6 @@ export const UserSchema = z.object(
         }
       },
     }),
-    phoneNumber: z
-      .string({
-        error: (issue) => {
-          switch (issue.code) {
-            case "invalid_type":
-              return ZOD_INVALID_STRING_TYPE
-          }
-        },
-      })
-      .nullish(),
     emailConfirmed: z.boolean({
       error: (issue) => {
         switch (issue.code) {
@@ -88,17 +114,50 @@ export const UserSchema = z.object(
         },
       })
       .nullish(),
-    // birthDate: z.iso
-    //   .datetime({
-    //     offset: true,
-    //     error: (issue) =>
-    //       issue.input === undefined
-    //         ? ZOD_VALUE_REQUIRED
-    //         : ZOD_INVALID_DATETIME_TYPE,
-    //   })
-    //   .nullish(),
-    birthDate: z.coerce.date()
+    patronymic: z
+      .string({
+        error: (issue) => {
+          switch (issue.code) {
+            case "invalid_type":
+              return ZOD_INVALID_STRING_TYPE
+          }
+        },
+      })
+      .nullish(),
+    birthDate: z.coerce
+      .date({
+        error: (issue) => {
+          switch (issue.code) {
+            case "invalid_type":
+              return ZOD_INVALID_DATETIME_TYPE
+          }
+        },
+      })
       .transform((val) => stripTimezone(val))
+      .nullish(),
+    snils: z
+      .string({
+        error: (issue) => {
+          switch (issue.code) {
+            case "invalid_type":
+              return ZOD_INVALID_STRING_TYPE
+          }
+        },
+      })
+      .refine(validateSnils, { message: "Неверный номер СНИЛС" })
+      .nullish(),
+    phoneNumber: z
+      .string({
+        error: (issue) => {
+          switch (issue.code) {
+            case "invalid_type":
+              return ZOD_INVALID_STRING_TYPE
+          }
+        },
+      })
+      .refine((val) => !val || isValidPhoneNumber(val), {
+        message: "Неверный формат номера телефона",
+      })
       .nullish(),
     teamMembers: z
       .array(
@@ -119,15 +178,6 @@ export const UserSchema = z.object(
         }
       )
       .nullish(),
-    // TODO avatar
-    // avatar:
-    //   // Для устранения ошибок с циклическими зависимостями
-    //   z
-    //     .lazy(() => {
-    //       const { FileEntitySchema } = require("@/Files")
-    //       return FileEntitySchema
-    //     })
-    //     .nullish(),
   },
   /**
    * Параметры объекта
