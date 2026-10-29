@@ -50,3 +50,5 @@ export const WorkspacePermissionsSchema = z.object(
       issue.input === undefined ? ZOD_VALUE_REQUIRED : ZOD_INVALID_OBJECT_TYPE,
   }
 )
+
+export type WorkspacePermission = z.infer<typeof WorkspacePermissionsSchema>

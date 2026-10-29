@@ -14,7 +14,7 @@ import {
   UseFormReturn,
 } from "react-hook-form"
 import { IconAsterisk } from "@tabler/icons-react"
-import { Protocol } from "@/Protocols"
+import { Protocol } from "../../model/types/protocol.schema"
 import { ProtocolSelector } from "@/Protocols/ui/protocol-selector/protocol-selector"
 
 export interface FieldProtocolProps<

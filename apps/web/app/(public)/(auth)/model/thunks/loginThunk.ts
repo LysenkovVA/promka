@@ -1,8 +1,8 @@
 "use client"
 
 import { createAsyncThunk } from "@reduxjs/toolkit"
-import { ILoginSchema } from "@/app/(public)/(auth)/model/types/ILoginSchema"
-import { IAuthData } from "@/app/(public)/(auth)/model/types/IAuthData"
+import { ILoginSchema } from "../types/ILoginSchema"
+import { IAuthData } from "../types/IAuthData"
 import { ResponseData } from "@/lib/responses/ResponseData"
 import { ThunkConfig } from "@/lib/redux"
 import apiClient from "@/lib/axios/apiClient"

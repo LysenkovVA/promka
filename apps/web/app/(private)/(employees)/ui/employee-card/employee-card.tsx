@@ -11,7 +11,7 @@ import { Employee } from "../../model/types/employee.schema"
 import { Avatar } from "@workspace/ui/components/avatar"
 import { useAuth } from "@/app/(public)/(auth)"
 import { useRouter } from "next/navigation"
-import { EmployeeHelper } from "@/Employees/helpers/employee-helper"
+import { EmployeeHelper } from "../../helpers/employee-helper"
 
 export interface EmployeeWidgetProps {
   employee: Employee

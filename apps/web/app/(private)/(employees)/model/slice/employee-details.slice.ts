@@ -5,7 +5,7 @@ import { DetailsReduxSchema } from "@/lib/redux/model/types/DetailsReduxSchema"
 import { Employee } from "../types/employee.schema"
 import { getEmployeeByIdThunk } from "../thunks/get-employee-by-id.thunk"
 import { updateEmployeeThunk } from "../thunks/update-employee.thunk"
-import { createCertificateThunk } from "@/Certificates/model/thunks/create-certificate.thunk"
+import { createCertificateThunk } from "@/Certificates"
 
 const initialState: DetailsReduxSchema<Employee> = {
   entityData: { surname: "" },

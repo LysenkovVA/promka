@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { FieldInput } from "@/components/form/field-input/field-input"
 import { FieldGroup } from "@workspace/ui/components/field"
 import { z } from "zod/v4"
-import { getCertificateByIdThunk } from "@/Certificates/model/thunks/get-certificate-by-id.thunk"
+import { getCertificateByIdThunk } from "../../model/thunks/get-certificate-by-id.thunk"
 import {
   DynamicModuleLoader,
   useAppDispatch,
@@ -26,8 +26,8 @@ import { certificateDetailsReducer } from "../../model/slice/certificate-details
 import { FieldDatePicker } from "@/components/form/field-date-picker/field-date-picker"
 import { FieldEmployee } from "@/Employees"
 import { FieldCertificateType } from "@/CertificateTypes"
-import { CertificateRequestSchema } from "@/Certificates/model/types/certificate-request.schema"
-import { FieldProtocol } from "@/Protocols/ui/field-protocol/field-protocol"
+import { CertificateRequestSchema } from "../../model/types/certificate-request.schema"
+import { FieldProtocol } from "@/Protocols"
 
 export interface CertificateDetailsFormProps {
   submitRef: RefObject<HTMLInputElement | null>

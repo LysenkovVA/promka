@@ -1,8 +1,8 @@
 "use client"
 
 import React, { memo } from "react"
-import { TeamMemberCard } from "@/TeamMember/ui/team-member-card/team-member-card"
-import { TeamMember } from "@/TeamMember/model/types/TeamMemberSchema"
+import { TeamMemberCard } from "../team-member-card/team-member-card"
+import { TeamMember } from "../../model/types/TeamMemberSchema"
 import { Button } from "@workspace/ui/components/button"
 
 export interface TeamMembersListProps {

@@ -14,7 +14,7 @@ import {
   UseFormReturn,
 } from "react-hook-form"
 import { IconAsterisk } from "@tabler/icons-react"
-import { Berth } from "@/Berthes"
+import { Berth } from "../../model/types/berth.schema"
 import { BerthSelector } from "../berth-selector/berth-selector"
 
 export interface FieldBerthProps<

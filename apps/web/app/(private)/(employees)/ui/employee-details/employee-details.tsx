@@ -18,7 +18,7 @@ import { deleteEmployeeThunk } from "../../model/thunks/delete-employee.thunk"
 import { useAuth } from "@/app/(public)/(auth)"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
-import { EmployeeHelper } from "@/Employees/helpers/employee-helper"
+import { EmployeeHelper } from "../../helpers/employee-helper"
 import { IconCalendar, IconId, IconMail, IconPhone } from "@tabler/icons-react"
 import {
   Item,

@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { FieldInput } from "@/components/form/field-input/field-input"
 import { FieldGroup } from "@workspace/ui/components/field"
 import { z } from "zod/v4"
-import { getProtocolByIdThunk } from "@/Protocols/model/thunks/get-protocol-by-id.thunk"
+import { getProtocolByIdThunk } from "../../model/thunks/get-protocol-by-id.thunk"
 import {
   DynamicModuleLoader,
   useAppDispatch,
@@ -30,7 +30,7 @@ import { Button } from "@workspace/ui/components/button"
 import { IconPlusFilled, IconTrash } from "@tabler/icons-react"
 import { FieldEmployee } from "@/Employees"
 import { FieldCertificateType } from "@/CertificateTypes"
-import { ProtocolRequestSchema } from "@/Protocols/model/types/protocol-request.schema"
+import { ProtocolRequestSchema } from "../../model/types/protocol-request.schema"
 
 export interface ProtocolDetailsFormProps {
   submitRef: RefObject<HTMLInputElement | null>

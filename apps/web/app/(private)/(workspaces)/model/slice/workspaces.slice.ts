@@ -4,11 +4,10 @@ import { Workspace } from "../types/workspace.schema"
 import { WorkspaceFilters } from "../types/workspace.filters"
 import { TAKE } from "@/config/app"
 import { workspaceAdapter } from "../adapter/workspace.adapter"
-import { logoutThunk } from "@/app/(public)/(auth)/model/thunks/logoutThunk"
-import { getWorkspacesThunk } from "@/Workspaces/model/thunks/get-workspaces.thunk"
-import { updateWorkspaceThunk } from "@/Workspaces/model/thunks/update-workspace.thunk"
-import { createWorkspaceThunk } from "@/Workspaces/model/thunks/create-workspace.thunk"
-import { changeActiveWorkspaceThunk } from "@/app/(public)/(auth)/model/thunks/changeActiveWorkspaceThunk"
+import { changeActiveWorkspaceThunk, logoutThunk } from "@/app/(public)/(auth)"
+import { getWorkspacesThunk } from "../thunks/get-workspaces.thunk"
+import { updateWorkspaceThunk } from "../thunks/update-workspace.thunk"
+import { createWorkspaceThunk } from "../thunks/create-workspace.thunk"
 
 const initialState: ListReduxSchema<Workspace, WorkspaceFilters> = {
   ids: [],

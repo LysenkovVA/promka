@@ -4,6 +4,7 @@ import { memo, ReactNode } from "react"
 import { InfiniteScroll } from "@/components/inifinite-scroll"
 import {
   IconDatabaseSmile,
+  IconFilter,
   IconMoodEmpty,
   IconPlusFilled,
   IconSearch,
@@ -64,6 +65,9 @@ export const ListWrapper = memo((props: ListWrapperProps) => {
                 isSearching={isSearching}
               />
             )}
+            <Button variant={"outline"}>
+              <IconFilter />
+            </Button>
             <Button onClick={onAddClick}>
               <IconPlusFilled />
               {"Добавить"}

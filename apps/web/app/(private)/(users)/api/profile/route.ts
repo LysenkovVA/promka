@@ -7,8 +7,8 @@ import { checkAuth } from "@/app/(public)/(auth)/api/checkAuth"
 import { prisma } from "@workspace/database/prisma"
 import { validateObject } from "@/lib/zod/validateObject"
 import { ServerError } from "@/lib/responses/ServerError"
-import { User } from "@/Users/model/types/UserSchema"
-import { ProfileRequestSchema } from "@/Users/model/types/profile-request.schema"
+import { User } from "../../model/types/UserSchema"
+import { ProfileRequestSchema } from "../../model/types/profile-request.schema"
 
 export async function PATCH(
   request: NextRequest

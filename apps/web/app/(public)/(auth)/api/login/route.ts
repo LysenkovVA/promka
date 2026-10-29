@@ -2,13 +2,13 @@
 
 import { NextRequest, NextResponse } from "next/server"
 import { validateObject } from "@/lib/zod/validateObject"
-import { LoginSchema } from "@/app/(public)/(auth)/model/types/LoginSchema"
+import { LoginSchema } from "../../model/types/LoginSchema"
 import { ResponseData } from "@/lib/responses/ResponseData"
 import { prisma } from "@workspace/database/prisma"
 import bcrypt from "bcryptjs"
 import { SessionData } from "@/lib/jose/types/sessionData"
 import { createAccessToken, createRefreshToken } from "@/lib/jose/client/tokens"
-import { IAuthData } from "@/app/(public)/(auth)/model/types/IAuthData"
+import { IAuthData } from "../../model/types/IAuthData"
 import { ServerError } from "@/lib/responses/ServerError"
 
 export async function POST(request: NextRequest): Promise<NextResponse> {

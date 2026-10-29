@@ -7,15 +7,18 @@ import { updateCertificateThunk } from "../thunks/update-certificate.thunk"
 import { deleteCertificateThunk } from "../thunks/delete-certificate.thunk"
 import { Certificate } from "../types/certificate.schema"
 import { CertificateFilters } from "../types/certificate.filters"
-import { createCertificateThunk } from "@/Certificates/model/thunks/create-certificate.thunk"
-import { createProtocolThunk } from "@/Protocols"
-import { updateProtocolThunk } from "@/Protocols/model/thunks/update-protocol.thunk"
-import { deleteProtocolThunk } from "@/Protocols/model/thunks/delete-protocol.thunk"
-import { createEmployeeThunk } from "@/Employees/model/thunks/create-employee.thunk"
-import { updateEmployeeThunk } from "@/Employees/model/thunks/update-employee.thunk"
-import { deleteEmployeeThunk } from "@/Employees/model/thunks/delete-employee.thunk"
-import { logoutThunk } from "@/app/(public)/(auth)/model/thunks/logoutThunk"
-import { changeActiveWorkspaceThunk } from "@/app/(public)/(auth)/model/thunks/changeActiveWorkspaceThunk"
+import { createCertificateThunk } from "../thunks/create-certificate.thunk"
+import {
+  createProtocolThunk,
+  deleteProtocolThunk,
+  updateProtocolThunk,
+} from "@/Protocols"
+import {
+  createEmployeeThunk,
+  deleteEmployeeThunk,
+  updateEmployeeThunk,
+} from "@/Employees"
+import { changeActiveWorkspaceThunk, logoutThunk } from "@/app/(public)/(auth)"
 
 const initialState: ListReduxSchema<Certificate, CertificateFilters> = {
   ids: [],

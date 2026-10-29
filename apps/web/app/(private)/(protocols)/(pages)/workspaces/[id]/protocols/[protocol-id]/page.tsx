@@ -1,5 +1,5 @@
 import { Metadata } from "next"
-import { ProtocolDetails } from "@/Protocols/ui/protocol-details/protocol-details"
+import { ProtocolDetails } from "../../../../../ui/protocol-details/protocol-details"
 
 export const metadata: Metadata = {
   title: "Протокол",

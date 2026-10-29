@@ -3,12 +3,12 @@
 import { NextRequest, NextResponse } from "next/server"
 import { ResponseData } from "@/lib/responses/ResponseData"
 import { Workspace } from "../../../model/types/workspace.schema"
-import { checkAuthForWorkspace } from "@/app/(public)/(auth)/api/checkAuth"
+import { checkAuthForWorkspace } from "@/app/(public)/(auth)"
 import { prisma } from "@workspace/database/prisma"
 import { ServerError } from "@/lib/responses/ServerError"
 import { Employee } from "@/Employees"
 import { validateObject } from "@/lib/zod/validateObject"
-import { WorkspaceRequestSchema } from "@/Workspaces/model/types/workspace-request.schema"
+import { WorkspaceRequestSchema } from "../../../model/types/workspace-request.schema"
 
 export async function GET(
   request: NextRequest,

@@ -5,7 +5,6 @@ import {
   ZOD_INVALID_STRING_TYPE,
   ZOD_VALUE_REQUIRED,
 } from "@/lib/zod/commonErrors"
-import { TeamMemberSchema } from "@/TeamMember"
 import { CompanySchema } from "@/Companies"
 
 /**

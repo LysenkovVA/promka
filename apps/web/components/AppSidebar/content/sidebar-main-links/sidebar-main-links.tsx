@@ -19,7 +19,7 @@ import { IconBuilding, IconLayoutDashboard } from "@tabler/icons-react"
 import { ROUTE } from "@/config/routes"
 import { useAuth } from "@/app/(public)/(auth)/model/hooks/useAuth"
 
-export const Dashboard = memo(() => {
+export const SidebarMainLinks = memo(() => {
   const { userWorkspaces } = useAuth()
 
   return (

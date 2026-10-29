@@ -10,9 +10,9 @@ import {
 } from "@workspace/ui/components/dialog"
 import { Button } from "@workspace/ui/components/button"
 import { DynamicModuleLoader } from "@/lib/redux"
-import { Protocol } from "@/Protocols"
-import { protocolDetailsReducer } from "@/Protocols/model/slice/protocol-details.slice"
-import { ProtocolDetailsForm } from "@/Protocols/ui/protocol-details-form/protocol-details-form"
+import { Protocol } from "../../model/types/protocol.schema"
+import { protocolDetailsReducer } from "../../model/slice/protocol-details.slice"
+import { ProtocolDetailsForm } from "../protocol-details-form/protocol-details-form"
 
 export interface ProtocolEditDialogProps {
   isOpen: boolean

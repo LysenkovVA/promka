@@ -10,11 +10,6 @@ export const getCertificateTypeDetailsData = createSelector(
   (schema) => schema?.entityData ?? undefined
 )
 
-// export const getCertificateTypeDetailsFormData = createSelector(
-//   getCertificateTypeDetails,
-//   (schema) => schema?.entityFormData ?? undefined
-// )
-
 export const getCertificateTypeDetailsIsFetching = createSelector(
   getCertificateTypeDetails,
   (schema) => schema?.isFetching ?? false

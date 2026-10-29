@@ -10,11 +10,6 @@ export const getBerthDetailsData = createSelector(
   (schema) => schema?.entityData ?? undefined
 )
 
-// export const getBerthDetailsFormData = createSelector(
-//   getBerthDetails,
-//   (schema) => schema?.entityFormData ?? undefined
-// )
-
 export const getBerthDetailsIsFetching = createSelector(
   getBerthDetails,
   (schema) => schema?.isFetching ?? false

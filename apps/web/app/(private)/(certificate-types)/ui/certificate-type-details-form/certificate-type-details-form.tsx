@@ -27,7 +27,7 @@ import { createCertificateTypeThunk } from "../../model/thunks/create-certificat
 import { updateCertificateTypeThunk } from "../../model/thunks/update-certificate-type.thunk"
 import { certificateTypeDetailsReducer } from "../../model/slice/certificate-type-details.slice"
 import { FieldSwitch } from "@/components/form/field-switch/field-switch"
-import { FieldDuration } from "@/CertificateTypes/ui/field-duration/field-duration"
+import { FieldDuration } from "../field-duration/field-duration"
 
 export interface CertificateTypeDetailsFormProps {
   submitRef: RefObject<HTMLInputElement | null>

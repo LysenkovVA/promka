@@ -14,16 +14,16 @@ import {
 } from "@/lib/redux"
 
 import { toast } from "sonner"
-import { WorkspaceRequestSchema } from "@/Workspaces/model/types/workspace-request.schema"
+import { WorkspaceRequestSchema } from "../../model/types/workspace-request.schema"
 import {
   getWorkspaceDetailsData,
   getWorkspaceDetailsIsFetching,
   getWorkspaceDetailsIsInitialized,
-} from "@/Workspaces/model/selectors/workspace-details-selectors"
-import { updateWorkspaceThunk } from "@/Workspaces/model/thunks/update-workspace.thunk"
-import { workspaceDetailsReducer } from "@/Workspaces/model/slice/workspace-details-slice"
-import { getWorkspaceByIdThunk } from "@/Workspaces/model/thunks/get-workspace-by-id-thunk"
-import { createWorkspaceThunk } from "@/Workspaces/model/thunks/create-workspace.thunk"
+} from "../../model/selectors/workspace-details-selectors"
+import { updateWorkspaceThunk } from "../../model/thunks/update-workspace.thunk"
+import { workspaceDetailsReducer } from "../../model/slice/workspace-details-slice"
+import { getWorkspaceByIdThunk } from "../../model/thunks/get-workspace-by-id-thunk"
+import { createWorkspaceThunk } from "../../model/thunks/create-workspace.thunk"
 
 export interface WorkspaceDetailsFormProps {
   submitRef: RefObject<HTMLInputElement | null>

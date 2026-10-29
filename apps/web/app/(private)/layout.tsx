@@ -14,8 +14,6 @@ export default function PrivateLayout({
 }: {
   children: React.ReactNode
 }) {
-  // console.log("🌞PrivateLayout отрисован")
-
   return (
     <SidebarProvider
       style={
@@ -39,8 +37,6 @@ export default function PrivateLayout({
               width: "100%",
               overflowY: "auto",
               flexGrow: 1,
-              // padding: 16,
-              // margin: 8,
             }}
           >
             {children}

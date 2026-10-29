@@ -13,16 +13,16 @@ import {
   getEmployeesSelector,
   getEmployeesSelectorIsLoading,
   getEmployeesSelectorSearch,
-} from "@/Employees/model/selectors/employees-selector.selectors"
-import { getEmployeesSelectorThunk } from "@/Employees/model/thunks/get-employees-selector.thunk"
-import { EmployeeHelper } from "@/Employees/helpers/employee-helper"
+} from "../../model/selectors/employees-selector.selectors"
+import { getEmployeesSelectorThunk } from "../../model/thunks/get-employees-selector.thunk"
+import { EmployeeHelper } from "../../helpers/employee-helper"
 import {
   employeesSelectorActions,
   employeesSelectorReducer,
-} from "@/Employees/model/slice/employees-selector.slice"
-import { deleteEmployeeThunk } from "@/Employees/model/thunks/delete-employee.thunk"
-import { Employee } from "@/Employees"
-import { EmployeeEditDialog } from "@/Employees/ui/employee-edit-dialog/employee-edit-dialog"
+} from "../../model/slice/employees-selector.slice"
+import { deleteEmployeeThunk } from "../../model/thunks/delete-employee.thunk"
+import { Employee } from "../../model/types/employee.schema"
+import { EmployeeEditDialog } from "../employee-edit-dialog/employee-edit-dialog"
 
 export interface EmployeeSelectorProps {
   value: Employee | null

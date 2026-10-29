@@ -1,4 +1,4 @@
-import { User } from "@/Users/model/types/UserSchema"
+import { User } from "../model/types/UserSchema"
 
 export class UserHelper {
   static getNameAndPatronymic(user: User | undefined): string {

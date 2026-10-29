@@ -12,10 +12,9 @@ import { updateProfileThunk } from "../../model/thunks/update-profile.thunk"
 import { useAuth } from "@/app/(public)/(auth)"
 import { FieldDatePicker } from "@/components/form/field-date-picker/field-date-picker"
 import { Separator } from "@workspace/ui/components/separator"
-import { ProfileRequestSchema } from "@/Users/model/types/profile-request.schema"
-import { User } from "@/Users/model/types/UserSchema"
-import { FieldSnils } from "@/Employees/ui/field-snils/field-snils"
-import { FieldPhone } from "@/Employees/ui/field-phone/field-phone"
+import { ProfileRequestSchema } from "../../model/types/profile-request.schema"
+import { User } from "../../model/types/UserSchema"
+import { FieldPhone, FieldSnils } from "@/Employees"
 
 export interface ProfileDetailsFormProps {
   submitRef: RefObject<HTMLInputElement | null>

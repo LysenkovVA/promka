@@ -4,8 +4,8 @@ import { DynamicModuleLoader } from "@/lib/redux"
 import { DetailsWrapper } from "@/components/details-wrapper/details-wrapper"
 import { useRouter } from "next/navigation"
 import { useRef } from "react"
-import { certificateDetailsReducer } from "@/Certificates/model/slice/certificate-details.slice"
-import { CertificateDetailsForm } from "@/Certificates/ui/certificate-details-form/certificate-details-form"
+import { certificateDetailsReducer } from "../../../../../model/slice/certificate-details.slice"
+import { CertificateDetailsForm } from "../../../../../ui/certificate-details-form/certificate-details-form"
 
 export default function CreateCertificatePage() {
   const router = useRouter()

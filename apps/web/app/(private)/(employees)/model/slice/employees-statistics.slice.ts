@@ -2,10 +2,10 @@
 
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { DetailsReduxSchema } from "@/lib/redux/model/types/DetailsReduxSchema"
-import { EmployeesStatistics } from "@/Employees/model/types/employees-statistics"
+import { EmployeesStatistics } from "../types/employees-statistics"
 import { getEmployeesStatisticsThunk } from "@/Employees/model/thunks/get-employees-statistics.thunk"
-import { createEmployeeThunk } from "@/Employees/model/thunks/create-employee.thunk"
-import { deleteEmployeeThunk } from "@/Employees/model/thunks/delete-employee.thunk"
+import { createEmployeeThunk } from "../thunks/create-employee.thunk"
+import { deleteEmployeeThunk } from "../thunks/delete-employee.thunk"
 
 const initialState: DetailsReduxSchema<EmployeesStatistics> = {
   entityData: { count: 0 },

@@ -7,8 +7,7 @@ import { updateBerthTypeThunk } from "../thunks/update-berth-type.thunk"
 import { deleteBerthTypeThunk } from "../thunks/delete-berth-type.thunk"
 import { BerthType } from "../types/berth-type.schema"
 import { BerthTypesFilters } from "../types/berth-type.filters"
-import { logoutThunk } from "@/app/(public)/(auth)/model/thunks/logoutThunk"
-import { changeActiveWorkspaceThunk } from "@/app/(public)/(auth)/model/thunks/changeActiveWorkspaceThunk"
+import { changeActiveWorkspaceThunk, logoutThunk } from "@/app/(public)/(auth)"
 
 const initialState: ListReduxSchema<BerthType, BerthTypesFilters> = {
   ids: [],

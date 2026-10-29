@@ -1,5 +1,5 @@
 import { useAppSelector } from "@/lib/redux"
-import { getAuthData } from "@/app/(public)/(auth)/model/selectors/authSelectors"
+import { getAuthData } from "../selectors/authSelectors"
 
 export const useAuth = () => {
   const authData = useAppSelector(getAuthData)

@@ -1,4 +1,4 @@
-import { User } from "../../../../(private)/(users)/model/types/UserSchema"
+import { User } from "@/Users"
 
 /**
  * Интерфейс данных, полученных при авторизации

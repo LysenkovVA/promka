@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { FieldInput } from "@/components/form/field-input/field-input"
 import { FieldGroup } from "@workspace/ui/components/field"
 import { z } from "zod/v4"
-import { getEmployeeByIdThunk } from "@/Employees/model/thunks/get-employee-by-id.thunk"
+import { getEmployeeByIdThunk } from "../../model/thunks/get-employee-by-id.thunk"
 import {
   DynamicModuleLoader,
   useAppDispatch,

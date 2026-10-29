@@ -73,7 +73,7 @@ export const EmployeesList = memo(() => {
         onScrollEnd={loadNextPart}
         hasMore={hasMore}
         title={`Сотрудники ${auth?.activeWorkspace?.company?.name}`}
-        itemsCount={data.length}
+        itemsCount={totalCount}
         onAddClick={() => {
           router.push(
             `/workspaces/${auth?.activeWorkspace?.id}/employees/create`

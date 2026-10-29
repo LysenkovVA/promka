@@ -12,7 +12,7 @@ import { Button } from "@workspace/ui/components/button"
 import { DynamicModuleLoader } from "@/lib/redux"
 import { berthDetailsReducer } from "../../model/slice/berth-details.slice"
 import { Berth } from "../../model/types/berth.schema"
-import { BerthDetailsForm } from "@/Berthes/ui/berth-details-form/berth-details-form"
+import { BerthDetailsForm } from "../berth-details-form/berth-details-form"
 
 export interface BerthEditDialogProps {
   isOpen: boolean

@@ -1,9 +1,9 @@
 "use client"
 
 import { memo } from "react"
-import { TeamMember } from "@/TeamMember/model/types/TeamMemberSchema"
+import { TeamMember } from "../../model/types/TeamMemberSchema"
 import { Avatar } from "@workspace/ui/components/avatar"
-import { TeamMemberHelper } from "@/TeamMember/helpers/team-member-helper"
+import { TeamMemberHelper } from "../../helpers/team-member-helper"
 import { Button } from "@workspace/ui/components/button"
 import { IconSettings } from "@tabler/icons-react"
 

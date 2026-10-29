@@ -16,13 +16,13 @@ import {
   getProtocolsIsLoading,
   getProtocolsSearch,
   getProtocolsTotalCount,
-} from "@/Protocols/model/selectors/protocols.selectors"
-import { getProtocolsThunk } from "@/Protocols/model/thunks/get-protocols.thunk"
+} from "../../model/selectors/protocols.selectors"
+import { getProtocolsThunk } from "../../model/thunks/get-protocols.thunk"
 import {
   protocolsActions,
   protocolsReducer,
-} from "@/Protocols/model/slice/protocols.slice"
-import { ProtocolCard } from "@/Protocols/ui/protocol-card/protocol-card"
+} from "../../model/slice/protocols.slice"
+import { ProtocolCard } from "../protocol-card/protocol-card"
 import { useDebounce } from "@/lib/hooks/useDebounce"
 
 export const ProtocolsList = memo(() => {
@@ -72,7 +72,7 @@ export const ProtocolsList = memo(() => {
       <ListWrapper
         onScrollEnd={loadNextPart}
         hasMore={hasMore}
-        itemsCount={data.length}
+        itemsCount={totalCount}
         title={`Протоколы ${auth?.activeWorkspace?.company?.name}`}
         onAddClick={() => {
           router.push(

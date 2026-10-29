@@ -2,12 +2,12 @@
 
 import { NextRequest, NextResponse } from "next/server"
 import { ResponseData } from "@/lib/responses/ResponseData"
-import { checkAuthForWorkspace } from "@/app/(public)/(auth)/api/checkAuth"
+import { checkAuthForWorkspace } from "@/app/(public)/(auth)"
 import { validateObject } from "@/lib/zod/validateObject"
 import { prisma } from "@workspace/database/prisma"
 import { Protocol } from "../../../../../model/types/protocol.schema"
 import { ServerError } from "@/lib/responses/ServerError"
-import { ProtocolRequestSchema } from "@/Protocols/model/types/protocol-request.schema"
+import { ProtocolRequestSchema } from "../../../../../model/types/protocol-request.schema"
 import { Prisma } from "@workspace/database/.generated/client"
 
 export async function POST(

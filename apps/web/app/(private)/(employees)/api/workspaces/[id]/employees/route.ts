@@ -2,7 +2,7 @@
 
 import { NextRequest, NextResponse } from "next/server"
 import { ResponseData } from "@/lib/responses/ResponseData"
-import { checkAuthForWorkspace } from "@/app/(public)/(auth)/api/checkAuth"
+import { checkAuthForWorkspace } from "@/app/(public)/(auth)"
 import { prisma } from "@workspace/database/prisma"
 import { Employee } from "../../../../model/types/employee.schema"
 import { TAKE } from "@/config/app"
@@ -52,7 +52,6 @@ export async function GET(
       take: Number(take),
       skip: Number(skip),
       include: {
-        // workspace: { include: { company: true } },
         berth: true,
         department: true,
         certificates: { include: { certificateType: true, protocol: true } },

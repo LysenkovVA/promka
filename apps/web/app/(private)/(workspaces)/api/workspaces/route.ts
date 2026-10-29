@@ -2,7 +2,7 @@
 
 import { NextRequest, NextResponse } from "next/server"
 import { ResponseData } from "@/lib/responses/ResponseData"
-import { checkAuth } from "@/app/(public)/(auth)/api/checkAuth"
+import { checkAuth } from "@/app/(public)/(auth)"
 import { prisma } from "@workspace/database/prisma"
 import { TAKE } from "@/config/app"
 import { ServerError } from "@/lib/responses/ServerError"
@@ -28,6 +28,13 @@ export async function GET(
           user: { id: userId },
         },
       },
+      OR: [
+        {
+          company: {
+            name: { contains: search, mode: "insensitive" },
+          },
+        },
+      ],
     }
 
     const data = await prisma.workspace.findMany({

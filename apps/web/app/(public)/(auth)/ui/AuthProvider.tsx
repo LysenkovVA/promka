@@ -9,17 +9,15 @@ import { ReactNode, useEffect } from "react"
 
 import {
   getAuthDataUser,
-  getUserAuthDataError,
   getUserAuthDataIsInitialized,
 } from "../model/selectors/authSelectors"
 import { useAppDispatch, useAppSelector } from "@/lib/redux"
 import { usePathname, useRouter } from "next/navigation"
 import { toast } from "sonner"
-import { refreshThunk } from "@/app/(public)/(auth)/model/thunks/refreshThunk"
+import { refreshThunk } from "../model/thunks/refreshThunk"
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const authUser = useAppSelector(getAuthDataUser)
-  const error = useAppSelector(getUserAuthDataError)
   const isInitialized = useAppSelector(getUserAuthDataIsInitialized)
 
   const router = useRouter()
@@ -36,18 +34,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  /**
-   * Отображение ошибки
-   */
-  // useEffect(() => {
-  //   if (error) {
-  //     toast.error(`${error}`, {
-  //       position: "top-center",
-  //       description: "Ошибка в AuthProvider",
-  //     })
-  //   }
-  // }, [error])
 
   /**
    * Обработка редиректов

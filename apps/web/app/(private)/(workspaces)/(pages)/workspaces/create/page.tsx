@@ -5,7 +5,7 @@ import { DetailsWrapper } from "@/components/details-wrapper/details-wrapper"
 import { useRouter } from "next/navigation"
 import { useRef } from "react"
 import { workspaceDetailsReducer } from "../../../model/slice/workspace-details-slice"
-import { WorkspaceDetailsForm } from "@/Workspaces/ui/workspace-details-form/workspace-details-form"
+import { WorkspaceDetailsForm } from "../../../ui/workspace-details-form/workspace-details-form"
 
 export default function CreateWorkspacePage() {
   const router = useRouter()

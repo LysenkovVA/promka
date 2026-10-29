@@ -13,10 +13,10 @@ import {
 } from "@workspace/ui/components/item"
 import dayjs from "dayjs"
 import { DetailsWrapper } from "@/components/details-wrapper/details-wrapper"
-import { formatSnils } from "@/Employees/ui/field-snils/field-snils"
+import { formatSnils } from "../../../(employees)/ui/field-snils/field-snils"
 import { formatPhoneNumberIntl } from "react-phone-number-input"
-import { UserHelper } from "@/Users/helpers/user-helper"
-import { ProfileDetailsForm } from "@/Users/ui/profile-details-form/profile-details-form"
+import { UserHelper } from "../../helpers/user-helper"
+import { ProfileDetailsForm } from "../profile-details-form/profile-details-form"
 
 export interface ProfileDetailsProps {}
 

@@ -18,7 +18,7 @@ import { berthesActions, berthesReducer } from "../../model/slice/berthes.slice"
 import { BerthEditDialog } from "../berth-edit-dialog/berth-edit-dialog"
 import { toast } from "sonner"
 import { useAuth } from "@/app/(public)/(auth)"
-import { deleteBerthThunk } from "@/Berthes/model/thunks/delete-berth.thunk"
+import { deleteBerthThunk } from "../../model/thunks/delete-berth.thunk"
 
 export interface BerthSelectorProps {
   value: Berth | null

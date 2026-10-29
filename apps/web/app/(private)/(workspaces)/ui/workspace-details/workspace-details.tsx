@@ -14,13 +14,13 @@ import {
   getWorkspaceDetailsError,
   getWorkspaceDetailsIsFetching,
   getWorkspaceDetailsIsInitialized,
-} from "@/Workspaces/model/selectors/workspace-details-selectors"
-import { getWorkspaceByIdThunk } from "@/Workspaces/model/thunks/get-workspace-by-id-thunk"
-import { workspaceDetailsReducer } from "@/Workspaces/model/slice/workspace-details-slice"
+} from "../../model/selectors/workspace-details-selectors"
+import { getWorkspaceByIdThunk } from "../../model/thunks/get-workspace-by-id-thunk"
+import { workspaceDetailsReducer } from "../../model/slice/workspace-details-slice"
 import { Picture } from "@/components/picture"
-import { TeamMembersList } from "@/TeamMember/ui/team-members-list/team-members-list"
-import { WorkspaceDetailsForm } from "@/Workspaces/ui/workspace-details-form/workspace-details-form"
-import { changeActiveWorkspaceThunk } from "@/app/(public)/(auth)/model/thunks/changeActiveWorkspaceThunk"
+import { TeamMembersList } from "@/TeamMember"
+import { WorkspaceDetailsForm } from "../workspace-details-form/workspace-details-form"
+import { changeActiveWorkspaceThunk } from "@/app/(public)/(auth)"
 
 export interface WorkspaceDetailsProps {
   workspaceId: string

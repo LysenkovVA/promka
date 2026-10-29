@@ -2,7 +2,7 @@
 
 import { NextRequest, NextResponse } from "next/server"
 import { ResponseData } from "@/lib/responses/ResponseData"
-import { checkAuthForWorkspace } from "@/app/(public)/(auth)/api/checkAuth"
+import { checkAuthForWorkspace } from "@/app/(public)/(auth)"
 import { prisma } from "@workspace/database/prisma"
 import { TAKE } from "@/config/app"
 import { CertificateType } from "../../../../model/types/certificate-type.schema"
@@ -28,9 +28,6 @@ export async function GET(
         workspace: { id: id },
         ...(search && { name: { contains: search, mode: "insensitive" } }),
       },
-      // include: {
-      //   workspace: { include: { company: true } },
-      // },
       take: Number(take),
       skip: Number(skip),
       orderBy: { name: "asc" },

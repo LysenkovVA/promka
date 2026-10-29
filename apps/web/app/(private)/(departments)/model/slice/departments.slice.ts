@@ -7,8 +7,7 @@ import { updateDepartmentThunk } from "../thunks/update-department.thunk"
 import { deleteDepartmentThunk } from "../thunks/delete-department.thunk"
 import { Department } from "../types/department.schema"
 import { DepartmentFilters } from "../types/department.filters"
-import { logoutThunk } from "@/app/(public)/(auth)/model/thunks/logoutThunk"
-import { changeActiveWorkspaceThunk } from "@/app/(public)/(auth)/model/thunks/changeActiveWorkspaceThunk"
+import { changeActiveWorkspaceThunk, logoutThunk } from "@/app/(public)/(auth)"
 
 const initialState: ListReduxSchema<Department, DepartmentFilters> = {
   ids: [],

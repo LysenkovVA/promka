@@ -10,9 +10,9 @@ import {
 } from "@workspace/ui/components/dialog"
 import { Button } from "@workspace/ui/components/button"
 import { DynamicModuleLoader } from "@/lib/redux"
-import { Employee } from "@/Employees"
-import { employeeDetailsReducer } from "@/Employees/model/slice/employee-details.slice"
-import { EmployeeDetailsSimpleForm } from "@/Employees/ui/employee-details-simple-form/employee-details-simple-form"
+import { Employee } from "../../model/types/employee.schema"
+import { employeeDetailsReducer } from "../../model/slice/employee-details.slice"
+import { EmployeeDetailsSimpleForm } from "../employee-details-simple-form/employee-details-simple-form"
 
 export interface EmployeeEditDialogProps {
   isOpen: boolean

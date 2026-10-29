@@ -6,10 +6,9 @@ import { TAKE } from "@/config/app"
 import { employeeAdapter } from "../adapter/employee.adapter"
 import { updateEmployeeThunk } from "../thunks/update-employee.thunk"
 import { deleteEmployeeThunk } from "../thunks/delete-employee.thunk"
-import { getEmployeesSelectorThunk } from "@/Employees/model/thunks/get-employees-selector.thunk"
-import { createEmployeeThunk } from "@/Employees/model/thunks/create-employee.thunk"
-import { logoutThunk } from "@/app/(public)/(auth)/model/thunks/logoutThunk"
-import { changeActiveWorkspaceThunk } from "@/app/(public)/(auth)/model/thunks/changeActiveWorkspaceThunk"
+import { getEmployeesSelectorThunk } from "../thunks/get-employees-selector.thunk"
+import { createEmployeeThunk } from "../thunks/create-employee.thunk"
+import { changeActiveWorkspaceThunk, logoutThunk } from "@/app/(public)/(auth)"
 
 const initialState: ListReduxSchema<Employee, EmployeeFilters> = {
   ids: [],

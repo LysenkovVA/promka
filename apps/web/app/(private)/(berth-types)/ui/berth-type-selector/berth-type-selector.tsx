@@ -21,7 +21,7 @@ import { Selector } from "@/components/selector/selector"
 import { BerthTypeEditDialog } from "../berth-type-edit-dialog/berth-type-edit-dialog"
 import { toast } from "sonner"
 import { useAuth } from "@/app/(public)/(auth)"
-import { deleteBerthTypeThunk } from "@/BerthTypes/model/thunks/delete-berth-type.thunk"
+import { deleteBerthTypeThunk } from "../../model/thunks/delete-berth-type.thunk"
 
 export interface BerthTypeSelectorProps {
   value: BerthType | null

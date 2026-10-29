@@ -1,4 +1,4 @@
-import { Certificate } from "@/Certificates"
+import { Certificate } from "../types/certificate.schema"
 import dayjs from "dayjs"
 
 export class CertificateHelper {

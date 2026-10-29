@@ -3,9 +3,9 @@
 import React, { memo } from "react"
 import { Certificate } from "../../model/types/certificate.schema"
 import { cn } from "@workspace/ui/lib/utils"
-import { CertificateHelper } from "@/Certificates/model/helpers/certificate-helper"
+import { CertificateHelper } from "../../model/helpers/certificate-helper"
 import { Avatar } from "@workspace/ui/components/avatar"
-import { EmployeeHelper } from "@/Employees/helpers/employee-helper"
+import { EmployeeHelper } from "@/Employees"
 import { Separator } from "@workspace/ui/components/separator"
 import { IconAlertTriangle } from "@tabler/icons-react"
 

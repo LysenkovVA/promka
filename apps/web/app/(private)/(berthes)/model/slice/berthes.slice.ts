@@ -7,8 +7,7 @@ import { getBerthesThunk } from "../thunks/get-berthes.thunk"
 import { berthAdapter } from "../adapter/berth.adapter"
 import { updateBerthThunk } from "../thunks/update-berth.thunk"
 import { deleteBerthThunk } from "../thunks/delete-berth.thunk"
-import { logoutThunk } from "@/app/(public)/(auth)/model/thunks/logoutThunk"
-import { changeActiveWorkspaceThunk } from "@/app/(public)/(auth)/model/thunks/changeActiveWorkspaceThunk"
+import { changeActiveWorkspaceThunk, logoutThunk } from "@/app/(public)/(auth)"
 
 const initialState: ListReduxSchema<Berth, BerthFilters> = {
   ids: [],

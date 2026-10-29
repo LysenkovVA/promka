@@ -7,8 +7,7 @@ import { updateCertificateTypeThunk } from "../thunks/update-certificate-type.th
 import { deleteCertificateTypeThunk } from "../thunks/delete-certificate-type.thunk"
 import { CertificateType } from "../types/certificate-type.schema"
 import { CertificateTypesFilters } from "../types/certificate-type.filters"
-import { logoutThunk } from "@/app/(public)/(auth)/model/thunks/logoutThunk"
-import { changeActiveWorkspaceThunk } from "@/app/(public)/(auth)/model/thunks/changeActiveWorkspaceThunk"
+import { changeActiveWorkspaceThunk, logoutThunk } from "@/app/(public)/(auth)"
 
 const initialState: ListReduxSchema<CertificateType, CertificateTypesFilters> =
   {

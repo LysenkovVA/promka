@@ -2,13 +2,13 @@
 
 import { NextRequest, NextResponse } from "next/server"
 import { ResponseData } from "@/lib/responses/ResponseData"
-import { Employee } from "@/Employees"
+import { Employee } from "../../../../../model/types/employee.schema"
 import { checkAuthForWorkspace } from "@/app/(public)/(auth)/api/checkAuth"
 import { prisma } from "@workspace/database/prisma"
 import { validateObject } from "@/lib/zod/validateObject"
 import { Prisma } from "@workspace/database/.generated/client"
 import { ServerError } from "@/lib/responses/ServerError"
-import { EmployeeRequestSchema } from "@/Employees/model/types/employee-request.schema"
+import { EmployeeRequestSchema } from "../../../../../model/types/employee-request.schema"
 
 export async function GET(
   request: NextRequest,
@@ -22,7 +22,6 @@ export async function GET(
     const candidate = await prisma.employee.findFirst({
       where: { id: employeeId },
       include: {
-        // workspace: { include: { company: true } },
         berth: { include: { berthType: true } },
         department: true,
         certificates: { include: { certificateType: true, protocol: true } },

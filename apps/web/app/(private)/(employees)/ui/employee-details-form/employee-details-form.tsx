@@ -30,11 +30,11 @@ import { FieldDepartment } from "@/Departments"
 import { Button } from "@workspace/ui/components/button"
 import { IconCirclePlusFilled, IconTrash } from "@tabler/icons-react"
 import { FieldCertificateType } from "@/CertificateTypes"
-import { FieldSnils } from "@/Employees/ui/field-snils/field-snils"
-import { FieldPhone } from "@/Employees/ui/field-phone/field-phone"
-import { EmployeeRequestSchema } from "@/Employees/model/types/employee-request.schema"
+import { FieldSnils } from "../field-snils/field-snils"
+import { FieldPhone } from "../field-phone/field-phone"
+import { EmployeeRequestSchema } from "../../model/types/employee-request.schema"
 import { GenericInnerList } from "@/components/form/form-generic-inner-list/form-generic-inner-list"
-import { FieldProtocol } from "@/Protocols/ui/field-protocol/field-protocol"
+import { FieldProtocol } from "@/Protocols"
 
 export interface EmployeeDetailsFormProps {
   submitRef: RefObject<HTMLInputElement | null>

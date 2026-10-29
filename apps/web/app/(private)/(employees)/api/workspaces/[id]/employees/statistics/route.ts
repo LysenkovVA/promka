@@ -2,10 +2,10 @@
 
 import { NextRequest, NextResponse } from "next/server"
 import { ResponseData } from "@/lib/responses/ResponseData"
-import { checkAuthForWorkspace } from "@/app/(public)/(auth)/api/checkAuth"
+import { checkAuthForWorkspace } from "@/app/(public)/(auth)"
 import { prisma } from "@workspace/database/prisma"
 import { ServerError } from "@/lib/responses/ServerError"
-import { EmployeesStatistics } from "@/Employees/model/types/employees-statistics"
+import { EmployeesStatistics } from "../../../../../model/types/employees-statistics"
 
 export async function GET(
   request: NextRequest,

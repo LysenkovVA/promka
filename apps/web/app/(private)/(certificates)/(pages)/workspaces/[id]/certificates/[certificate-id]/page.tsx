@@ -1,5 +1,5 @@
 import { Metadata } from "next"
-import { CertificateDetails } from "@/Certificates/ui/certificate-details/certificate-details"
+import { CertificateDetails } from "../../../../../ui/certificate-details/certificate-details"
 
 export const metadata: Metadata = {
   title: "Удостоверение",

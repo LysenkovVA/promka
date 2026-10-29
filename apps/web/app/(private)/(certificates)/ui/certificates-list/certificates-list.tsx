@@ -16,13 +16,13 @@ import {
   getCertificatesIsLoading,
   getCertificatesSearch,
   getCertificatesTotalCount,
-} from "@/Certificates/model/selectors/certificates.selectors"
-import { getCertificatesThunk } from "@/Certificates/model/thunks/get-certificates.thunk"
+} from "../../model/selectors/certificates.selectors"
+import { getCertificatesThunk } from "../../model/thunks/get-certificates.thunk"
 import {
   certificatesActions,
   certificatesReducer,
-} from "@/Certificates/model/slice/certificates.slice"
-import { CertificateCard } from "@/Certificates/ui/certificate-card/certificate-card"
+} from "../../model/slice/certificates.slice"
+import { CertificateCard } from "../certificate-card/certificate-card"
 import { useDebounce } from "@/lib/hooks/useDebounce"
 
 export const CertificatesList = memo(() => {

@@ -4,7 +4,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit"
 import { ResponseData } from "@/lib/responses/ResponseData"
 import { ThunkConfig } from "@/lib/redux"
 import apiClient from "@/lib/axios/apiClient"
-import { User } from "@/Users/model/types/UserSchema"
+import { User } from "../types/UserSchema"
 
 export interface UpdateProfileThunkProps {
   entityData: User

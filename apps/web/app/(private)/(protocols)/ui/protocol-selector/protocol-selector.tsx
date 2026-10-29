@@ -13,16 +13,16 @@ import {
   getProtocolsSelector,
   getProtocolsSelectorIsLoading,
   getProtocolsSelectorSearch,
-} from "@/Protocols/model/selectors/protocols-selector.selectors"
+} from "../../model/selectors/protocols-selector.selectors"
 import { getProtocolsSelectorThunk } from "@/Protocols/model/thunks/get-protocols-selector.thunk"
 import {
   protocolsSelectorActions,
   protocolsSelectorReducer,
-} from "@/Protocols/model/slice/protocols-selector.slice"
-import { deleteProtocolThunk } from "@/Protocols/model/thunks/delete-protocol.thunk"
-import { Protocol } from "@/Protocols"
-import { ProtocolHelper } from "@/Protocols/model/helpers/protocol-helper"
-import { ProtocolEditDialog } from "@/Protocols/ui/protocol-edit-dialog/protocol-edit-dialog"
+} from "../../model/slice/protocols-selector.slice"
+import { deleteProtocolThunk } from "../../model/thunks/delete-protocol.thunk"
+import { Protocol } from "../../model/types/protocol.schema"
+import { ProtocolHelper } from "../../model/helpers/protocol-helper"
+import { ProtocolEditDialog } from "../protocol-edit-dialog/protocol-edit-dialog"
 
 export interface ProtocolSelectorProps {
   value: Protocol | null

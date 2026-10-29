@@ -1,10 +1,10 @@
 "use client"
 
 import { DynamicModuleLoader } from "@/lib/redux"
-import { employeeDetailsReducer } from "@/Employees/model/slice/employee-details.slice"
+import { employeeDetailsReducer } from "../../../../../model/slice/employee-details.slice"
 import { DetailsWrapper } from "@/components/details-wrapper/details-wrapper"
 import { useRouter } from "next/navigation"
-import { EmployeeDetailsForm } from "@/Employees/ui/employee-details-form/employee-details-form"
+import { EmployeeDetailsForm } from "../../../../../ui/employee-details-form/employee-details-form"
 import { useRef } from "react"
 
 export default function CreateEmployeePage() {

@@ -15,7 +15,7 @@ import {
 } from "react-hook-form"
 import { IconAsterisk } from "@tabler/icons-react"
 import { BerthType } from "../../model/types/berth-type.schema"
-import { BerthTypeSelector } from "@/BerthTypes/ui/berth-type-selector/berth-type-selector"
+import { BerthTypeSelector } from "../berth-type-selector/berth-type-selector"
 
 export interface FieldBerthTypeProps<
   TFieldValues extends FieldValues = FieldValues,

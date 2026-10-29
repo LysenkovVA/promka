@@ -4,7 +4,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit"
 import { ResponseData } from "@/lib/responses/ResponseData"
 import { ThunkConfig } from "@/lib/redux"
 import apiClient from "@/lib/axios/apiClient"
-import { IAuthData } from "@/app/(public)/(auth)/model/types/IAuthData"
+import { IAuthData } from "../types/IAuthData"
 
 export const refreshThunk = createAsyncThunk<
   IAuthData,

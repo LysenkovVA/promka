@@ -7,7 +7,7 @@ import {
   ZOD_INVALID_STRING_TYPE,
   ZOD_VALUE_REQUIRED,
 } from "@/lib/zod/commonErrors"
-import { TeamMemberSchema } from "@/TeamMember/model/types/TeamMemberSchema"
+import { TeamMemberSchema } from "@/TeamMember"
 import { stripTimezone } from "@/lib/date/utils"
 import { isValidPhoneNumber } from "react-phone-number-input/input"
 

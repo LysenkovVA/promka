@@ -14,8 +14,8 @@ import {
   UseFormReturn,
 } from "react-hook-form"
 import { IconAsterisk } from "@tabler/icons-react"
-import { Employee } from "@/Employees"
-import { EmployeeSelector } from "@/Employees/ui/employee-selector/employee-selector"
+import { Employee } from "../../model/types/employee.schema"
+import { EmployeeSelector } from "../employee-selector/employee-selector"
 
 export interface FieldEmployeeProps<
   TFieldValues extends FieldValues = FieldValues,

@@ -5,11 +5,11 @@ import { ResponseData } from "@/lib/responses/ResponseData"
 import { validateObject } from "@/lib/zod/validateObject"
 import { prisma } from "@workspace/database/prisma"
 import {
+  RegisterUserRequestSchema,
   RegisterUserResponse,
   RegisterUserResponseSchema,
-} from "@/Users/model/types/RegisterUserResponseSchema"
+} from "@/Users"
 import bcrypt from "bcryptjs"
-import { RegisterUserRequestSchema } from "@/Users/model/types/RegisterUserRequestSchema"
 import { ServerError } from "@/lib/responses/ServerError"
 
 export async function POST(

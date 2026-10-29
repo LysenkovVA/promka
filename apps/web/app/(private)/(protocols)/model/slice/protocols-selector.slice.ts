@@ -6,9 +6,8 @@ import { TAKE } from "@/config/app"
 import { protocolAdapter } from "../adapter/protocol.adapter"
 import { updateProtocolThunk } from "../thunks/update-protocol.thunk"
 import { deleteProtocolThunk } from "../thunks/delete-protocol.thunk"
-import { getProtocolsSelectorThunk } from "@/Protocols/model/thunks/get-protocols-selector.thunk"
-import { logoutThunk } from "@/app/(public)/(auth)/model/thunks/logoutThunk"
-import { changeActiveWorkspaceThunk } from "@/app/(public)/(auth)/model/thunks/changeActiveWorkspaceThunk"
+import { getProtocolsSelectorThunk } from "../thunks/get-protocols-selector.thunk"
+import { changeActiveWorkspaceThunk, logoutThunk } from "@/app/(public)/(auth)"
 
 const initialState: ListReduxSchema<Protocol, ProtocolFilters> = {
   ids: [],

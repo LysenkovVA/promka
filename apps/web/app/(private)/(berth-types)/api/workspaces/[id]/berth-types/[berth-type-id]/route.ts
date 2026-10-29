@@ -2,7 +2,7 @@
 
 import { NextRequest, NextResponse } from "next/server"
 import { ResponseData } from "@/lib/responses/ResponseData"
-import { checkAuthForWorkspace } from "@/app/(public)/(auth)/api/checkAuth"
+import { checkAuthForWorkspace } from "@/app/(public)/(auth)"
 import { prisma } from "@workspace/database/prisma"
 import { validateObject } from "@/lib/zod/validateObject"
 import { Prisma } from "@workspace/database/.generated/client"
@@ -23,14 +23,11 @@ export async function GET(
 
     const candidate = await prisma.berthType.findFirst({
       where: { id: berthTypeId },
-      // include: {
-      //   workspace: { include: { company: true } },
-      // },
     })
 
     if (!candidate)
       return ResponseData.BadRequest([
-        "Тип должности не найдена",
+        "Тип должности не найден",
       ]).toNextResponse()
 
     // @ts-ignore
@@ -59,9 +56,6 @@ export async function PATCH(
         name: validatedData.name ?? Prisma.skip,
       },
       where: { id: berthTypeId },
-      // include: {
-      //   workspace: { include: { company: true } },
-      // },
     })
 
     if (!updatedData)
