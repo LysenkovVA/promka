@@ -13,6 +13,7 @@ import { HeaderMenuWorkspaceItems } from "@/components/AppHeader/components/head
 import { useAuth } from "@/app/(public)/(auth)/model/hooks/useAuth"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { ROUTE } from "@/config/routes"
 
 export const HeaderMenu = memo((_) => {
   const { activeWorkspace } = useAuth()
@@ -23,18 +24,18 @@ export const HeaderMenu = memo((_) => {
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
-          <Link href="/dashboard">
+          <Link href={ROUTE.DASHBOARD.href}>
             <IconLayoutDashboard className={"size-5! w-fit flex-shrink-0"} />
           </Link>
         </BreadcrumbItem>
-        {activeWorkspace?.id && path !== "/profile" && (
+        {activeWorkspace?.id && path !== ROUTE.PROFILE.href && (
           <>
             <HeaderMenuSeparator />
             <HeaderMenuCompaniesItem />
             <HeaderMenuWorkspaceItems />
           </>
         )}
-        {path === "/profile" && (
+        {path === ROUTE.PROFILE.href && (
           <>
             <HeaderMenuSeparator />
             <div>{"Мой профиль"}</div>

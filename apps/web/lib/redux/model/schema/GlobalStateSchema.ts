@@ -17,6 +17,7 @@ import { CertificateFilters } from "@/Certificates/model/types/certificate.filte
 import { InfiniteScrollSchema } from "@/components/inifinite-scroll/model/types/InfiniteScrollSchema"
 import { Protocol } from "@/Protocols"
 import { ProtocolFilters } from "@/Protocols/model/types/protocol.filters"
+import { WorkspaceFilters } from "@/Workspaces/model/types/workspace.filters"
 
 /**
  * Схема глобального состояния
@@ -28,6 +29,7 @@ export interface GlobalStateSchema {
 
   infiniteScrollSchema: InfiniteScrollSchema
   // Динамические
+  workspacesSchema?: ListReduxSchema<Workspace, WorkspaceFilters>
   workspaceDetailsSchema?: DetailsReduxSchema<Workspace>
   // Сотрудники
   employeeDetailsSchema?: DetailsReduxSchema<Employee>

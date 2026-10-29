@@ -102,31 +102,6 @@ export const EmployeesList = memo(() => {
           </div>
         )}
       </ListWrapper>
-      {/*<PageWrapper>*/}
-      {/*  <div className={"flex w-full items-center justify-between pb-4"}>*/}
-      {/*    <div className={"text-2xl font-light"}>*/}
-      {/*      {`Сотрудники ${auth.activeWorkspace?.company?.name}`}*/}
-      {/*    </div>*/}
-      {/*    <Button*/}
-      {/*      onClick={() =>*/}
-      {/*        router.push(*/}
-      {/*          `/workspaces/${auth?.activeWorkspace?.id}/employees/create`*/}
-      {/*        )*/}
-      {/*      }*/}
-      {/*    >*/}
-      {/*      <IconPlusFilled />*/}
-      {/*      {"Добавить"}*/}
-      {/*    </Button>*/}
-      {/*  </div>*/}
-      {/*  {(!data || data?.length === 0) && <div>Список сотрудников пуст</div>}*/}
-      {/*  {data && data.length > 0 && (*/}
-      {/*    <div className={"grid grid-cols-3 gap-3"}>*/}
-      {/*      {data.map((employee) => (*/}
-      {/*        <EmployeeCard key={employee.id} employee={employee} />*/}
-      {/*      ))}*/}
-      {/*    </div>*/}
-      {/*  )}*/}
-      {/*</PageWrapper>*/}
     </DynamicModuleLoader>
   )
 })

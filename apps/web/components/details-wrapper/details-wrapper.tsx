@@ -70,7 +70,7 @@ export const DetailsWrapper = memo((props: DetailsWrapperProps) => {
       <ButtonGroup>
         <Button variant={"outline"} onClick={onEditClick}>
           <IconEditFilled />
-          {"Редактировать"}
+          {"Правка"}
         </Button>
       </ButtonGroup>
     )

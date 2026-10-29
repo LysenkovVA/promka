@@ -4,6 +4,6 @@
 export type APP_ROUTE = "DASHBOARD" | "PROFILE"
 
 export const ROUTE: Record<APP_ROUTE, { href: string; name: string }> = {
-  DASHBOARD: { href: "/dashboard", name: "Мои организации" },
+  DASHBOARD: { href: "/workspaces", name: "Мои организации" },
   PROFILE: { href: "/profile", name: "Мой профиль" },
 }

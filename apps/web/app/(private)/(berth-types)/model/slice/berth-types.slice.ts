@@ -8,6 +8,7 @@ import { deleteBerthTypeThunk } from "../thunks/delete-berth-type.thunk"
 import { BerthType } from "../types/berth-type.schema"
 import { BerthTypesFilters } from "../types/berth-type.filters"
 import { logoutThunk } from "@/app/(public)/(auth)/model/thunks/logoutThunk"
+import { changeActiveWorkspaceThunk } from "@/app/(public)/(auth)/model/thunks/changeActiveWorkspaceThunk"
 
 const initialState: ListReduxSchema<BerthType, BerthTypesFilters> = {
   ids: [],
@@ -59,6 +60,21 @@ export const berthTypesSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // Изменение workspaceId
+      .addCase(changeActiveWorkspaceThunk.fulfilled, (state, action) => {
+        // Очистка стейта
+        state.isLoading = false
+        state.error = undefined
+        state.take = TAKE
+        state.skip = 0
+        state.search = undefined
+        state.filters = undefined
+        state.formDataFilters = undefined
+        state.totalCount = 0
+        state.hasMore = false
+        state._isInitialized = false
+        berthTypeAdapter.removeAll(state)
+      })
       // Logout
       .addCase(logoutThunk.fulfilled, (state, action) => {
         // Очистка стейта

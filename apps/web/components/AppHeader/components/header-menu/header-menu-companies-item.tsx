@@ -16,8 +16,6 @@ import Link from "next/link"
 export const HeaderMenuCompaniesItem = memo((_) => {
   const { activeWorkspace, userWorkspaces } = useAuth()
 
-  // const router = useRouter()
-
   return (
     <BreadcrumbItem>
       <DropdownMenu>

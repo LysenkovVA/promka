@@ -9,6 +9,7 @@ import { deleteEmployeeThunk } from "../thunks/delete-employee.thunk"
 import { getEmployeesSelectorThunk } from "@/Employees/model/thunks/get-employees-selector.thunk"
 import { createEmployeeThunk } from "@/Employees/model/thunks/create-employee.thunk"
 import { logoutThunk } from "@/app/(public)/(auth)/model/thunks/logoutThunk"
+import { changeActiveWorkspaceThunk } from "@/app/(public)/(auth)/model/thunks/changeActiveWorkspaceThunk"
 
 const initialState: ListReduxSchema<Employee, EmployeeFilters> = {
   ids: [],
@@ -52,6 +53,21 @@ export const employeesSelectorSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // Изменение workspaceId
+      .addCase(changeActiveWorkspaceThunk.fulfilled, (state, action) => {
+        // Очистка стейта
+        state.isLoading = false
+        state.error = undefined
+        state.take = TAKE
+        state.skip = 0
+        state.search = undefined
+        state.filters = undefined
+        state.formDataFilters = undefined
+        state.totalCount = 0
+        state.hasMore = false
+        state._isInitialized = false
+        employeeAdapter.removeAll(state)
+      })
       // Logout
       .addCase(logoutThunk.fulfilled, (state, action) => {
         // Очистка стейта

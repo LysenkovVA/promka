@@ -1,0 +1,1 @@
+export type WorkspaceFilters = "none"

@@ -1,5 +1,5 @@
 import { Metadata } from "next"
-import { WorkspaceDetails } from "@/Workspaces/ui/WorkspaceDetails/WorkspaceDetails"
+import { WorkspaceDetails } from "../../../ui/workspace-details/workspace-details"
 
 export const metadata: Metadata = {
   title: "Компания",

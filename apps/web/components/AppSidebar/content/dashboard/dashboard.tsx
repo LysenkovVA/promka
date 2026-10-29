@@ -22,8 +22,6 @@ import { useAuth } from "@/app/(public)/(auth)/model/hooks/useAuth"
 export const Dashboard = memo(() => {
   const { userWorkspaces } = useAuth()
 
-  const { activeWorkspace } = useAuth()
-
   return (
     <Collapsible defaultOpen className="group/collapsible">
       {/*Группа*/}
@@ -48,11 +46,7 @@ export const Dashboard = memo(() => {
           <SidebarMenuSub>
             <SidebarMenuSubItem>
               {userWorkspaces?.map((workspace) => (
-                <SidebarMenuSubButton
-                  asChild
-                  key={workspace.id}
-                  // className={`${workspace?.id === activeWorkspace?.id ? "bg-violet-300" : undefined}`}
-                >
+                <SidebarMenuSubButton asChild key={workspace.id}>
                   <Link
                     className={`m-auto flex w-full flex-row items-center justify-start gap-1`}
                     href={`/workspaces/${workspace.id}`}

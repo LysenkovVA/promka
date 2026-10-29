@@ -8,6 +8,7 @@ import { deleteDepartmentThunk } from "../thunks/delete-department.thunk"
 import { Department } from "../types/department.schema"
 import { DepartmentFilters } from "../types/department.filters"
 import { logoutThunk } from "@/app/(public)/(auth)/model/thunks/logoutThunk"
+import { changeActiveWorkspaceThunk } from "@/app/(public)/(auth)/model/thunks/changeActiveWorkspaceThunk"
 
 const initialState: ListReduxSchema<Department, DepartmentFilters> = {
   ids: [],
@@ -59,6 +60,21 @@ export const departmentsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // Изменение workspaceId
+      .addCase(changeActiveWorkspaceThunk.fulfilled, (state, action) => {
+        // Очистка стейта
+        state.isLoading = false
+        state.error = undefined
+        state.take = TAKE
+        state.skip = 0
+        state.search = undefined
+        state.filters = undefined
+        state.formDataFilters = undefined
+        state.totalCount = 0
+        state.hasMore = false
+        state._isInitialized = false
+        departmentAdapter.removeAll(state)
+      })
       // Logout
       .addCase(logoutThunk.fulfilled, (state, action) => {
         // Очистка стейта

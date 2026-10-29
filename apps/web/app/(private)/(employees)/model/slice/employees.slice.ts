@@ -16,6 +16,7 @@ import { createProtocolThunk } from "@/Protocols"
 import { updateProtocolThunk } from "@/Protocols/model/thunks/update-protocol.thunk"
 import { deleteProtocolThunk } from "@/Protocols/model/thunks/delete-protocol.thunk"
 import { logoutThunk } from "@/app/(public)/(auth)/model/thunks/logoutThunk"
+import { changeActiveWorkspaceThunk } from "@/app/(public)/(auth)/model/thunks/changeActiveWorkspaceThunk"
 
 const initialState: ListReduxSchema<Employee, EmployeeFilters> = {
   ids: [],
@@ -59,6 +60,21 @@ export const employeesSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // Изменение workspaceId
+      .addCase(changeActiveWorkspaceThunk.fulfilled, (state, action) => {
+        // Очистка стейта
+        state.isLoading = false
+        state.error = undefined
+        state.take = TAKE
+        state.skip = 0
+        state.search = undefined
+        state.filters = undefined
+        state.formDataFilters = undefined
+        state.totalCount = 0
+        state.hasMore = false
+        state._isInitialized = false
+        employeeAdapter.removeAll(state)
+      })
       // Logout
       .addCase(logoutThunk.fulfilled, (state, action) => {
         // Очистка стейта

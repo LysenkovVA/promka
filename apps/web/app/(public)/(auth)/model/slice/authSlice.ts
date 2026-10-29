@@ -5,6 +5,8 @@ import { DetailsReduxSchema } from "@/lib/redux/model/types/DetailsReduxSchema"
 import { refreshThunk } from "@/app/(public)/(auth)/model/thunks/refreshThunk"
 import { logoutThunk } from "@/app/(public)/(auth)/model/thunks/logoutThunk"
 import { updateProfileThunk } from "@/Users/model/thunks/update-profile.thunk"
+import { updateWorkspaceThunk } from "@/Workspaces/model/thunks/update-workspace.thunk"
+import { toast } from "sonner"
 
 const initialState: DetailsReduxSchema<IAuthData> = {
   entityData: {
@@ -32,14 +34,14 @@ export const authSlice = createSlice({
     ) => {
       state.entityData = action.payload
     },
-    setActiveWorkspaceId: (
-      state: DetailsReduxSchema<IAuthData>,
-      action: PayloadAction<string | undefined>
-    ) => {
-      if (state.entityData) {
-        state.entityData.activeWorkspaceId = action.payload
-      }
-    },
+    // setActiveWorkspaceId: (
+    //   state: DetailsReduxSchema<IAuthData>,
+    //   action: PayloadAction<string | undefined>
+    // ) => {
+    //   if (state.entityData) {
+    //     state.entityData.activeWorkspaceId = action.payload
+    //   }
+    // },
   },
   extraReducers: (builder) => {
     builder
@@ -157,6 +159,9 @@ export const authSlice = createSlice({
         state.isFetching = false
         state.isSaving = false
         state._isInitialized = true
+      })
+      .addCase(updateWorkspaceThunk.fulfilled, (state, action) => {
+        toast.message("updateWorkspaceThunk в authSlice не обработан")
       })
   },
 })

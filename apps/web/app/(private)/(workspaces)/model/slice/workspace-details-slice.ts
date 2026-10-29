@@ -4,6 +4,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { DetailsReduxSchema } from "@/lib/redux/model/types/DetailsReduxSchema"
 import { Workspace } from "@/Workspaces/model/types/workspace.schema"
 import { getWorkspaceByIdThunk } from "@/Workspaces/model/thunks/get-workspace-by-id-thunk"
+import { updateWorkspaceThunk } from "@/Workspaces/model/thunks/update-workspace.thunk"
 
 const initialState: DetailsReduxSchema<Workspace> = {
   entityData: { company: { name: "" } },
@@ -53,6 +54,19 @@ export const workspaceDetailsSlice = createSlice({
         state.error = action.payload
         state.entityData = { company: { name: "" } }
         // state.entityFormData = { company: { name: "" } }
+        state._isInitialized = true
+      })
+      .addCase(updateWorkspaceThunk.fulfilled, (state, action) => {
+        state.isFetching = false
+        state.isSaving = false
+        state.error = ""
+        state.entityData = {
+          ...state.entityData,
+          company: {
+            id: action.payload.data?.company.id!,
+            name: action.payload.data?.company.name!,
+          },
+        }
         state._isInitialized = true
       })
   },

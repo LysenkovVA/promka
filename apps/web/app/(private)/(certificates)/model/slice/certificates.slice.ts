@@ -15,6 +15,7 @@ import { createEmployeeThunk } from "@/Employees/model/thunks/create-employee.th
 import { updateEmployeeThunk } from "@/Employees/model/thunks/update-employee.thunk"
 import { deleteEmployeeThunk } from "@/Employees/model/thunks/delete-employee.thunk"
 import { logoutThunk } from "@/app/(public)/(auth)/model/thunks/logoutThunk"
+import { changeActiveWorkspaceThunk } from "@/app/(public)/(auth)/model/thunks/changeActiveWorkspaceThunk"
 
 const initialState: ListReduxSchema<Certificate, CertificateFilters> = {
   ids: [],
@@ -66,6 +67,21 @@ export const certificatesSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // Изменение workspaceId
+      .addCase(changeActiveWorkspaceThunk.fulfilled, (state, action) => {
+        // Очистка стейта
+        state.isLoading = false
+        state.error = undefined
+        state.take = TAKE
+        state.skip = 0
+        state.search = undefined
+        state.filters = undefined
+        state.formDataFilters = undefined
+        state.totalCount = 0
+        state.hasMore = false
+        state._isInitialized = false
+        certificateAdapter.removeAll(state)
+      })
       // Logout
       .addCase(logoutThunk.fulfilled, (state, action) => {
         // Очистка стейта

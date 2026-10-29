@@ -10,7 +10,7 @@ export interface ChangeActiveWorkspaceThunkProps {
 }
 
 export const changeActiveWorkspaceThunk = createAsyncThunk<
-  void,
+  string | undefined,
   ChangeActiveWorkspaceThunkProps,
   ThunkConfig<string>
 >("changeActiveWorkspaceThunk", async (props, thunkApi) => {
@@ -28,28 +28,31 @@ export const changeActiveWorkspaceThunk = createAsyncThunk<
         })
       )
 
-      // Компания изменилась, загружаем новые списки
-      // TODO Контроль за всеми связанными списками
-      if (props.workspaceId) {
-        // dispatch(getCompanyByIdThunk({ id: props.company.id! }))
-        // Обновление списка сотрудников
-        // TODO
-        // dispatch(
-        //   getEmployeesSimpleListThunk({
-        //     replaceData: true,
-        //     workspaceId: props.workspaceId,
-        //   })
-        // )
-      } else {
-        return rejectWithValue(
-          ResponseData.InternalServerError(
-            new Error(
-              "Не удалось получить workspaceId в changeActiveCompanyThunk"
-            )
-          ).getAllErrors()
-        )
-      }
+      return props.workspaceId
+      // // Компания изменилась, загружаем новые списки
+      // // TODO Контроль за всеми связанными списками
+      // if (props.workspaceId) {
+      //   // dispatch(getCompanyByIdThunk({ id: props.company.id! }))
+      //   // Обновление списка сотрудников
+      //   // TODO
+      //   // dispatch(
+      //   //   getEmployeesSimpleListThunk({
+      //   //     replaceData: true,
+      //   //     workspaceId: props.workspaceId,
+      //   //   })
+      //   // )
+      // } else {
+      //   return rejectWithValue(
+      //     ResponseData.InternalServerError(
+      //       new Error(
+      //         "Не удалось получить workspaceId в changeActiveCompanyThunk"
+      //       )
+      //     ).getAllErrors()
+      //   )
+      // }
     }
+
+    return rejectWithValue("Организация не выбрана")
   } catch (error: any) {
     // Сетевая ошибка или другая проблема
     return rejectWithValue(

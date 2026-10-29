@@ -12,7 +12,7 @@ import {
 } from "@/app/(public)/(auth)/model/selectors/authSelectors"
 import { AppCompanySwitcher } from "@/components/AppSidebar/app-company-switcher"
 import { Dashboard } from "@/components/AppSidebar/content/dashboard/dashboard"
-import { Employees } from "@/components/AppSidebar/content/employees/employees"
+import { SidebarWorkspaceLinks } from "@/components/AppSidebar/content/sidebar-workspace-links/sidebar-workspace-links"
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const user = useAppSelector(getAuthDataUser)
@@ -29,7 +29,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       {/*Контент сайдбара (scrollable-область между заголовком и подвалом сайдбара*/}
       <SidebarContent>
         <Dashboard />
-        {authData?.activeWorkspaceId && <Employees />}
+        {authData?.activeWorkspaceId && <SidebarWorkspaceLinks />}
       </SidebarContent>
       {/*Подвал сайдбара*/}
       <SidebarFooter>
