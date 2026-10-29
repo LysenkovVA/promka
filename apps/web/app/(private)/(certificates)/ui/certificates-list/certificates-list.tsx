@@ -14,13 +14,16 @@ import {
   getCertificatesHasMore,
   getCertificatesIsInitialized,
   getCertificatesIsLoading,
+  getCertificatesSearch,
   getCertificatesTotalCount,
 } from "@/Certificates/model/selectors/certificates.selectors"
 import { getCertificatesThunk } from "@/Certificates/model/thunks/get-certificates.thunk"
-import { certificatesReducer } from "@/Certificates/model/slice/certificates.slice"
+import {
+  certificatesActions,
+  certificatesReducer,
+} from "@/Certificates/model/slice/certificates.slice"
 import { CertificateCard } from "@/Certificates/ui/certificate-card/certificate-card"
-import { IconPlusFilled } from "@tabler/icons-react"
-import { Button } from "@workspace/ui/components/button"
+import { useDebounce } from "@/lib/hooks/useDebounce"
 
 export const CertificatesList = memo(() => {
   const dispatch = useAppDispatch()
@@ -29,16 +32,23 @@ export const CertificatesList = memo(() => {
   const isLoading = useAppSelector(getCertificatesIsLoading)
   const hasMore = useAppSelector(getCertificatesHasMore)
   const totalCount = useAppSelector(getCertificatesTotalCount)
+  const searchValue = useAppSelector(getCertificatesSearch)
   const isInitialized = useAppSelector(getCertificatesIsInitialized)
 
   const auth = useAuth()
   const router = useRouter()
 
+  const fetchData = useCallback(() => {
+    dispatch(getCertificatesThunk({ replaceData: true }))
+  }, [dispatch])
+
+  const debouncedFetchData = useDebounce(fetchData, 800)
+
   useEffect(() => {
     if (!isInitialized) {
-      dispatch(getCertificatesThunk({ replaceData: true }))
+      fetchData()
     }
-  }, [dispatch, isInitialized])
+  }, [fetchData, isInitialized])
 
   const loadNextPart = useCallback(() => {
     if (isInitialized && hasMore && !isLoading) {
@@ -46,40 +56,12 @@ export const CertificatesList = memo(() => {
     }
   }, [dispatch, hasMore, isInitialized, isLoading])
 
-  const header = (
-    <div className={"mb-2 h-16 w-full bg-muted"}>
-      <div
-        className={
-          "mr-16 ml-16 flex h-full flex-row items-center justify-between"
-        }
-      >
-        <div
-          className={"text-xl"}
-        >{`Удостоверения ${auth?.activeWorkspace?.company?.name}`}</div>
-        <>
-          <Button
-            onClick={() => {
-              router.push(
-                `/workspaces/${auth?.activeWorkspace?.id}/certificates/create`
-              )
-            }}
-          >
-            <IconPlusFilled />
-            {"Добавить"}
-          </Button>
-        </>
-      </div>
-    </div>
-  )
-
-  const footer = (
-    <div
-      className={"mt-2 flex h-16 w-full items-center justify-start bg-muted"}
-    >
-      <div className={"justify-start pl-16 text-center text-lg font-bold"}>
-        {`Всего: ${totalCount}`}
-      </div>
-    </div>
+  const onSearchChange = useCallback(
+    (searchValue: string) => {
+      dispatch(certificatesActions.setSearch(searchValue))
+      debouncedFetchData()
+    },
+    [dispatch, debouncedFetchData]
   )
 
   return (
@@ -90,9 +72,17 @@ export const CertificatesList = memo(() => {
       <ListWrapper
         onScrollEnd={loadNextPart}
         hasMore={hasMore}
-        header={header}
-        footer={footer}
-        itemsCount={data.length}
+        itemsCount={totalCount}
+        title={`Удостоверения ${auth?.activeWorkspace?.company?.name}`}
+        onAddClick={() =>
+          router.push(
+            `/workspaces/${auth?.activeWorkspace?.id}/certificates/create`
+          )
+        }
+        searchable
+        searchValue={searchValue}
+        onSearchChange={onSearchChange}
+        isSearching={searchValue.length > 0 && isLoading}
       >
         {data && data.length > 0 && (
           <div className={"grid grid-cols-3 gap-3"}>

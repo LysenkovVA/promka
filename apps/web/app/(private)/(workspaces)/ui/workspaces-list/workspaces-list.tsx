@@ -19,8 +19,6 @@ import { getWorkspacesThunk } from "../../model/thunks/get-workspaces.thunk"
 import { useAuth } from "@/app/(public)/(auth)"
 import { useRouter } from "next/navigation"
 import { ListWrapper } from "@/components/list-wrapper/list-wrapper"
-import { Button } from "@workspace/ui/components/button"
-import { IconPlusFilled } from "@tabler/icons-react"
 import { changeActiveWorkspaceThunk } from "@/app/(public)/(auth)/model/thunks/changeActiveWorkspaceThunk"
 
 export const WorkspacesList = memo(() => {
@@ -51,38 +49,6 @@ export const WorkspacesList = memo(() => {
     }
   }, [dispatch, hasMore, isInitialized, isLoading])
 
-  const header = (
-    <div className={"mb-2 h-16 w-full bg-muted"}>
-      <div
-        className={
-          "mr-16 ml-16 flex h-full flex-row items-center justify-between"
-        }
-      >
-        <div className={"text-xl"}>{`Мои организации`}</div>
-        <>
-          <Button
-            onClick={() => {
-              router.push(`/workspaces/create`)
-            }}
-          >
-            <IconPlusFilled />
-            {"Добавить"}
-          </Button>
-        </>
-      </div>
-    </div>
-  )
-
-  const footer = (
-    <div
-      className={"mt-2 flex h-16 w-full items-center justify-start bg-muted"}
-    >
-      <div className={"justify-start pl-16 text-center text-lg font-bold"}>
-        {`Всего: ${totalCount}`}
-      </div>
-    </div>
-  )
-
   return (
     <DynamicModuleLoader
       reducers={{ workspacesSchema: workspacesReducer }}
@@ -91,9 +57,11 @@ export const WorkspacesList = memo(() => {
       <ListWrapper
         onScrollEnd={loadNextPart}
         hasMore={hasMore}
-        header={header}
-        footer={footer}
         itemsCount={data.length}
+        title={`Мои организации`}
+        onAddClick={() => {
+          router.push(`/workspaces/create`)
+        }}
       >
         {data && data.length > 0 && (
           <div className={"grid grid-cols-3 gap-3"}>

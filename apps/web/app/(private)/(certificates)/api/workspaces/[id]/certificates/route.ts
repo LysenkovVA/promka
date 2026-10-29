@@ -26,13 +26,26 @@ export async function GET(
 
     const WHERE: CertificateWhereInput = {
       workspace: { id: id },
-      ...(search && { name: { contains: search, mode: "insensitive" } }),
+      ...(search && {
+        OR: [
+          { number: { contains: search, mode: "insensitive" } },
+          {
+            certificateType: {
+              name: { contains: search, mode: "insensitive" },
+            },
+          },
+          {
+            protocol: {
+              number: { contains: search, mode: "insensitive" },
+            },
+          },
+        ],
+      }),
     }
 
     const data = await prisma.certificate.findMany({
       where: WHERE,
       include: {
-        // workspace: { include: { company: true } },
         certificateType: true,
         employee: {
           include: {

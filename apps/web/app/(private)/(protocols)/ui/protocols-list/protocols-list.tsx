@@ -14,13 +14,16 @@ import {
   getProtocolsHasMore,
   getProtocolsIsInitialized,
   getProtocolsIsLoading,
+  getProtocolsSearch,
   getProtocolsTotalCount,
 } from "@/Protocols/model/selectors/protocols.selectors"
 import { getProtocolsThunk } from "@/Protocols/model/thunks/get-protocols.thunk"
-import { protocolsReducer } from "@/Protocols/model/slice/protocols.slice"
+import {
+  protocolsActions,
+  protocolsReducer,
+} from "@/Protocols/model/slice/protocols.slice"
 import { ProtocolCard } from "@/Protocols/ui/protocol-card/protocol-card"
-import { IconPlusFilled } from "@tabler/icons-react"
-import { Button } from "@workspace/ui/components/button"
+import { useDebounce } from "@/lib/hooks/useDebounce"
 
 export const ProtocolsList = memo(() => {
   const dispatch = useAppDispatch()
@@ -29,16 +32,23 @@ export const ProtocolsList = memo(() => {
   const isLoading = useAppSelector(getProtocolsIsLoading)
   const hasMore = useAppSelector(getProtocolsHasMore)
   const totalCount = useAppSelector(getProtocolsTotalCount)
+  const searchValue = useAppSelector(getProtocolsSearch)
   const isInitialized = useAppSelector(getProtocolsIsInitialized)
 
   const auth = useAuth()
   const router = useRouter()
 
+  const fetchData = useCallback(() => {
+    dispatch(getProtocolsThunk({ replaceData: true }))
+  }, [dispatch])
+
+  const debouncedFetchData = useDebounce(fetchData, 800)
+
   useEffect(() => {
     if (!isInitialized) {
-      dispatch(getProtocolsThunk({ replaceData: true }))
+      fetchData()
     }
-  }, [dispatch, isInitialized])
+  }, [fetchData, isInitialized])
 
   const loadNextPart = useCallback(() => {
     if (isInitialized && hasMore && !isLoading) {
@@ -46,40 +56,12 @@ export const ProtocolsList = memo(() => {
     }
   }, [dispatch, hasMore, isInitialized, isLoading])
 
-  const header = (
-    <div className={"mb-2 h-16 w-full bg-muted"}>
-      <div
-        className={
-          "mr-16 ml-16 flex h-full flex-row items-center justify-between"
-        }
-      >
-        <div
-          className={"text-xl"}
-        >{`Протоколы ${auth?.activeWorkspace?.company?.name}`}</div>
-        <>
-          <Button
-            onClick={() => {
-              router.push(
-                `/workspaces/${auth?.activeWorkspace?.id}/protocols/create`
-              )
-            }}
-          >
-            <IconPlusFilled />
-            {"Добавить"}
-          </Button>
-        </>
-      </div>
-    </div>
-  )
-
-  const footer = (
-    <div
-      className={"mt-2 flex h-16 w-full items-center justify-start bg-muted"}
-    >
-      <div className={"justify-start pl-16 text-center text-lg font-bold"}>
-        {`Всего: ${totalCount}`}
-      </div>
-    </div>
+  const onSearchChange = useCallback(
+    (searchValue: string) => {
+      dispatch(protocolsActions.setSearch(searchValue))
+      debouncedFetchData()
+    },
+    [dispatch, debouncedFetchData]
   )
 
   return (
@@ -90,9 +72,17 @@ export const ProtocolsList = memo(() => {
       <ListWrapper
         onScrollEnd={loadNextPart}
         hasMore={hasMore}
-        header={header}
-        footer={footer}
         itemsCount={data.length}
+        title={`Протоколы ${auth?.activeWorkspace?.company?.name}`}
+        onAddClick={() => {
+          router.push(
+            `/workspaces/${auth?.activeWorkspace?.id}/protocols/create`
+          )
+        }}
+        searchable
+        searchValue={searchValue}
+        onSearchChange={onSearchChange}
+        isSearching={searchValue.length > 0 && isLoading}
       >
         {data && data.length > 0 && (
           <div className={"grid grid-cols-3 gap-3"}>

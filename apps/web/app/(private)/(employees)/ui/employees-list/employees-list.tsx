@@ -6,12 +6,16 @@ import {
   useAppDispatch,
   useAppSelector,
 } from "@/lib/redux"
-import { employeesReducer } from "../../model/slice/employees.slice"
+import {
+  employeesActions,
+  employeesReducer,
+} from "../../model/slice/employees.slice"
 import {
   getEmployees,
   getEmployeesHasMore,
   getEmployeesIsInitialized,
   getEmployeesIsLoading,
+  getEmployeesSearch,
   getEmployeesTotalCount,
 } from "../../model/selectors/employees.selectors"
 import { EmployeeCard } from "../employee-card/employee-card"
@@ -19,8 +23,7 @@ import { getEmployeesThunk } from "../../model/thunks/get-employees.thunk"
 import { useAuth } from "@/app/(public)/(auth)"
 import { useRouter } from "next/navigation"
 import { ListWrapper } from "@/components/list-wrapper/list-wrapper"
-import { Button } from "@workspace/ui/components/button"
-import { IconPlusFilled } from "@tabler/icons-react"
+import { useDebounce } from "@/lib/hooks/useDebounce"
 
 export const EmployeesList = memo(() => {
   const dispatch = useAppDispatch()
@@ -30,15 +33,22 @@ export const EmployeesList = memo(() => {
   const hasMore = useAppSelector(getEmployeesHasMore)
   const totalCount = useAppSelector(getEmployeesTotalCount)
   const isInitialized = useAppSelector(getEmployeesIsInitialized)
+  const searchValue = useAppSelector(getEmployeesSearch)
 
   const auth = useAuth()
   const router = useRouter()
 
+  const fetchData = useCallback(() => {
+    dispatch(getEmployeesThunk({ replaceData: true }))
+  }, [dispatch])
+
+  const debouncedFetchData = useDebounce(fetchData, 800)
+
   useEffect(() => {
     if (!isInitialized) {
-      dispatch(getEmployeesThunk({ replaceData: true }))
+      fetchData()
     }
-  }, [dispatch, isInitialized])
+  }, [fetchData, isInitialized])
 
   const loadNextPart = useCallback(() => {
     if (isInitialized && hasMore && !isLoading) {
@@ -46,40 +56,12 @@ export const EmployeesList = memo(() => {
     }
   }, [dispatch, hasMore, isInitialized, isLoading])
 
-  const header = (
-    <div className={"mb-2 h-16 w-full bg-muted"}>
-      <div
-        className={
-          "mr-16 ml-16 flex h-full flex-row items-center justify-between"
-        }
-      >
-        <div
-          className={"text-xl"}
-        >{`Сотрудники ${auth?.activeWorkspace?.company?.name}`}</div>
-        <>
-          <Button
-            onClick={() => {
-              router.push(
-                `/workspaces/${auth?.activeWorkspace?.id}/employees/create`
-              )
-            }}
-          >
-            <IconPlusFilled />
-            {"Добавить"}
-          </Button>
-        </>
-      </div>
-    </div>
-  )
-
-  const footer = (
-    <div
-      className={"mt-2 flex h-16 w-full items-center justify-start bg-muted"}
-    >
-      <div className={"justify-start pl-16 text-center text-lg font-bold"}>
-        {`Всего: ${totalCount}`}
-      </div>
-    </div>
+  const onSearchChange = useCallback(
+    (searchValue: string) => {
+      dispatch(employeesActions.setSearch(searchValue))
+      debouncedFetchData()
+    },
+    [dispatch, debouncedFetchData]
   )
 
   return (
@@ -90,9 +72,17 @@ export const EmployeesList = memo(() => {
       <ListWrapper
         onScrollEnd={loadNextPart}
         hasMore={hasMore}
-        header={header}
-        footer={footer}
+        title={`Сотрудники ${auth?.activeWorkspace?.company?.name}`}
         itemsCount={data.length}
+        onAddClick={() => {
+          router.push(
+            `/workspaces/${auth?.activeWorkspace?.id}/employees/create`
+          )
+        }}
+        searchable
+        searchValue={searchValue}
+        onSearchChange={onSearchChange}
+        isSearching={searchValue.length > 0 && isLoading}
       >
         {data && data.length > 0 && (
           <div className={"grid grid-cols-3 gap-3"}>
