@@ -1,88 +1,44 @@
 "use client"
 
-import { memo } from "react"
-import {
-  Field,
-  FieldDescription,
-  FieldError,
-  FieldLabel,
-} from "@workspace/ui/components/field"
-import {
-  Controller,
-  FieldPath,
-  FieldValues,
-  UseFormReturn,
-} from "react-hook-form"
-import { IconAsterisk } from "@tabler/icons-react"
+import { memo, ReactNode } from "react"
+import { FieldPath, FieldValues, useFormContext } from "react-hook-form"
+import { FormControl } from "@/components/form/form-control/form-control"
 import { Textarea } from "@workspace/ui/components/textarea"
 
 export interface FieldTextAreaProps<
   TFieldValues extends FieldValues = FieldValues,
 > {
-  form: UseFormReturn<TFieldValues>
-  path: FieldPath<TFieldValues>
-  label: string
-  placeholder?: string
-  onChange?: (value: string) => void
-  description?: string
+  name: FieldPath<TFieldValues>
+  label?: string
   required?: boolean
+  placeholder?: string
+  description?: ReactNode
 }
 
 /**
- * Поле формы TextArea
- * @param props
- * @constructor
+ * Текстовое поле формы
  */
-function FieldTextAreaInner<TFieldValues extends FieldValues>(
-  props: FieldTextAreaProps<TFieldValues>
-) {
-  const {
-    form,
-    path,
-    label,
-    placeholder,
-    onChange,
-    description,
-    required = false,
-  } = props
+export const FieldTextArea = memo((props: FieldTextAreaProps) => {
+  const { name, label, required = false, placeholder, description } = props
+
+  const { getFieldState } = useFormContext()
 
   return (
-    <Controller
-      control={form.control}
-      name={path}
-      render={({ field, fieldState }) => (
-        <Field aria-invalid={fieldState.invalid}>
-          <FieldLabel htmlFor={`${path}`}>
-            <div className={"flex w-full items-center justify-start gap-1"}>
-              {label}
-              {required && (
-                <IconAsterisk className={"size-2 text-destructive"} />
-              )}
-            </div>
-          </FieldLabel>
-          <Textarea
-            className={"min-h-[70px]"}
-            {...field}
-            id={`${path}`}
-            aria-invalid={fieldState.invalid}
-            autoComplete={"off"}
-            placeholder={placeholder}
-            value={field.value ?? ""}
-            onChange={(e) => {
-              field.onChange(e)
-              onChange?.(e.target.value)
-            }}
-          />
-          {description && <FieldDescription>{description}</FieldDescription>}
-          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-        </Field>
+    <FormControl
+      name={name}
+      label={label}
+      required={required}
+      description={description}
+    >
+      {({ value, onChange, onBlur }) => (
+        <Textarea
+          aria-invalid={getFieldState(name)?.invalid}
+          value={value ?? ""}
+          onChange={onChange}
+          onBlur={onBlur}
+          placeholder={placeholder}
+        />
       )}
-    />
+    </FormControl>
   )
-}
-
-export const FieldTextArea = memo(FieldTextAreaInner) as <
-  TFieldValues extends FieldValues,
->(
-  props: FieldTextAreaProps<TFieldValues>
-) => ReturnType<React.FC<FieldTextAreaProps<TFieldValues>>>
+})

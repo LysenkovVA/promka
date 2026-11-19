@@ -1,7 +1,7 @@
 "use client"
 
 import { memo, RefObject, useCallback, useEffect } from "react"
-import { useForm } from "react-hook-form"
+import { FormProvider, useForm } from "react-hook-form"
 import { Workspace } from "../../model/types/workspace.schema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { FieldInput } from "@/components/form/field-input/field-input"
@@ -48,7 +48,7 @@ export const WorkspaceDetailsForm = memo((props: WorkspaceDetailsFormProps) => {
    * with zodResolver, which infers input and output separately.
    * Either omit the generic and let it infer from resolver, or specify all three explicitly
    */
-  const form = useForm<
+  const methods = useForm<
     z.input<typeof WorkspaceRequestSchema>,
     any,
     z.output<typeof WorkspaceRequestSchema>
@@ -63,10 +63,10 @@ export const WorkspaceDetailsForm = memo((props: WorkspaceDetailsFormProps) => {
   }, [dispatch, workspaceId, isInitialized, isLoading])
 
   useEffect(() => {
-    form.reset({
+    methods.reset({
       company: { id: data?.company.id, name: data?.company.name },
     })
-  }, [data, form])
+  }, [data, methods])
 
   const onSubmitForm = useCallback(
     async (formData: Workspace) => {
@@ -122,30 +122,32 @@ export const WorkspaceDetailsForm = memo((props: WorkspaceDetailsFormProps) => {
       reducers={{ workspaceDetailsSchema: workspaceDetailsReducer }}
       removeAfterUnmount={false}
     >
-      <form
-        id={"workspace-details-form"}
-        className={"overflow-y no-scrollbar flex w-full flex-col gap-8 p-2"}
-        onSubmit={(e) => {
-          e.preventDefault()
-          e.stopPropagation()
-          form.handleSubmit(onSubmitForm, (errors) => {
-            if (process.env.NODE_ENV === "development") {
-              toast.error(JSON.stringify(errors))
-            }
-          })(e)
-        }}
-      >
-        <FieldGroup>
-          <FieldInput
-            required={true}
-            form={form}
-            path={"company.name"}
-            label={"Название организации"}
-            placeholder={"Укажите название"}
-          />
-        </FieldGroup>
-        <input type={"submit"} hidden ref={submitRef} />
-      </form>
+      {/*Обязательно оборачиваем всю форму в FormProvider*/}
+      <FormProvider {...methods}>
+        <form
+          id={"workspace-details-form"}
+          className={"overflow-y no-scrollbar flex w-full flex-col gap-8 p-2"}
+          onSubmit={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            methods.handleSubmit(onSubmitForm, (errors) => {
+              if (process.env.NODE_ENV === "development") {
+                toast.error(JSON.stringify(errors))
+              }
+            })(e)
+          }}
+        >
+          <FieldGroup>
+            <FieldInput
+              required={true}
+              name={"company.name"}
+              label={"Название организации"}
+              placeholder={"Укажите название"}
+            />
+          </FieldGroup>
+          <input type={"submit"} hidden ref={submitRef} />
+        </form>
+      </FormProvider>
     </DynamicModuleLoader>
   )
 })

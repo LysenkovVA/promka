@@ -1,13 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { memo } from "react"
-import {
-  Field,
-  FieldDescription,
-  FieldError,
-  FieldLabel,
-} from "@workspace/ui/components/field"
+import { memo, ReactNode } from "react"
 import {
   Popover,
   PopoverContent,
@@ -16,113 +10,73 @@ import {
 import { Calendar } from "@workspace/ui/components/calendar"
 import { Button } from "@workspace/ui/components/button"
 import { stripTimezone } from "@/lib/date/utils"
-import {
-  Controller,
-  FieldPath,
-  FieldValues,
-  UseFormReturn,
-} from "react-hook-form"
-import { IconAsterisk, IconChevronDown, IconCircleX } from "@tabler/icons-react"
+import { FieldPath, FieldValues, useFormContext } from "react-hook-form"
+import { IconChevronDown } from "@tabler/icons-react"
 import dayjs from "dayjs"
 import { ru } from "react-day-picker/locale"
+import { FieldInputProps } from "@/components/form/field-input/field-input"
+import { FormControl } from "@/components/form/form-control/form-control"
 
 export interface FieldDatePickerProps<
   TFieldValues extends FieldValues = FieldValues,
 > {
-  form: UseFormReturn<TFieldValues>
-  path: FieldPath<TFieldValues>
-  label: string
-  placeholder?: string
-  onChange?: (value: Date | null) => void
-  description?: string
+  name: FieldPath<TFieldValues>
+  label?: string
   required?: boolean
+  placeholder?: string
+  description?: ReactNode
 }
 
-function FieldDatePickerInner<TFieldValues extends FieldValues>(
-  props: FieldDatePickerProps<TFieldValues>
-) {
-  const {
-    form,
-    path,
-    label,
-    placeholder = "Выберите дату",
-    onChange,
-    description,
-    required = false,
-  } = props
+export const FieldDatePicker = memo((props: FieldInputProps) => {
+  const { name, label, required = false, placeholder, description } = props
+
+  const { getFieldState } = useFormContext()
 
   const [open, setOpen] = React.useState(false)
 
   return (
-    <Controller
-      control={form.control}
-      name={path}
-      render={({ field, fieldState }) => (
-        <Field aria-invalid={fieldState.invalid}>
-          <FieldLabel htmlFor={`${path}`}>
-            <div className={"flex w-full items-center justify-start gap-1"}>
-              {label}
-              {required && (
-                <IconAsterisk className={"size-2 text-destructive"} />
-              )}
-            </div>
-          </FieldLabel>
-          <Popover open={open} onOpenChange={setOpen}>
-            <PopoverTrigger asChild {...field} id={`${path}`}>
-              <Button
-                variant="outline"
-                className="justify-between bg-transparent font-normal hover:bg-transparent"
-              >
-                {field.value
-                  ? dayjs(field.value)?.toDate()?.toLocaleDateString()
-                  : placeholder}
-                <div className={"flex items-center justify-center gap-1"}>
-                  {form.watch(path) && (
-                    <IconCircleX
-                      stroke={2}
-                      className={"text-gray-400"}
-                      onClick={(e) => {
-                        // TODO
-                      }}
-                    />
-                  )}
-                  <IconChevronDown />
-                </div>
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent align="start">
-              <Calendar
-                className={"w-full"}
-                mode="single"
-                locale={ru}
-                selected={field.value}
-                defaultMonth={field.value}
-                captionLayout="dropdown"
-                onSelect={(selectedDate) => {
-                  if (selectedDate) {
-                    // Сбрасываем время при выборе даты, используем UTC
-                    const cleanedDate = stripTimezone(selectedDate)
-                    field.onChange(cleanedDate)
-                    onChange?.(cleanedDate ?? null)
-                  } else {
-                    field.onChange(null)
-                    onChange?.(null)
-                  }
-                  setOpen(false)
-                }}
-              />
-            </PopoverContent>
-          </Popover>
-          {description && <FieldDescription>{description}</FieldDescription>}
-          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-        </Field>
+    <FormControl
+      name={name}
+      label={label}
+      required={required}
+      description={description}
+    >
+      {({ value, onChange, onBlur }) => (
+        <Popover open={open} onOpenChange={setOpen}>
+          <PopoverTrigger asChild>
+            <Button
+              aria-invalid={getFieldState(name)?.invalid}
+              variant="outline"
+              className={`flex items-center ${value ? "justify-between" : "justify-end"} bg-transparent font-normal hover:bg-transparent`}
+            >
+              {value
+                ? dayjs(value)?.toDate()?.toLocaleDateString()
+                : placeholder}
+              <IconChevronDown />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent align="start">
+            <Calendar
+              className={"w-full"}
+              mode="single"
+              locale={ru}
+              selected={value}
+              defaultMonth={value}
+              captionLayout="dropdown"
+              onSelect={(selectedDate) => {
+                if (selectedDate) {
+                  // Сбрасываем время при выборе даты, используем UTC
+                  const cleanedDate = stripTimezone(selectedDate)
+                  onChange(cleanedDate)
+                } else {
+                  onChange(null)
+                }
+                setOpen(false)
+              }}
+            />
+          </PopoverContent>
+        </Popover>
       )}
-    />
+    </FormControl>
   )
-}
-
-export const FieldDatePicker = memo(FieldDatePickerInner) as <
-  TFieldValues extends FieldValues,
->(
-  props: FieldDatePickerProps<TFieldValues>
-) => ReturnType<React.FC<FieldDatePickerProps<TFieldValues>>>
+})

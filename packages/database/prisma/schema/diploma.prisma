@@ -1,0 +1,22 @@
+/**
+ * Диплом
+ */
+model Diploma {
+  id String @id @default(cuid())
+
+  // Серия
+  series String
+  // Номер
+  number String
+
+  // Сотрудник
+  employee   Employee @relation(name: "employee-diplomas", fields: [employeeId], references: [id], onDelete: Cascade)
+  employeeId String
+
+  // Рабочее пространство
+  workspace   Workspace @relation(name: "workspace-diplomas", fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId String
+
+  @@index([series, number])
+  @@map("diplomas")
+}

@@ -1,0 +1,16 @@
+/**
+ * Обучающая организация
+ */
+model StudyOrganization {
+  id   String @id @default(cuid())
+  name String
+
+  // Рабочее пространство
+  workspace   Workspace @relation(name: "workspace-study-organizations", fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId String
+
+  protocols Protocol[] @relation("study-organization-protocols")
+
+  @@index([name])
+  @@map("study-organizations")
+}

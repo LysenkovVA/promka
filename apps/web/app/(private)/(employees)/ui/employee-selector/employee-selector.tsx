@@ -27,10 +27,17 @@ import { EmployeeEditDialog } from "../employee-edit-dialog/employee-edit-dialog
 export interface EmployeeSelectorProps {
   value: Employee | null
   onChange: (value: Employee | null) => void
+  placeholder?: string
+  isInvalid?: boolean
 }
 
 export const EmployeeSelector = memo((props: EmployeeSelectorProps) => {
-  const { value, onChange } = props
+  const {
+    value,
+    onChange,
+    placeholder = "Выберите сотрудника",
+    isInvalid = false,
+  } = props
 
   const [isOpen, setIsOpen] = useState(false)
   const [isEdit, setIsEdit] = useState(false)
@@ -87,6 +94,7 @@ export const EmployeeSelector = memo((props: EmployeeSelectorProps) => {
     >
       <Selector
         items={data}
+        isInvalid={isInvalid}
         isOpen={isOpen}
         onOpenChange={setIsOpen}
         selectedValue={value?.id ? value : null}
@@ -95,7 +103,7 @@ export const EmployeeSelector = memo((props: EmployeeSelectorProps) => {
             return <div>{EmployeeHelper.getFullName(value)}</div>
           }
 
-          return <div>{"Выберите сотрудника"}</div>
+          return <div>{placeholder}</div>
         }}
         onChangeSelectedValue={onChange}
         searchValue={search}
@@ -111,7 +119,6 @@ export const EmployeeSelector = memo((props: EmployeeSelectorProps) => {
           </div>
         )}
         onAddClick={() => {
-          toast.message("Add employee click")
           setEditValueId(undefined)
           setIsEdit(true)
         }}

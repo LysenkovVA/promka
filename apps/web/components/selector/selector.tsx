@@ -41,8 +41,10 @@ import {
   DialogTitle,
 } from "@workspace/ui/components/dialog"
 import { ButtonGroup } from "@workspace/ui/components/button-group"
+import { cn } from "@workspace/ui/lib/utils"
 
 export interface SelectorProps<TValue> {
+  className?: string
   isOpen: boolean
   onOpenChange: (isOpened: boolean) => void
   selectedValue: TValue | null
@@ -59,10 +61,12 @@ export interface SelectorProps<TValue> {
   onEditClick?: (item: TValue | null) => void
   onDeleteClick?: (item: TValue | null) => void
   deleteMessage?: string
+  isInvalid?: boolean
 }
 
 export function Selector<TValue>(props: SelectorProps<TValue>) {
   const {
+    className,
     isOpen,
     onOpenChange,
     selectedValue,
@@ -79,6 +83,7 @@ export function Selector<TValue>(props: SelectorProps<TValue>) {
     onEditClick,
     onDeleteClick,
     deleteMessage = "Вы действительно хотите удалить запись?",
+    isInvalid = false,
   } = props
 
   const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false)
@@ -88,8 +93,13 @@ export function Selector<TValue>(props: SelectorProps<TValue>) {
       className={"flex w-full shrink flex-row items-center justify-start gap-2"}
     >
       <Popover open={isOpen} onOpenChange={onOpenChange}>
-        <PopoverTrigger className={"w-full shrink"} asChild>
+        <PopoverTrigger
+          className={cn(["w-full shrink", className])}
+          asChild
+          aria-invalid={isInvalid}
+        >
           <Button
+            aria-invalid={isInvalid}
             className={
               "flex w-full items-center justify-between text-start text-gray-600"
             }

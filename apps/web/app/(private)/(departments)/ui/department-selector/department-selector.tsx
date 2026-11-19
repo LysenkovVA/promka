@@ -6,30 +6,38 @@ import {
   useAppDispatch,
   useAppSelector,
 } from "@/lib/redux"
-import {
-  departmentsActions,
-  departmentsReducer,
-} from "../../model/slice/departments.slice"
+import { Selector } from "@/components/selector/selector"
+import { toast } from "sonner"
+import { useAuth } from "@/app/(public)/(auth)"
+
+import { deleteDepartmentThunk } from "../../model/thunks/delete-department.thunk"
 import { Department } from "../../model/types/department.schema"
+import { DepartmentEditDialog } from "../department-edit-dialog/department-edit-dialog"
 import {
   getDepartments,
   getDepartmentsIsLoading,
   getDepartmentsSearch,
 } from "../../model/selectors/departments.selectors"
 import { getDepartmentsThunk } from "../../model/thunks/get-departments.thunk"
-import { Selector } from "@/components/selector/selector"
-import { DepartmentEditDialog } from "../department-edit-dialog/department-edit-dialog"
-import { toast } from "sonner"
-import { useAuth } from "@/app/(public)/(auth)"
-import { deleteDepartmentThunk } from "../../model/thunks/delete-department.thunk"
+import {
+  departmentsActions,
+  departmentsReducer,
+} from "../../model/slice/departments.slice"
 
 export interface DepartmentSelectorProps {
   value: Department | null
   onChange: (value: Department | null) => void
+  placeholder?: string
+  isInvalid?: boolean
 }
 
 export const DepartmentSelector = memo((props: DepartmentSelectorProps) => {
-  const { value, onChange } = props
+  const {
+    value,
+    onChange,
+    placeholder = "Выберите подразделение",
+    isInvalid = false,
+  } = props
 
   const [isOpen, setIsOpen] = useState(false)
   const [isEdit, setIsEdit] = useState(false)
@@ -60,7 +68,7 @@ export const DepartmentSelector = memo((props: DepartmentSelectorProps) => {
 
         if (result.isOk) {
           onChange(null)
-          toast.success(`Подразделение '${value.name}' удалено`, {
+          toast.success(`Подразделение '${value.name}' удалена`, {
             position: "top-center",
             style: {
               color: "green",
@@ -74,7 +82,7 @@ export const DepartmentSelector = memo((props: DepartmentSelectorProps) => {
         style: { color: "tomato" },
       })
     }
-  }, [auth?.activeWorkspace?.id, dispatch, onChange, value?.id, value?.name])
+  }, [auth?.activeWorkspace?.id, dispatch, onChange, value])
 
   return (
     <DynamicModuleLoader
@@ -83,15 +91,16 @@ export const DepartmentSelector = memo((props: DepartmentSelectorProps) => {
     >
       <Selector
         items={data}
+        isInvalid={isInvalid}
         isOpen={isOpen}
         onOpenChange={setIsOpen}
         selectedValue={value?.id ? value : null}
         onRenderSelectedValue={() => {
           if (value?.id) {
-            return <div>{value?.name}</div>
+            return <div>{value.name}</div>
           }
 
-          return <div>{"Выберите подразделение"}</div>
+          return <div>{placeholder}</div>
         }}
         onChangeSelectedValue={onChange}
         searchValue={search}
@@ -99,7 +108,13 @@ export const DepartmentSelector = memo((props: DepartmentSelectorProps) => {
           dispatch(departmentsActions.setSearch(searchValue))
         }}
         isSearching={isLoading}
-        onRenderItem={(item: Department) => <div>{item.name}</div>}
+        onRenderItem={(item: Department) => (
+          <div
+            className={"flex w-full flex-col items-start justify-center gap-0"}
+          >
+            <div className={"text-sm"}>{item.name}</div>
+          </div>
+        )}
         onAddClick={() => {
           setEditValueId(undefined)
           setIsEdit(true)

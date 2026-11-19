@@ -8,17 +8,6 @@ import { employeeAdapter } from "../adapter/employee.adapter"
 import { updateEmployeeThunk } from "../thunks/update-employee.thunk"
 import { deleteEmployeeThunk } from "../thunks/delete-employee.thunk"
 import { createEmployeeThunk } from "../thunks/create-employee.thunk"
-import {
-  createCertificateThunk,
-  deleteCertificateThunk,
-  updateCertificateThunk,
-} from "@/Certificates"
-import { toast } from "sonner"
-import {
-  createProtocolThunk,
-  deleteProtocolThunk,
-  updateProtocolThunk,
-} from "@/Protocols"
 import { changeActiveWorkspaceThunk, logoutThunk } from "@/app/(public)/(auth)"
 
 const initialState: ListReduxSchema<Employee, EmployeeFilters> = {
@@ -148,30 +137,6 @@ export const employeesSlice = createSlice({
         if (action.payload.data?.id) {
           employeeAdapter.removeOne(state, action.payload.data?.id)
         }
-      })
-      // Добавление удостоверения
-      .addCase(createCertificateThunk.fulfilled, (state, action) => {
-        toast.message("createCertificateThunk в employeesSlice не реализован")
-      })
-      // Обновление удостоверения
-      .addCase(updateCertificateThunk.fulfilled, (state, action) => {
-        toast.message("updateCertificateThunk в employeesSlice не реализован")
-      })
-      // Удаление удостоверения
-      .addCase(deleteCertificateThunk.fulfilled, (state, action) => {
-        toast.message("deleteCertificateThunk в employeesSlice не реализован")
-      })
-      // Добавление протокола
-      .addCase(createProtocolThunk.fulfilled, (state, action) => {
-        toast.message("createProtocolThunk в employeesSlice не реализован")
-      })
-      // Обновление протокола
-      .addCase(updateProtocolThunk.fulfilled, (state, action) => {
-        toast.message("updateProtocolThunk в employeesSlice не реализован")
-      })
-      // Удаление протокола
-      .addCase(deleteProtocolThunk.fulfilled, (state, action) => {
-        toast.message("deleteProtocolThunk в employeesSlice не реализован")
       })
   },
 })

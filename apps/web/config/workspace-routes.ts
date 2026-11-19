@@ -1,11 +1,7 @@
 /**
  * Шаблоны маршрутов для workspace. :workspaceId заменяется на реальный ID.
  */
-type WorkspaceRouteKey =
-  | "DASHBOARD"
-  | "EMPLOYEES"
-  | "CERTIFICATES"
-  | "PROTOCOLS"
+type WorkspaceRouteKey = "DASHBOARD" | "EMPLOYEES" | "STUDIES"
 
 const WORKSPACE_ROUTE_TEMPLATES: Record<
   WorkspaceRouteKey,
@@ -16,13 +12,9 @@ const WORKSPACE_ROUTE_TEMPLATES: Record<
     template: "/workspaces/:workspaceId/employees",
     name: "Сотрудники",
   },
-  CERTIFICATES: {
-    template: "/workspaces/:workspaceId/certificates",
-    name: "Удостоверения",
-  },
-  PROTOCOLS: {
-    template: "/workspaces/:workspaceId/protocols",
-    name: "Протоколы",
+  STUDIES: {
+    template: "/workspaces/:workspaceId/studies",
+    name: "Обучение",
   },
 }
 

@@ -7,6 +7,7 @@ import { logoutThunk } from "../thunks/logoutThunk"
 import { updateProfileThunk } from "@/Users"
 import { updateWorkspaceThunk } from "@/Workspaces"
 import { toast } from "sonner"
+import { createWorkspaceThunk } from "@/Workspaces/model/thunks/create-workspace.thunk"
 
 const initialState: DetailsReduxSchema<IAuthData> = {
   entityData: {
@@ -151,6 +152,13 @@ export const authSlice = createSlice({
         state.isFetching = false
         state.isSaving = false
         state._isInitialized = true
+      })
+      .addCase(createWorkspaceThunk.fulfilled, (state, action) => {
+        // if (action.payload.data?.id && action.payload.data.teamMembers?.length > 0) {
+        //   const teamMember = action.payload.data.teamMembers?.filter(tm => {return tm.user.})
+        // }
+
+        toast.message("createWorkspaceThunk в authSlice не обработан")
       })
       .addCase(updateWorkspaceThunk.fulfilled, (state, action) => {
         toast.message("updateWorkspaceThunk в authSlice не обработан")

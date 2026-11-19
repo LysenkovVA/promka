@@ -13,19 +13,33 @@ model Workspace {
   teamMembers TeamMember[] @relation(name: "workspace-team-members")
 
   // Сотрудники компании
-  employees        Employee[]        @relation(name: "workspace-employees")
+  employees                Employee[]                @relation(name: "workspace-employees")
   // Должности компании
-  berthes          Berth[]           @relation(name: "workspace-berthes")
+  berthes                  Berth[]                   @relation(name: "workspace-berthes")
   // Типы должностей компании
-  berthTypes       BerthType[]       @relation(name: "workspace-berth-types")
+  berthTypes               BerthType[]               @relation(name: "workspace-berth-types")
   // Подразделения
-  departments      Department[]      @relation(name: "workspace-departments")
+  departments              Department[]              @relation(name: "workspace-departments")
   // Типы удостоверений
-  certificateTypes CertificateType[] @relation(name: "workspace-certificate-types")
+  specializations          Specialization[]          @relation(name: "workspace-specializations")
+  // Направления типов удостоверений
+  specializationDirections SpecializationDirection[] @relation(name: "workspace-specialization-directions")
+  // Параметры типов удостоверений
+  specializationParameters SpecializationParameter[] @relation(name: "workspace-specialization-parameters")
   // Удостоверения
-  certificates     Certificate[]     @relation(name: "workspace-certificates")
+  certificates             Certificate[]             @relation(name: "workspace-certificates")
   // Протоколы удостоверений
-  protocols        Protocol[]        @relation(name: "workspace-protocols")
+  protocols                Protocol[]                @relation(name: "workspace-protocols")
+  // Учебные организации
+  studyOrganizations       StudyOrganization[]       @relation(name: "workspace-study-organizations")
+
+  studies Study[] @relation(name: "workspace-studies")
+
+  passports Passport[] @relation(name: "workspace-passports")
+
+  diplomas Diploma[] @relation(name: "workspace-diplomas")
+
+  snilses Snils[] @relation(name: "workspace-snilses")
 
   @@map("workspaces")
 }

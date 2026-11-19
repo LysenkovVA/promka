@@ -58,6 +58,8 @@ async function main() {
       },
     })
 
+    return
+
     const userWorkspace = await prisma.workspace.create({
       data: {
         company: {
@@ -65,18 +67,6 @@ async function main() {
             name: 'ООО "СпецСтройТехнологии-М"',
           },
         },
-        // berthes: {
-        //   create: [
-        //     {
-        //       name: "Начальник службы ОТ и ПБ",
-        //       berthType: { create: { name: "ИТР" } },
-        //     },
-        //     {
-        //       name: "Стропальщик",
-        //       berthType: { create: { name: "Рабочие" } },
-        //     },
-        //   ],
-        // },
       },
     })
 

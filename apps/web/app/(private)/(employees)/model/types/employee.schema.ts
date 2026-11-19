@@ -9,40 +9,10 @@ import { stripTimezone } from "@/lib/date/utils"
 import { BerthSchema } from "@/Berthes"
 import { DepartmentSchema } from "@/Departments"
 import { isValidPhoneNumber } from "react-phone-number-input/input"
-
-// Функция валидации контрольной суммы СНИЛС
-const validateSnils = (snils: string) => {
-  if (!snils) return true
-
-  // Убираем все символы, кроме цифр
-  const cleanSnils = snils.replace(/\D/g, "")
-
-  if (cleanSnils.length !== 11) return false
-
-  // Проверка на зарезервированные последовательности
-  if (parseInt(cleanSnils.slice(0, 9)) <= 1001998) return true
-
-  const digits = cleanSnils.slice(0, 9).split("").map(Number)
-  const checksum = parseInt(cleanSnils.slice(9, 11))
-
-  let sum = 0
-  for (let i = 0; i < 9; i++) {
-    // @ts-ignore
-    sum += digits[i] * (9 - i)
-  }
-
-  let calculatedChecksum = 0
-  if (sum < 100) {
-    calculatedChecksum = sum
-  } else if (sum === 100 || sum === 101) {
-    calculatedChecksum = 0
-  } else {
-    const remainder = sum % 101
-    calculatedChecksum = remainder === 100 || remainder === 101 ? 0 : remainder
-  }
-
-  return calculatedChecksum === checksum
-}
+import { WorkspaceSchema } from "@/Workspaces"
+import { StudySchema } from "@/Studies"
+import { SnilsSchema } from "@/Snilses"
+import { PassportSchema } from "@/Passports"
 
 /**
  * Схема валидации EmployeeSchema
@@ -124,17 +94,6 @@ export const EmployeeSchema = z.object(
       })
       .transform((val) => stripTimezone(val))
       .nullish(),
-    snils: z
-      .string({
-        error: (issue) => {
-          switch (issue.code) {
-            case "invalid_type":
-              return ZOD_INVALID_STRING_TYPE
-          }
-        },
-      })
-      .refine(validateSnils, { message: "Неверный номер СНИЛС" })
-      .nullish(),
     phoneNumber: z
       .string({
         error: (issue) => {
@@ -158,14 +117,6 @@ export const EmployeeSchema = z.object(
         },
       })
       .nullish(),
-    // workspace:
-    //   // Для устранения ошибок с циклическими зависимостями
-    //   z
-    //     .lazy<typeof WorkspaceSchema>(() => {
-    //       const { WorkspaceSchema } = require("@/Workspaces")
-    //       return WorkspaceSchema
-    //     })
-    //     .nullish(),
     berth:
       // Для устранения ошибок с циклическими зависимостями
       z
@@ -182,12 +133,12 @@ export const EmployeeSchema = z.object(
           return DepartmentSchema
         })
         .nullish(),
-    certificates: z
+    passports: z
       .array(
         // Для устранения ошибок с циклическими зависимостями
         z.lazy(() => {
-          const { CertificateSchema } = require("@/Certificates")
-          return CertificateSchema
+          const { PassportSchema } = require("@/Passports")
+          return PassportSchema
         }),
         {
           error: (issue) => {
@@ -199,6 +150,65 @@ export const EmployeeSchema = z.object(
         }
       )
       .nullish(),
+    snilses: z
+      .array(
+        // Для устранения ошибок с циклическими зависимостями
+        z.lazy(() => {
+          const { SnilsSchema } = require("@/Snilses")
+          return SnilsSchema
+        }),
+        {
+          error: (issue) => {
+            switch (issue.code) {
+              case "invalid_type":
+                return ZOD_INVALID_OBJECT_TYPE
+            }
+          },
+        }
+      )
+      .nullish(),
+    diplomas: z
+      .array(
+        // Для устранения ошибок с циклическими зависимостями
+        z.lazy(() => {
+          const { DiplomaSchema } = require("@/Diplomas")
+          return DiplomaSchema
+        }),
+        {
+          error: (issue) => {
+            switch (issue.code) {
+              case "invalid_type":
+                return ZOD_INVALID_OBJECT_TYPE
+            }
+          },
+        }
+      )
+      .nullish(),
+    studies: z
+      .array(
+        // Для устранения ошибок с циклическими зависимостями
+        z.lazy(() => {
+          const { StudySchema } = require("@/Studies")
+          return StudySchema
+        }),
+        {
+          error: (issue) => {
+            switch (issue.code) {
+              case "invalid_type":
+                return ZOD_INVALID_OBJECT_TYPE
+            }
+          },
+        }
+      )
+      .nullish(),
+    workspace:
+      // Для устранения ошибок с циклическими зависимостями
+      z
+        .lazy(() => {
+          const { WorkspaceSchema } = require("@/Workspaces")
+          return WorkspaceSchema
+        })
+        .nullish(),
   },
   /**
    * Параметры объекта

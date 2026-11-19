@@ -7,7 +7,12 @@ import {
   useAppSelector,
 } from "@/lib/redux"
 import { Selector } from "@/components/selector/selector"
+import { toast } from "sonner"
+import { useAuth } from "@/app/(public)/(auth)"
+
+import { deleteBerthThunk } from "../../model/thunks/delete-berth.thunk"
 import { Berth } from "../../model/types/berth.schema"
+import { BerthEditDialog } from "../berth-edit-dialog/berth-edit-dialog"
 import {
   getBerthes,
   getBerthesIsLoading,
@@ -15,18 +20,21 @@ import {
 } from "../../model/selectors/berthes.selectors"
 import { getBerthesThunk } from "../../model/thunks/get-berthes.thunk"
 import { berthesActions, berthesReducer } from "../../model/slice/berthes.slice"
-import { BerthEditDialog } from "../berth-edit-dialog/berth-edit-dialog"
-import { toast } from "sonner"
-import { useAuth } from "@/app/(public)/(auth)"
-import { deleteBerthThunk } from "../../model/thunks/delete-berth.thunk"
 
 export interface BerthSelectorProps {
   value: Berth | null
   onChange: (value: Berth | null) => void
+  placeholder?: string
+  isInvalid?: boolean
 }
 
 export const BerthSelector = memo((props: BerthSelectorProps) => {
-  const { value, onChange } = props
+  const {
+    value,
+    onChange,
+    placeholder = "Выберите должность",
+    isInvalid = false,
+  } = props
 
   const [isOpen, setIsOpen] = useState(false)
   const [isEdit, setIsEdit] = useState(false)
@@ -71,7 +79,7 @@ export const BerthSelector = memo((props: BerthSelectorProps) => {
         style: { color: "tomato" },
       })
     }
-  }, [auth?.activeWorkspace?.id, dispatch, onChange, value?.id, value?.name])
+  }, [auth?.activeWorkspace?.id, dispatch, onChange, value])
 
   return (
     <DynamicModuleLoader
@@ -80,15 +88,16 @@ export const BerthSelector = memo((props: BerthSelectorProps) => {
     >
       <Selector
         items={data}
+        isInvalid={isInvalid}
         isOpen={isOpen}
         onOpenChange={setIsOpen}
         selectedValue={value?.id ? value : null}
         onRenderSelectedValue={() => {
           if (value?.id) {
-            return <div>{value?.name ?? "No name"}</div>
+            return <div>{value.name}</div>
           }
 
-          return <div>{"Выберите должность"}</div>
+          return <div>{placeholder}</div>
         }}
         onChangeSelectedValue={onChange}
         searchValue={search}
@@ -97,11 +106,10 @@ export const BerthSelector = memo((props: BerthSelectorProps) => {
         }}
         isSearching={isLoading}
         onRenderItem={(item: Berth) => (
-          <div className={"flex flex-col items-start justify-start gap-1"}>
-            <span>{item.name}</span>
-            <span className={"text-xs font-light text-gray-400"}>
-              {item.berthType?.name}
-            </span>
+          <div
+            className={"flex w-full flex-col items-start justify-center gap-0"}
+          >
+            <div className={"text-sm"}>{item.name}</div>
           </div>
         )}
         onAddClick={() => {
@@ -113,20 +121,14 @@ export const BerthSelector = memo((props: BerthSelectorProps) => {
           setIsEdit(true)
         }}
         onDeleteClick={onDeleteCallback}
-        deleteMessage={`Вы действительно хотите удалить должность \"${value?.name}\"?`}
+        deleteMessage={`Вы действительно хотите удалить сотрудника \"${value?.name}\"?`}
       />
       {isEdit && (
         <BerthEditDialog
           isOpen={isEdit}
-          onOpenChange={(changedOpen) => {
-            setIsEdit(changedOpen)
-          }}
+          onOpenChange={(isOpen) => setIsEdit(isOpen)}
           berthId={editValueId}
-          onSubmit={(data) => {
-            onChange(data)
-            setIsEdit(false)
-          }}
-          onClose={() => setIsEdit(false)}
+          onSubmit={(data) => onChange(data)}
         />
       )}
     </DynamicModuleLoader>

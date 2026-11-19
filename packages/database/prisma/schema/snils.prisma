@@ -1,0 +1,20 @@
+/**
+ * СНИЛС
+ */
+model Snils {
+  id String @id @default(cuid())
+
+  // Номер
+  number String
+
+  // Сотрудник
+  employee   Employee @relation(name: "employee-snilses", fields: [employeeId], references: [id], onDelete: Cascade)
+  employeeId String
+
+  // Рабочее пространство
+  workspace   Workspace @relation(name: "workspace-snilses", fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId String
+
+  @@index([number])
+  @@map("snils")
+}

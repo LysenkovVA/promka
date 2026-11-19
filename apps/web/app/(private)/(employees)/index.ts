@@ -7,6 +7,7 @@ import { deleteEmployeeThunk } from "./model/thunks/delete-employee.thunk"
 import { EmployeeHelper } from "./helpers/employee-helper"
 import { FieldSnils } from "./ui/field-snils/field-snils"
 import { FieldPhone } from "./ui/field-phone/field-phone"
+import { FormCollectionEmployees } from "./ui/form-collection-employees/form-collection-employees"
 
 export {
   EmployeeSchema,
@@ -17,5 +18,6 @@ export {
   EmployeeHelper,
   FieldPhone,
   FieldSnils,
+  FormCollectionEmployees,
 }
 export type { Employee, EmployeeFilters }

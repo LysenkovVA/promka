@@ -1,0 +1,16 @@
+/**
+ * Направление типа удостоверения
+ */
+model SpecializationDirection {
+  id   String @id @default(cuid())
+  name String
+
+  // Рабочее пространство
+  workspace   Workspace? @relation(name: "workspace-specialization-directions", fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId String?
+
+  specializations Specialization[] @relation(name: "specialization-direction-specializations")
+
+  @@index([name])
+  @@map("specialization-directions")
+}

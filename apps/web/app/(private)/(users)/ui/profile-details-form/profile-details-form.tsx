@@ -1,7 +1,7 @@
 "use client"
 
 import { memo, RefObject, useCallback, useEffect } from "react"
-import { useForm } from "react-hook-form"
+import { FormProvider, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { FieldInput } from "@/components/form/field-input/field-input"
 import { FieldDescription, FieldGroup } from "@workspace/ui/components/field"
@@ -37,7 +37,7 @@ export const ProfileDetailsForm = memo((props: ProfileDetailsFormProps) => {
    * with zodResolver, which infers input and output separately.
    * Either omit the generic and let it infer from resolver, or specify all three explicitly
    */
-  const form = useForm<
+  const methods = useForm<
     z.input<typeof ProfileRequestSchema>,
     any,
     z.output<typeof ProfileRequestSchema>
@@ -46,7 +46,7 @@ export const ProfileDetailsForm = memo((props: ProfileDetailsFormProps) => {
   })
 
   useEffect(() => {
-    form.reset({
+    methods.reset({
       id: auth.user?.id,
       surname: auth.user?.surname!,
       name: auth.user?.name,
@@ -57,7 +57,7 @@ export const ProfileDetailsForm = memo((props: ProfileDetailsFormProps) => {
       snils: auth.user?.snils,
       // certificates: data?.certificates ? [...data?.certificates] : [],
     })
-  }, [auth.user, form])
+  }, [auth.user, methods])
 
   const onSubmitForm = useCallback(
     async (formData: any) => {
@@ -89,76 +89,71 @@ export const ProfileDetailsForm = memo((props: ProfileDetailsFormProps) => {
         }
       }
     },
-    [auth?.activeWorkspace?.id, dispatch, onSubmit]
+    [dispatch, onSubmit]
   )
 
   return (
-    <form
-      id={"profile-details-form"}
-      className={"overflow-y no-scrollbar flex w-full flex-col gap-8 p-2"}
-      onSubmit={(e) => {
-        e.preventDefault()
-        e.stopPropagation()
-        form.handleSubmit(onSubmitForm, (errors) =>
-          toast.error(JSON.stringify(errors))
-        )(e)
-      }}
-    >
-      <FieldGroup>
-        <FieldInput
-          required={true}
-          form={form}
-          path={"surname"}
-          label={"Фамилия"}
-          placeholder={"Укажите фамилию"}
-        />
-        <div className={"grid grid-cols-2 gap-2"}>
+    <FormProvider {...methods}>
+      <form
+        id={"profile-details-form"}
+        className={"overflow-y no-scrollbar flex w-full flex-col gap-8 p-2"}
+        onSubmit={(e) => {
+          e.preventDefault()
+          e.stopPropagation()
+          methods.handleSubmit(onSubmitForm, (errors) =>
+            toast.error(JSON.stringify(errors))
+          )(e)
+        }}
+      >
+        <FieldGroup>
           <FieldInput
-            form={form}
-            path={"name"}
-            label={"Имя"}
-            placeholder={"Укажите имя"}
+            required={true}
+            name={"surname"}
+            label={"Фамилия"}
+            placeholder={"Укажите фамилию"}
           />
-          <FieldInput
-            form={form}
-            path={"patronymic"}
-            label={"Отчество"}
-            placeholder={"Укажите отчество"}
-          />
-        </div>
-        <div className={"grid grid-cols-2 gap-2"}>
-          <FieldDatePicker
-            form={form}
-            path={"birthDate"}
-            label={"Дата рождения"}
-          />
-          <FieldSnils
-            form={form}
-            path={"snils"}
-            label={"СНИЛС"}
-            placeholder={"Укажите СНИЛС"}
-          />
-        </div>
-      </FieldGroup>
-      <FieldGroup>
-        <FieldDescription>{"Контакты"}</FieldDescription>
-        <Separator />
-        <div className={"grid grid-cols-2 gap-2"}>
-          <FieldPhone
-            form={form}
-            path={"phoneNumber"}
-            label={"Телефон"}
-            placeholder={"Укажите телефон"}
-          />
-          {/*<FieldInput*/}
-          {/*  form={form}*/}
-          {/*  path={"email"}*/}
-          {/*  label={"E-mail"}*/}
-          {/*  placeholder={"Укажите e-mail"}*/}
-          {/*/>*/}
-        </div>
-      </FieldGroup>
-      <input type={"submit"} hidden ref={submitRef} />
-    </form>
+          <div className={"grid grid-cols-2 gap-2"}>
+            <FieldInput
+              name={"name"}
+              label={"Имя"}
+              placeholder={"Укажите имя"}
+            />
+            <FieldInput
+              name={"patronymic"}
+              label={"Отчество"}
+              placeholder={"Укажите отчество"}
+            />
+          </div>
+          <div className={"grid grid-cols-2 gap-2"}>
+            <FieldDatePicker name={"birthDate"} label={"Дата рождения"} />
+            <FieldSnils
+              control={methods.control}
+              path={"snils"}
+              label={"СНИЛС"}
+              placeholder={"Укажите СНИЛС"}
+            />
+          </div>
+        </FieldGroup>
+        <FieldGroup>
+          <FieldDescription>{"Контакты"}</FieldDescription>
+          <Separator />
+          <div className={"grid grid-cols-2 gap-2"}>
+            <FieldPhone
+              control={methods.control}
+              path={"phoneNumber"}
+              label={"Телефон"}
+              placeholder={"Укажите телефон"}
+            />
+            {/*<FieldInput*/}
+            {/*  form={form}*/}
+            {/*  path={"email"}*/}
+            {/*  label={"E-mail"}*/}
+            {/*  placeholder={"Укажите e-mail"}*/}
+            {/*/>*/}
+          </div>
+        </FieldGroup>
+        <input type={"submit"} hidden ref={submitRef} />
+      </form>
+    </FormProvider>
   )
 })

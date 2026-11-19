@@ -1,7 +1,7 @@
 "use client"
 
 import { memo, RefObject, useCallback, useEffect } from "react"
-import { useForm } from "react-hook-form"
+import { FormProvider, useForm } from "react-hook-form"
 import { Employee } from "../../model/types/employee.schema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { FieldInput } from "@/components/form/field-input/field-input"
@@ -27,14 +27,11 @@ import { FieldBerth } from "@/Berthes"
 import { FieldDatePicker } from "@/components/form/field-date-picker/field-date-picker"
 import { Separator } from "@workspace/ui/components/separator"
 import { FieldDepartment } from "@/Departments"
-import { Button } from "@workspace/ui/components/button"
-import { IconCirclePlusFilled, IconTrash } from "@tabler/icons-react"
-import { FieldCertificateType } from "@/CertificateTypes"
-import { FieldSnils } from "../field-snils/field-snils"
 import { FieldPhone } from "../field-phone/field-phone"
 import { EmployeeRequestSchema } from "../../model/types/employee-request.schema"
-import { GenericInnerList } from "@/components/form/form-generic-inner-list/form-generic-inner-list"
-import { FieldProtocol } from "@/Protocols"
+import { FormCollectionPassports } from "@/Passports"
+import { FormCollectionSnilses } from "@/Snilses"
+import { FormCollectionDiplomas } from "@/Diplomas"
 
 export interface EmployeeDetailsFormProps {
   submitRef: RefObject<HTMLInputElement | null>
@@ -61,7 +58,7 @@ export const EmployeeDetailsForm = memo((props: EmployeeDetailsFormProps) => {
    * with zodResolver, which infers input and output separately.
    * Either omit the generic and let it infer from resolver, or specify all three explicitly
    */
-  const form = useForm<
+  const methods = useForm<
     z.input<typeof EmployeeRequestSchema>,
     any,
     z.output<typeof EmployeeRequestSchema>
@@ -76,7 +73,7 @@ export const EmployeeDetailsForm = memo((props: EmployeeDetailsFormProps) => {
   }, [dispatch, employeeId, isInitialized, isLoading])
 
   useEffect(() => {
-    form.reset({
+    methods.reset({
       id: data?.id,
       surname: data?.surname,
       name: data?.name,
@@ -84,7 +81,6 @@ export const EmployeeDetailsForm = memo((props: EmployeeDetailsFormProps) => {
       birthDate: data?.birthDate,
       email: data?.email,
       phoneNumber: data?.phoneNumber,
-      snils: data?.snils,
       hireDate: data?.hireDate,
       firedDate: data?.firedDate,
       berth: data?.berth?.id
@@ -93,9 +89,11 @@ export const EmployeeDetailsForm = memo((props: EmployeeDetailsFormProps) => {
       department: data?.department?.id
         ? { id: data.department.id, name: data.department.name }
         : null,
-      certificates: data?.certificates ? [...data?.certificates] : [],
+      passports: data?.passports ? [...data?.passports] : [],
+      snilses: data?.snilses ? [...data?.snilses] : [],
+      diplomas: data?.diplomas ? [...data?.diplomas] : [],
     })
-  }, [data, form])
+  }, [data, methods])
 
   const onSubmitForm = useCallback(
     async (formData: any) => {
@@ -160,199 +158,212 @@ export const EmployeeDetailsForm = memo((props: EmployeeDetailsFormProps) => {
       reducers={{ employeeDetailsSchema: employeeDetailsReducer }}
       removeAfterUnmount={false}
     >
-      <form
-        id={"employee-details-form"}
-        className={"overflow-y no-scrollbar flex w-full flex-col gap-8 p-2"}
-        onSubmit={(e) => {
-          e.preventDefault()
-          e.stopPropagation()
-          form.handleSubmit(onSubmitForm, (errors) =>
-            toast.error(JSON.stringify(errors))
-          )(e)
-        }}
-      >
-        <FieldGroup>
-          <FieldInput
-            required={true}
-            form={form}
-            path={"surname"}
-            label={"Фамилия"}
-            placeholder={"Укажите фамилию"}
-          />
-          <div className={"grid grid-cols-2 gap-2"}>
+      {/*Обязательно оборачиваем всю форму в FormProvider*/}
+      <FormProvider {...methods}>
+        <form
+          id={"employee-details-form"}
+          className={"overflow-y no-scrollbar flex w-full flex-col gap-8 p-2"}
+          onSubmit={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            methods.handleSubmit(onSubmitForm, (errors) =>
+              toast.error(JSON.stringify(errors))
+            )(e)
+          }}
+        >
+          <FieldGroup>
             <FieldInput
-              form={form}
-              path={"name"}
-              label={"Имя"}
-              placeholder={"Укажите имя"}
+              required={true}
+              name={"surname"}
+              label={"Фамилия"}
+              placeholder={"Укажите фамилию"}
             />
-            <FieldInput
-              form={form}
-              path={"patronymic"}
-              label={"Отчество"}
-              placeholder={"Укажите отчество"}
-            />
-          </div>
-          <div className={"grid grid-cols-2 gap-2"}>
-            <FieldDatePicker
-              form={form}
-              path={"birthDate"}
-              label={"Дата рождения"}
-            />
-            <FieldSnils
-              form={form}
-              path={"snils"}
-              label={"СНИЛС"}
-              placeholder={"Укажите СНИЛС"}
-            />
-          </div>
-        </FieldGroup>
-        <FieldGroup>
-          <FieldDescription>
-            {auth.activeWorkspace?.company.name?.toUpperCase()}
-          </FieldDescription>
-          <Separator />
-          <FieldBerth form={form} path={"berth"} label={"Должность"} />
-          <FieldDepartment
-            form={form}
-            path={"department"}
-            label={"Подразделение"}
-          />
-          <div className={"grid grid-cols-2 gap-2"}>
-            <FieldDatePicker
-              form={form}
-              path={"hireDate"}
-              label={"Принят на работу"}
-            />
-          </div>
-        </FieldGroup>
-        <FieldGroup>
-          <FieldDescription>{"Контакты"}</FieldDescription>
-          <Separator />
-          <div className={"grid grid-cols-2 gap-2"}>
-            <FieldPhone
-              form={form}
-              path={"phoneNumber"}
-              label={"Телефон"}
-              placeholder={"Укажите телефон"}
-            />
-            <FieldInput
-              form={form}
-              path={"email"}
-              label={"E-mail"}
-              placeholder={"Укажите e-mail"}
-            />
-          </div>
-        </FieldGroup>
-        <FieldGroup>
-          <GenericInnerList
-            name={"certificates"}
-            // @ts-ignore
-            control={form.control}
-            register={form.register}
-            formState={form.formState}
-            renderItems={(
-              subFields,
-              { append, remove, insert, getPath, errors }
-            ) => (
-              <div className={"w-full"}>
-                <div className={"flex items-center justify-start gap-2"}>
-                  <div className={"text-lg"}>{"Удостоверения"}</div>
-                  <Button
-                    className={"mt-2 mb-2 w-fit"}
-                    variant={"secondary"}
-                    type={"button"}
-                    onClick={() => {
-                      // Добавляем в начало списка
-                      append({
-                        certificateType: undefined,
-                        protocol: undefined,
-                        number: "",
-                        date: new Date(),
-                        group: undefined,
-                      })
-                    }}
-                  >
-                    <IconCirclePlusFilled />
-                    {"Добавить"}
-                  </Button>
-                </div>
-                <Separator className={"mb-4"} />
+            <div className={"grid grid-cols-2 gap-2"}>
+              <FieldInput
+                name={"name"}
+                label={"Имя"}
+                placeholder={"Укажите имя"}
+              />
+              <FieldInput
+                name={"patronymic"}
+                label={"Отчество"}
+                placeholder={"Укажите отчество"}
+              />
+            </div>
+            <div className={"grid grid-cols-2 gap-2"}>
+              <FieldDatePicker name={"birthDate"} label={"Дата рождения"} />
+            </div>
+          </FieldGroup>
+          {/* ДОКУМЕНТЫ */}
+          <FieldGroup className={"w-full"}>
+            <FieldDescription>{"Документы"}</FieldDescription>
+            <Separator />
+            <FieldGroup>
+              <FormCollectionPassports name={"passports"} limit={1} />
+              <FormCollectionSnilses name={"snilses"} limit={1} />
+              <FormCollectionDiplomas name={"diplomas"} limit={1} />
+            </FieldGroup>
 
-                {subFields.map((subField, subIndex) => {
-                  return (
-                    <div
-                      key={subIndex}
-                      className={
-                        "mb-4 flex w-full flex-col items-start justify-center gap-2"
-                      }
-                    >
-                      <div
-                        className={
-                          "mb-2 flex flex-row items-center justify-start gap-2"
-                        }
-                      >
-                        <div
-                          className={"text-muted-foreground"}
-                        >{`Удостоверение # ${subIndex + 1}`}</div>
-                        <Button
-                          size={"icon"}
-                          variant={"destructive"}
-                          onClick={() => remove(subIndex)}
-                        >
-                          <IconTrash className={"text-destructive"} />
-                        </Button>
-                      </div>
-                      <div
-                        className={
-                          "grid w-full grid-cols-2 gap-2 rounded-lg border p-4"
-                        }
-                      >
-                        <FieldProtocol
-                          form={form}
-                          path={getPath(subIndex, "protocol")}
-                          label={"Протокол"}
-                          required={true}
-                        />
-                        <FieldCertificateType
-                          required={true}
-                          form={form}
-                          path={getPath(subIndex, "certificateType")}
-                          label={"Тип"}
-                        />
-                        <FieldInput
-                          required={true}
-                          form={form}
-                          path={getPath(subIndex, "number")}
-                          label={"Номер"}
-                        />
-                        <FieldDatePicker
-                          form={form}
-                          path={getPath(subIndex, "date")}
-                          label={"Дата"}
-                        />
-                        {/*{form.watch(getPath(subIndex, "certificateType"))?.id &&*/}
-                        {/*  form.watch(getPath(subIndex, "certificateType"))*/}
-                        {/*    ?.hasGroups && (*/}
-                        {/*    <FieldInput*/}
-                        {/*      required={true}*/}
-                        {/*      form={form}*/}
-                        {/*      path={getPath(subIndex, "group")}*/}
-                        {/*      label={"Группа"}*/}
-                        {/*      placeholder={"Укажите группу"}*/}
-                        {/*    />*/}
-                        {/*  )}*/}
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
-            )}
-          />
-        </FieldGroup>
+            {/*<Tabs className={"w-full"} defaultValue={"PASSPORT"}>*/}
+            {/*  <TabsList className={"w-full"}>*/}
+            {/*    <TabsTrigger value={"PASSPORT"}>{"Паспорт"}</TabsTrigger>*/}
+            {/*    <TabsTrigger value={"SNILS"}>{"СНИЛС"}</TabsTrigger>*/}
+            {/*  </TabsList>*/}
+            {/*  <TabsContent value={"PASSPORT"}>*/}
+            {/*    {"Тут будет паспорт"}*/}
+            {/*  </TabsContent>*/}
+            {/*  <TabsContent value={"SNILS"}>*/}
+            {/*    <FieldSnils*/}
+            {/*      control={methods.control}*/}
+            {/*      path={"snils"}*/}
+            {/*      label={"СНИЛС"}*/}
+            {/*      placeholder={"Укажите СНИЛС"}*/}
+            {/*    />*/}
+            {/*  </TabsContent>*/}
+            {/*</Tabs>*/}
+          </FieldGroup>
+          <FieldGroup>
+            <FieldDescription>
+              {auth.activeWorkspace?.company.name?.toUpperCase()}
+            </FieldDescription>
+            <Separator />
+            <FieldBerth form={methods} path={"berth"} label={"Должность"} />
+            <FieldDepartment
+              form={methods}
+              path={"department"}
+              label={"Подразделение"}
+            />
+            <div className={"grid grid-cols-2 gap-2"}>
+              <FieldDatePicker name={"hireDate"} label={"Принят на работу"} />
+            </div>
+          </FieldGroup>
+          <FieldGroup>
+            <FieldDescription>{"Контакты"}</FieldDescription>
+            <Separator />
+            <div className={"grid grid-cols-2 gap-2"}>
+              <FieldPhone
+                control={methods.control}
+                path={"phoneNumber"}
+                label={"Телефон"}
+                placeholder={"Укажите телефон"}
+              />
+              <FieldInput
+                name={"email"}
+                label={"E-mail"}
+                placeholder={"Укажите e-mail"}
+              />
+            </div>
+          </FieldGroup>
+          {/*<FieldGroup>*/}
+          {/*  <GenericInnerList*/}
+          {/*    name={"certificates"}*/}
+          {/*    // @ts-ignore*/}
+          {/*    control={form.control}*/}
+          {/*    register={form.register}*/}
+          {/*    formState={form.formState}*/}
+          {/*    renderItems={(*/}
+          {/*      subFields,*/}
+          {/*      { append, remove, insert, getPath, errors }*/}
+          {/*    ) => (*/}
+          {/*      <div className={"w-full"}>*/}
+          {/*        <div className={"flex items-center justify-start gap-2"}>*/}
+          {/*          <div className={"text-lg"}>{"Удостоверения"}</div>*/}
+          {/*          <Button*/}
+          {/*            className={"mt-2 mb-2 w-fit"}*/}
+          {/*            variant={"secondary"}*/}
+          {/*            type={"button"}*/}
+          {/*            onClick={() => {*/}
+          {/*              // Добавляем в начало списка*/}
+          {/*              append({*/}
+          {/*                certificateType: undefined,*/}
+          {/*                protocol: undefined,*/}
+          {/*                number: "",*/}
+          {/*                date: new Date(),*/}
+          {/*                group: undefined,*/}
+          {/*              })*/}
+          {/*            }}*/}
+          {/*          >*/}
+          {/*            <IconCirclePlusFilled />*/}
+          {/*            {"Добавить"}*/}
+          {/*          </Button>*/}
+          {/*        </div>*/}
+          {/*        <Separator className={"mb-4"} />*/}
 
-        <input type={"submit"} hidden ref={submitRef} />
-      </form>
+          {/*        {subFields.map((subField, subIndex) => {*/}
+          {/*          return (*/}
+          {/*            <div*/}
+          {/*              key={subIndex}*/}
+          {/*              className={*/}
+          {/*                "mb-4 flex w-full flex-col items-start justify-center gap-2"*/}
+          {/*              }*/}
+          {/*            >*/}
+          {/*              <div*/}
+          {/*                className={*/}
+          {/*                  "mb-2 flex flex-row items-center justify-start gap-2"*/}
+          {/*                }*/}
+          {/*              >*/}
+          {/*                <div*/}
+          {/*                  className={"text-muted-foreground"}*/}
+          {/*                >{`Удостоверение # ${subIndex + 1}`}</div>*/}
+          {/*                <Button*/}
+          {/*                  size={"icon"}*/}
+          {/*                  variant={"destructive"}*/}
+          {/*                  onClick={() => remove(subIndex)}*/}
+          {/*                >*/}
+          {/*                  <IconTrash className={"text-destructive"} />*/}
+          {/*                </Button>*/}
+          {/*              </div>*/}
+          {/*              <div*/}
+          {/*                className={*/}
+          {/*                  "grid w-full grid-cols-2 gap-2 rounded-lg border p-4"*/}
+          {/*                }*/}
+          {/*              >*/}
+          {/*                <FieldProtocol*/}
+          {/*                  form={form}*/}
+          {/*                  path={getPath(subIndex, "protocol")}*/}
+          {/*                  label={"Протокол"}*/}
+          {/*                  required={true}*/}
+          {/*                />*/}
+          {/*                <FieldCertificateType*/}
+          {/*                  required={true}*/}
+          {/*                  control={form.control}*/}
+          {/*                  path={getPath(subIndex, "certificateType")}*/}
+          {/*                  label={"Тип"}*/}
+          {/*                />*/}
+          {/*                <FieldInput*/}
+          {/*                  required={true}*/}
+          {/*                  control={form.control}*/}
+          {/*                  path={getPath(subIndex, "number")}*/}
+          {/*                  label={"Номер"}*/}
+          {/*                />*/}
+          {/*                <FieldDatePicker*/}
+          {/*                  control={form.control}*/}
+          {/*                  path={getPath(subIndex, "date")}*/}
+          {/*                  label={"Дата"}*/}
+          {/*                />*/}
+          {/*                /!*{form.watch(getPath(subIndex, "certificateType"))?.id &&*!/*/}
+          {/*                /!*  form.watch(getPath(subIndex, "certificateType"))*!/*/}
+          {/*                /!*    ?.hasGroups && (*!/*/}
+          {/*                /!*    <FieldInput*!/*/}
+          {/*                /!*      required={true}*!/*/}
+          {/*                /!*      form={form}*!/*/}
+          {/*                /!*      path={getPath(subIndex, "group")}*!/*/}
+          {/*                /!*      label={"Группа"}*!/*/}
+          {/*                /!*      placeholder={"Укажите группу"}*!/*/}
+          {/*                /!*    />*!/*/}
+          {/*                /!*  )}*!/*/}
+          {/*              </div>*/}
+          {/*            </div>*/}
+          {/*          )*/}
+          {/*        })}*/}
+          {/*      </div>*/}
+          {/*    )}*/}
+          {/*  />*/}
+          {/*</FieldGroup>*/}
+
+          <input type={"submit"} hidden ref={submitRef} />
+        </form>
+      </FormProvider>
     </DynamicModuleLoader>
   )
 })

@@ -6,9 +6,9 @@ import { Employee } from "../../../../../model/types/employee.schema"
 import { checkAuthForWorkspace } from "@/app/(public)/(auth)/api/checkAuth"
 import { prisma } from "@workspace/database/prisma"
 import { validateObject } from "@/lib/zod/validateObject"
-import { Prisma } from "@workspace/database/.generated/client"
 import { ServerError } from "@/lib/responses/ServerError"
 import { EmployeeRequestSchema } from "../../../../../model/types/employee-request.schema"
+import { Prisma } from "@workspace/database/.generated/client"
 
 export async function GET(
   request: NextRequest,
@@ -24,7 +24,35 @@ export async function GET(
       include: {
         berth: { include: { berthType: true } },
         department: true,
-        certificates: { include: { certificateType: true, protocol: true } },
+        certificates: {
+          include: {
+            study: {
+              include: {
+                specialization: {
+                  include: {
+                    specializationDirection: true,
+                    specializationParameter: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+        studies: {
+          include: {
+            specialization: {
+              include: {
+                specializationDirection: true,
+                specializationParameter: true,
+              },
+            },
+            protocol: true,
+            workspace: { include: { company: true } },
+          },
+        },
+        passports: true,
+        snilses: true,
+        diplomas: true,
       },
     })
 
@@ -61,20 +89,61 @@ export async function PATCH(
       include: {
         berth: { include: { berthType: true } },
         department: true,
-        certificates: { include: { certificateType: true, protocol: true } },
+        studies: {
+          include: {
+            specialization: {
+              include: {
+                specializationDirection: true,
+                specializationParameter: true,
+              },
+            },
+          },
+        },
+        passports: true,
+        snilses: true,
+        diplomas: true,
       },
     })
 
-    // Новые удостоверения
-    const itemsToCreate = validatedData.certificates?.filter((item) => !item.id)
-    // Удостоверения для обновления
-    const itemsToUpdate = validatedData.certificates?.filter((item) => item.id)
-    const existingItemIds =
-      existingData?.certificates?.map((item) => item.id) || []
-    const providedItemIds = itemsToUpdate?.map((item) => item.id!)
-    // Удостоверения для удаления
-    const itemsToDelete = existingItemIds.filter(
-      (id) => !providedItemIds?.includes(id!)
+    // ПАСПОРТА
+    // Новые паспорта
+    const passportsToCreate = validatedData.passports?.filter(
+      (item) => !item.id
+    )
+    // Паспорта для обновления
+    const passportsToUpdate = validatedData.passports?.filter((item) => item.id)
+    const existingPassportsIds =
+      existingData?.passports?.map((item) => item.id) || []
+    const providedPassportsIds = passportsToUpdate?.map((item) => item.id!)
+    // Паспорта для удаления
+    const passportsToDelete = existingPassportsIds.filter(
+      (id) => !providedPassportsIds?.includes(id!)
+    )
+
+    // СНИЛСЫ
+    // Новые СНИЛСы
+    const snilsesToCreate = validatedData.snilses?.filter((item) => !item.id)
+    // СНИЛСы для обновления
+    const snilsesToUpdate = validatedData.snilses?.filter((item) => item.id)
+    const existingSnilsesIds =
+      existingData?.snilses?.map((item) => item.id) || []
+    const providedSnilsesIds = snilsesToUpdate?.map((item) => item.id!)
+    // СНИЛСы для удаления
+    const snilsesToDelete = existingSnilsesIds.filter(
+      (id) => !providedSnilsesIds?.includes(id!)
+    )
+
+    // ДИПЛОМЫ
+    // Новые дипломы
+    const diplomasToCreate = validatedData.diplomas?.filter((item) => !item.id)
+    // Дипломы для обновления
+    const diplomasToUpdate = validatedData.diplomas?.filter((item) => item.id)
+    const existingDiplomasIds =
+      existingData?.diplomas?.map((item) => item.id) || []
+    const providedDiplomasIds = diplomasToUpdate?.map((item) => item.id!)
+    // Дипломы для удаления
+    const diplomasToDelete = existingDiplomasIds.filter(
+      (id) => !providedDiplomasIds?.includes(id!)
     )
 
     const updatedData = await prisma.employee.update({
@@ -83,7 +152,6 @@ export async function PATCH(
         name: validatedData.name ?? null,
         patronymic: validatedData.patronymic ?? null,
         birthDate: validatedData.birthDate ?? null,
-        snils: validatedData.snils ?? null,
         hireDate: validatedData.hireDate ?? null,
         firedDate: validatedData.firedDate ?? null,
         phoneNumber: validatedData.phoneNumber ?? null,
@@ -98,48 +166,102 @@ export async function PATCH(
               department: { connect: { id: validatedData.department?.id } },
             }
           : { department: { disconnect: true } }),
-        certificates: {
+        passports: {
           create:
-            itemsToCreate && itemsToCreate.length > 0
-              ? itemsToCreate.map((item) => {
+            passportsToCreate && passportsToCreate.length > 0
+              ? passportsToCreate.map((item) => {
                   return {
-                    certificateType: {
-                      connect: { id: item.certificateType.id! },
-                    },
+                    series: item.series,
                     number: item.number,
-                    date: item.date ?? Prisma.skip,
-                    group: item.group ?? Prisma.skip,
+                    birthDate: item.birthDate ?? Prisma.skip,
+                    birthPlace: item.birthPlace ?? Prisma.skip,
+                    issuedBy: item.issuedBy ?? Prisma.skip,
+                    issueDate: item.issueDate ?? Prisma.skip,
+                    subdivisionCode: item.subdivisionCode ?? Prisma.skip,
                     workspace: {
                       connect: { id: id },
-                    },
-                    protocol: {
-                      connect: { id: item.protocol.id! },
                     },
                   }
                 })
               : Prisma.skip,
           update:
-            itemsToUpdate && itemsToUpdate.length > 0
-              ? itemsToUpdate.map((item) => {
+            passportsToUpdate && passportsToUpdate.length > 0
+              ? passportsToUpdate.map((item) => {
                   return {
                     data: {
-                      certificateType: {
-                        connect: { id: item.certificateType.id },
-                      },
-                      number: item.number ?? Prisma.skip,
-                      date: item.date ?? Prisma.skip,
-                      group: item.group ?? Prisma.skip,
-                      protocol: {
-                        connect: { id: item.protocol.id },
-                      },
+                      series: item.series,
+                      number: item.number,
+                      birthDate: item.birthDate ?? Prisma.skip,
+                      birthPlace: item.birthPlace ?? Prisma.skip,
+                      issuedBy: item.issuedBy ?? Prisma.skip,
+                      issueDate: item.issueDate ?? Prisma.skip,
+                      subdivisionCode: item.subdivisionCode ?? Prisma.skip,
                     },
                     where: { id: item.id! },
                   }
                 })
               : Prisma.skip,
           delete:
-            itemsToDelete && itemsToDelete.length > 0
-              ? itemsToDelete.map((itemId) => ({ id: itemId }))
+            passportsToDelete && passportsToDelete.length > 0
+              ? passportsToDelete.map((itemId) => ({ id: itemId }))
+              : Prisma.skip,
+        },
+        snilses: {
+          create:
+            snilsesToCreate && snilsesToCreate.length > 0
+              ? snilsesToCreate.map((item) => {
+                  return {
+                    number: item.number,
+                    workspace: {
+                      connect: { id: id },
+                    },
+                  }
+                })
+              : Prisma.skip,
+          update:
+            snilsesToUpdate && snilsesToUpdate.length > 0
+              ? snilsesToUpdate.map((item) => {
+                  return {
+                    data: {
+                      number: item.number,
+                    },
+                    where: { id: item.id! },
+                  }
+                })
+              : Prisma.skip,
+          delete:
+            snilsesToDelete && snilsesToDelete.length > 0
+              ? snilsesToDelete.map((itemId) => ({ id: itemId }))
+              : Prisma.skip,
+        },
+        diplomas: {
+          create:
+            diplomasToCreate && diplomasToCreate.length > 0
+              ? diplomasToCreate.map((item) => {
+                  return {
+                    series: item.series,
+                    number: item.number,
+                    workspace: {
+                      connect: { id: id },
+                    },
+                  }
+                })
+              : Prisma.skip,
+          update:
+            diplomasToUpdate && diplomasToUpdate.length > 0
+              ? diplomasToUpdate.map((item) => {
+                  return {
+                    data: {
+                      series: item.series,
+                      number: item.number,
+                    },
+                    where: { id: item.id! },
+                  }
+                })
+              : Prisma.skip,
+          delete:
+            diplomasToDelete && diplomasToDelete.length > 0
+              ? diplomasToDelete.map((itemId) => ({ id: itemId }))
               : Prisma.skip,
         },
       },
@@ -147,7 +269,19 @@ export async function PATCH(
       include: {
         berth: { include: { berthType: true } },
         department: true,
-        certificates: { include: { certificateType: true, protocol: true } },
+        studies: {
+          include: {
+            specialization: {
+              include: {
+                specializationDirection: true,
+                specializationParameter: true,
+              },
+            },
+          },
+        },
+        passports: true,
+        snilses: true,
+        diplomas: true,
       },
     })
 
