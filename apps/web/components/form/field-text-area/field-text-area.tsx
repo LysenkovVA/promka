@@ -7,19 +7,14 @@ import {
   FieldError,
   FieldLabel,
 } from "@workspace/ui/components/field"
-import {
-  Controller,
-  FieldPath,
-  FieldValues,
-  UseFormReturn,
-} from "react-hook-form"
+import { Control, Controller, FieldPath, FieldValues } from "react-hook-form"
 import { IconAsterisk } from "@tabler/icons-react"
 import { Textarea } from "@workspace/ui/components/textarea"
 
 export interface FieldTextAreaProps<
   TFieldValues extends FieldValues = FieldValues,
 > {
-  form: UseFormReturn<TFieldValues>
+  control: Control<TFieldValues, any, TFieldValues>
   path: FieldPath<TFieldValues>
   label: string
   placeholder?: string
@@ -37,7 +32,7 @@ function FieldTextAreaInner<TFieldValues extends FieldValues>(
   props: FieldTextAreaProps<TFieldValues>
 ) {
   const {
-    form,
+    control,
     path,
     label,
     placeholder,
@@ -48,7 +43,7 @@ function FieldTextAreaInner<TFieldValues extends FieldValues>(
 
   return (
     <Controller
-      control={form.control}
+      control={control}
       name={path}
       render={({ field, fieldState }) => (
         <Field aria-invalid={fieldState.invalid}>

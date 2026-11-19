@@ -1,7 +1,7 @@
 "use client"
 
 import { memo, RefObject, useCallback, useEffect } from "react"
-import { useFieldArray, useForm } from "react-hook-form"
+import { FormProvider, useFieldArray, useForm } from "react-hook-form"
 import { Employee, EmployeeSchema } from "../../model/types/employee.schema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { FieldInput } from "@/components/form/field-input/field-input"
@@ -50,7 +50,7 @@ export const EmployeeDetailsSimpleForm = memo(
      * with zodResolver, which infers input and output separately.
      * Either omit the generic and let it infer from resolver, or specify all three explicitly
      */
-    const form = useForm<
+    const methods = useForm<
       z.input<typeof EmployeeSchema>,
       any,
       z.output<typeof EmployeeSchema>
@@ -61,7 +61,7 @@ export const EmployeeDetailsSimpleForm = memo(
 
     // Работа со списком удостоверений
     const { fields, append, remove } = useFieldArray({
-      control: form.control,
+      control: methods.control,
       name: "certificates",
     })
 
@@ -72,8 +72,8 @@ export const EmployeeDetailsSimpleForm = memo(
     }, [dispatch, employeeId, isInitialized, isLoading])
 
     useEffect(() => {
-      form.reset(data)
-    }, [data, form])
+      methods.reset(data)
+    }, [data, methods])
 
     const onSubmitForm = useCallback(
       async (formData: Employee) => {
@@ -138,40 +138,40 @@ export const EmployeeDetailsSimpleForm = memo(
         reducers={{ employeeDetailsSchema: employeeDetailsReducer }}
         removeAfterUnmount={false}
       >
-        <form
-          id={"employee-details-simple-form"}
-          className={"overflow-y no-scrollbar flex w-full flex-col gap-8 p-2"}
-          onSubmit={(e) => {
-            e.preventDefault()
-            e.stopPropagation()
-            form.handleSubmit(onSubmitForm)(e)
-          }}
-        >
-          <FieldGroup>
-            <FieldInput
-              required={true}
-              form={form}
-              path={"surname"}
-              label={"Фамилия"}
-              placeholder={"Укажите фамилию"}
-            />
-            <div className={"grid grid-cols-2 gap-2"}>
+        {/*Обязательно оборачиваем всю форму в FormProvider*/}
+        <FormProvider {...methods}>
+          <form
+            id={"employee-details-simple-form"}
+            className={"overflow-y no-scrollbar flex w-full flex-col gap-8 p-2"}
+            onSubmit={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              methods.handleSubmit(onSubmitForm)(e)
+            }}
+          >
+            <FieldGroup>
               <FieldInput
-                form={form}
-                path={"name"}
-                label={"Имя"}
-                placeholder={"Укажите имя"}
+                required={true}
+                name={"surname"}
+                label={"Фамилия"}
+                placeholder={"Укажите фамилию"}
               />
-              <FieldInput
-                form={form}
-                path={"patronymic"}
-                label={"Отчество"}
-                placeholder={"Укажите отчество"}
-              />
-            </div>
-          </FieldGroup>
-          <input type={"submit"} hidden ref={submitRef} />
-        </form>
+              <div className={"grid grid-cols-2 gap-2"}>
+                <FieldInput
+                  name={"name"}
+                  label={"Имя"}
+                  placeholder={"Укажите имя"}
+                />
+                <FieldInput
+                  name={"patronymic"}
+                  label={"Отчество"}
+                  placeholder={"Укажите отчество"}
+                />
+              </div>
+            </FieldGroup>
+            <input type={"submit"} hidden ref={submitRef} />
+          </form>
+        </FormProvider>
       </DynamicModuleLoader>
     )
   }

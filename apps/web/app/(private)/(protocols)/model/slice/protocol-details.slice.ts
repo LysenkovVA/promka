@@ -5,14 +5,9 @@ import { DetailsReduxSchema } from "@/lib/redux/model/types/DetailsReduxSchema"
 import { Protocol } from "../types/protocol.schema"
 import { getProtocolByIdThunk } from "../thunks/get-protocol-by-id.thunk"
 import { updateProtocolThunk } from "../thunks/update-protocol.thunk"
-import dayjs from "dayjs"
 
 const initialState: DetailsReduxSchema<Protocol> = {
-  entityData: {
-    number: "",
-    date: dayjs(new Date()).toDate(),
-    certificates: [],
-  },
+  entityData: { number: "", date: new Date(), studies: [] },
   error: "",
   isFetching: false,
   isSaving: false,
@@ -29,9 +24,6 @@ export const protocolDetailsSlice = createSlice({
     ) => {
       state._isInitialized = action.payload.isInitialized
     },
-    setEntityData: (state, action: PayloadAction<Protocol>) => {
-      state.entityData = action.payload
-    },
   },
   extraReducers: (builder) => {
     builder
@@ -40,11 +32,7 @@ export const protocolDetailsSlice = createSlice({
         state.isFetching = true
         state.isSaving = false
         state.error = ""
-        state.entityData = {
-          number: "",
-          date: dayjs(new Date()).toDate(),
-          certificates: [],
-        }
+        state.entityData = { number: "", date: new Date(), studies: [] }
         state._isInitialized = false
       })
       .addCase(getProtocolByIdThunk.fulfilled, (state, action) => {
@@ -58,11 +46,7 @@ export const protocolDetailsSlice = createSlice({
         state.isFetching = false
         state.isSaving = false
         state.error = action.payload
-        state.entityData = {
-          number: "",
-          date: dayjs(new Date()).toDate(),
-          certificates: [],
-        }
+        state.entityData = { number: "", date: new Date(), studies: [] }
         state._isInitialized = true
       })
       .addCase(updateProtocolThunk.fulfilled, (state, action) => {

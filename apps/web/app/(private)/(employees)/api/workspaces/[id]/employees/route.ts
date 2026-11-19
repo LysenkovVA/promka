@@ -54,7 +54,16 @@ export async function GET(
       include: {
         berth: true,
         department: true,
-        certificates: { include: { certificateType: true, protocol: true } },
+        studies: {
+          include: {
+            specialization: {
+              include: {
+                specializationDirection: true,
+                specializationParameter: true,
+              },
+            },
+          },
+        },
       },
     })
 

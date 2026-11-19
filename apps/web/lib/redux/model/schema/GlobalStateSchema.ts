@@ -10,14 +10,19 @@ import { BerthTypesFilters } from "@/BerthTypes/model/types/berth-type.filters"
 import { EmployeesStatistics } from "@/Employees/model/types/employees-statistics"
 import { Department } from "@/Departments"
 import { DepartmentFilters } from "@/Departments/model/types/department.filters"
-import { CertificateType } from "@/CertificateTypes"
-import { CertificateTypesFilters } from "@/CertificateTypes/model/types/certificate-type.filters"
-import { Certificate } from "@/Certificates"
-import { CertificateFilters } from "@/Certificates/model/types/certificate.filters"
+import { Specialization } from "@/Specializations"
+import { SpecializationsFilters } from "@/Specializations/model/types/specialization.filters"
 import { InfiniteScrollSchema } from "@/components/inifinite-scroll/model/types/InfiniteScrollSchema"
-import { Protocol } from "@/Protocols"
-import { ProtocolFilters } from "@/Protocols/model/types/protocol.filters"
 import { WorkspaceFilters } from "@/Workspaces/model/types/workspace.filters"
+import { StudyOrganization } from "@/StudyOrganizations"
+import { StudyOrganizationFilters } from "@/StudyOrganizations/model/types/study-organization.filters"
+import { SpecializationParameter } from "@/SpecializationParameters"
+import { SpecializationParametersFilters } from "@/SpecializationParameters/model/types/specialization-parameter.filters"
+import { SpecializationDirection } from "@/SpecializationDirections"
+import { SpecializationDirectionsFilters } from "@/SpecializationDirections/model/types/specialization-direction.filters"
+import { Study } from "@/Studies/model/types/study.schema"
+import { StudyFilters } from "@/Studies/model/types/study.filters"
+import { Protocol } from "@/Protocols"
 
 /**
  * Схема глобального состояния
@@ -46,18 +51,36 @@ export interface GlobalStateSchema {
   departmentDetailsSchema?: DetailsReduxSchema<Department>
   departmentsSchema?: ListReduxSchema<Department, DepartmentFilters>
   // Типы удостоверений
-  certificateTypeDetailsSchema?: DetailsReduxSchema<CertificateType>
-  certificateTypesSchema?: ListReduxSchema<
-    CertificateType,
-    CertificateTypesFilters
+  specializationDetailsSchema?: DetailsReduxSchema<Specialization>
+  specializationsSchema?: ListReduxSchema<
+    Specialization,
+    SpecializationsFilters
   >
-  // Удостоверения
-  certificateDetailsSchema?: DetailsReduxSchema<Certificate>
-  certificatesSchema?: ListReduxSchema<Certificate, CertificateFilters>
+  // Типы удостоверений
+  specializationParameterDetailsSchema?: DetailsReduxSchema<SpecializationParameter>
+  specializationParametersSchema?: ListReduxSchema<
+    SpecializationParameter,
+    SpecializationParametersFilters
+  >
+  // Направления типов удостоверений
+  specializationDirectionDetailsSchema?: DetailsReduxSchema<SpecializationDirection>
+  specializationDirectionsSchema?: ListReduxSchema<
+    SpecializationDirection,
+    SpecializationDirectionsFilters
+  >
+  // Обучение
+  studyDetailsSchema?: DetailsReduxSchema<Study>
+  studiesSchema?: ListReduxSchema<Study, StudyFilters>
+
   // Протоколы
   protocolDetailsSchema?: DetailsReduxSchema<Protocol>
-  protocolsSchema?: ListReduxSchema<Protocol, ProtocolFilters>
-  protocolsSelectorSchema?: ListReduxSchema<Protocol, ProtocolFilters>
+
+  // Образовательные организации
+  studyOrganizationDetailsSchema?: DetailsReduxSchema<StudyOrganization>
+  studyOrganizationsSchema?: ListReduxSchema<
+    StudyOrganization,
+    StudyOrganizationFilters
+  >
 }
 
 /**

@@ -7,12 +7,7 @@ import {
   FieldError,
   FieldLabel,
 } from "@workspace/ui/components/field"
-import {
-  Controller,
-  FieldPath,
-  FieldValues,
-  UseFormReturn,
-} from "react-hook-form"
+import { Control, Controller, FieldPath, FieldValues } from "react-hook-form"
 import { IconAsterisk } from "@tabler/icons-react"
 import "react-phone-number-input/style.css"
 import { Input } from "@workspace/ui/components/input"
@@ -24,7 +19,7 @@ import PhoneInput, {
 export interface FieldPhoneProps<
   TFieldValues extends FieldValues = FieldValues,
 > {
-  form: UseFormReturn<TFieldValues>
+  control: Control<TFieldValues, any, TFieldValues>
   path: FieldPath<TFieldValues>
   label: string
   placeholder?: string
@@ -42,7 +37,7 @@ function FieldPhoneInner<TFieldValues extends FieldValues>(
   props: FieldPhoneProps<TFieldValues>
 ) {
   const {
-    form,
+    control,
     path,
     label,
     placeholder,
@@ -53,7 +48,7 @@ function FieldPhoneInner<TFieldValues extends FieldValues>(
 
   return (
     <Controller
-      control={form.control}
+      control={control}
       name={path}
       render={({ field, fieldState }) => (
         <Field aria-invalid={fieldState.invalid}>

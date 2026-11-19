@@ -1,0 +1,38 @@
+/**
+ * Специализация (обучение)
+ */
+model Specialization {
+  id String @id @default(cuid())
+
+  // Выбранное направление для типа удостоверения
+  specializationDirection   SpecializationDirection @relation(name: "specialization-direction-specializations", fields: [specializationDirectionId], references: [id], onDelete: Restrict)
+  specializationDirectionId String
+
+  // Есть дополнительный параметр (Например, группа, разряд, уровень)
+  hasParameter Boolean @default(false)
+
+  // Выбранный параметр для типа удостоверения
+  specializationParameter   SpecializationParameter? @relation(name: "specialization-parameter-specializations", fields: [specializationParameterId], references: [id], onDelete: Restrict)
+  specializationParameterId String?
+
+  // Значение выбранного параметра
+  specializationParameterValue String?
+
+  // Срок действия
+  // 0 - Безлимитно
+  durationAtMonths Int @default(0)
+
+  validAtOrganizationOnly Boolean @default(false)
+
+  studies Study[] @relation(name: "specialization-studies")
+
+  // Рабочее пространство
+  workspace   Workspace? @relation(name: "workspace-specializations", fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId String?
+
+  // Пользователь
+  user   User?   @relation(name: "user-specializations", fields: [userId], references: [id], onDelete: Cascade)
+  userId String?
+
+  @@map("specializations")
+}

@@ -6,7 +6,6 @@ import { Employee } from "../../../../../model/types/employee.schema"
 import { checkAuthForWorkspace } from "@/app/(public)/(auth)/api/checkAuth"
 import { prisma } from "@workspace/database/prisma"
 import { validateObject } from "@/lib/zod/validateObject"
-import { Prisma } from "@workspace/database/.generated/client"
 import { ServerError } from "@/lib/responses/ServerError"
 import { EmployeeRequestSchema } from "../../../../../model/types/employee-request.schema"
 
@@ -24,7 +23,51 @@ export async function GET(
       include: {
         berth: { include: { berthType: true } },
         department: true,
-        certificates: { include: { certificateType: true, protocol: true } },
+        certificates: {
+          include: {
+            study: {
+              include: {
+                specialization: {
+                  include: {
+                    specializationDirection: true,
+                    specializationParameter: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+        studies: {
+          include: {
+            specialization: {
+              include: {
+                specializationDirection: true,
+                specializationParameter: true,
+              },
+            },
+            // employees: {
+            //   // where: {
+            //   //   id: employeeId,
+            //   // },
+            //   include: {
+            //     workspace: { include: { company: true } },
+            //   },
+            // },
+
+            // certificates: {
+            //   // where: {
+            //   //   employee: {
+            //   //     id: employeeId,
+            //   //   },
+            //   // },
+            //   include: {
+            //     workspace: { include: { company: true } },
+            //   },
+            // },
+            protocol: true,
+            workspace: { include: { company: true } },
+          },
+        },
       },
     })
 
@@ -61,21 +104,30 @@ export async function PATCH(
       include: {
         berth: { include: { berthType: true } },
         department: true,
-        certificates: { include: { certificateType: true, protocol: true } },
+        studies: {
+          include: {
+            specialization: {
+              include: {
+                specializationDirection: true,
+                specializationParameter: true,
+              },
+            },
+          },
+        },
       },
     })
 
-    // Новые удостоверения
-    const itemsToCreate = validatedData.certificates?.filter((item) => !item.id)
-    // Удостоверения для обновления
-    const itemsToUpdate = validatedData.certificates?.filter((item) => item.id)
-    const existingItemIds =
-      existingData?.certificates?.map((item) => item.id) || []
-    const providedItemIds = itemsToUpdate?.map((item) => item.id!)
-    // Удостоверения для удаления
-    const itemsToDelete = existingItemIds.filter(
-      (id) => !providedItemIds?.includes(id!)
-    )
+    // // Новые удостоверения
+    // const itemsToCreate = validatedData.certificates?.filter((item) => !item.id)
+    // // Удостоверения для обновления
+    // const itemsToUpdate = validatedData.certificates?.filter((item) => item.id)
+    // const existingItemIds =
+    //   existingData?.certificates?.map((item) => item.id) || []
+    // const providedItemIds = itemsToUpdate?.map((item) => item.id!)
+    // // Удостоверения для удаления
+    // const itemsToDelete = existingItemIds.filter(
+    //   (id) => !providedItemIds?.includes(id!)
+    // )
 
     const updatedData = await prisma.employee.update({
       data: {
@@ -98,56 +150,65 @@ export async function PATCH(
               department: { connect: { id: validatedData.department?.id } },
             }
           : { department: { disconnect: true } }),
-        certificates: {
-          create:
-            itemsToCreate && itemsToCreate.length > 0
-              ? itemsToCreate.map((item) => {
-                  return {
-                    certificateType: {
-                      connect: { id: item.certificateType.id! },
-                    },
-                    number: item.number,
-                    date: item.date ?? Prisma.skip,
-                    group: item.group ?? Prisma.skip,
-                    workspace: {
-                      connect: { id: id },
-                    },
-                    protocol: {
-                      connect: { id: item.protocol.id! },
-                    },
-                  }
-                })
-              : Prisma.skip,
-          update:
-            itemsToUpdate && itemsToUpdate.length > 0
-              ? itemsToUpdate.map((item) => {
-                  return {
-                    data: {
-                      certificateType: {
-                        connect: { id: item.certificateType.id },
-                      },
-                      number: item.number ?? Prisma.skip,
-                      date: item.date ?? Prisma.skip,
-                      group: item.group ?? Prisma.skip,
-                      protocol: {
-                        connect: { id: item.protocol.id },
-                      },
-                    },
-                    where: { id: item.id! },
-                  }
-                })
-              : Prisma.skip,
-          delete:
-            itemsToDelete && itemsToDelete.length > 0
-              ? itemsToDelete.map((itemId) => ({ id: itemId }))
-              : Prisma.skip,
-        },
+        // certificates: {
+        //   create:
+        //     itemsToCreate && itemsToCreate.length > 0
+        //       ? itemsToCreate.map((item) => {
+        //           return {
+        //             certificateType: {
+        //               connect: { id: item.certificateType.id! },
+        //             },
+        //             number: item.number,
+        //             date: item.date ?? Prisma.skip,
+        //             group: item.group ?? Prisma.skip,
+        //             workspace: {
+        //               connect: { id: id },
+        //             },
+        //             protocol: {
+        //               connect: { id: item.protocol.id! },
+        //             },
+        //           }
+        //         })
+        //       : Prisma.skip,
+        //   update:
+        //     itemsToUpdate && itemsToUpdate.length > 0
+        //       ? itemsToUpdate.map((item) => {
+        //           return {
+        //             data: {
+        //               certificateType: {
+        //                 connect: { id: item.certificateType.id },
+        //               },
+        //               number: item.number ?? Prisma.skip,
+        //               date: item.date ?? Prisma.skip,
+        //               group: item.group ?? Prisma.skip,
+        //               protocol: {
+        //                 connect: { id: item.protocol.id },
+        //               },
+        //             },
+        //             where: { id: item.id! },
+        //           }
+        //         })
+        //       : Prisma.skip,
+        //   delete:
+        //     itemsToDelete && itemsToDelete.length > 0
+        //       ? itemsToDelete.map((itemId) => ({ id: itemId }))
+        //       : Prisma.skip,
+        // },
       },
       where: { id: employeeId },
       include: {
         berth: { include: { berthType: true } },
         department: true,
-        certificates: { include: { certificateType: true, protocol: true } },
+        studies: {
+          include: {
+            specialization: {
+              include: {
+                specializationDirection: true,
+                specializationParameter: true,
+              },
+            },
+          },
+        },
       },
     })
 

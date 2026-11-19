@@ -32,9 +32,11 @@ import { DetailsWrapper } from "@/components/details-wrapper/details-wrapper"
 import { getEmployeeByIdThunk } from "@/Employees/model/thunks/get-employee-by-id.thunk"
 import { formatSnils } from "@/Employees/ui/field-snils/field-snils"
 import { formatPhoneNumberIntl } from "react-phone-number-input"
-import { FieldDescription } from "@workspace/ui/components/field"
-import { Separator } from "@workspace/ui/components/separator"
-import { CertificateCard } from "@/Certificates/ui/certificate-card/certificate-card"
+import { StudyCardList } from "@/Studies/ui/study-card-list/study-card-list"
+import { Alert, AlertTitle } from "@workspace/ui/components/alert"
+import { Study } from "@/Studies/model/types/study.schema"
+import { getStudiesByEmployeeIdThunk } from "@/Employees/model/thunks/get-studies-by-employee-id.thunk"
+import { ResponseData } from "@/lib/responses/ResponseData"
 
 export interface EmployeeDetailsProps {
   employeeId?: string
@@ -44,6 +46,9 @@ export const EmployeeDetails = memo((props: EmployeeDetailsProps) => {
   const { employeeId } = props
 
   const [isEdit, setIsEdit] = useState(false)
+  const [employeeStudies, setEmployeeStudies] = useState<Study[] | undefined>(
+    undefined
+  )
 
   const dispatch = useAppDispatch()
   const data = useAppSelector(getEmployeeDetailsData)
@@ -61,6 +66,22 @@ export const EmployeeDetails = memo((props: EmployeeDetailsProps) => {
       dispatch(getEmployeeByIdThunk({ employeeId: employeeId }))
     }
   }, [dispatch, employeeId, isInitialized, isLoading])
+
+  useEffect(() => {
+    if (employeeId) {
+      dispatch(getStudiesByEmployeeIdThunk({ employeeId: employeeId })).then(
+        (result) => {
+          if (result.meta.requestStatus === "fulfilled") {
+            const responseData = result.payload as ResponseData<Study[]>
+
+            if (responseData.isOk) {
+              setEmployeeStudies(responseData.data)
+            }
+          }
+        }
+      )
+    }
+  }, [dispatch, employeeId])
 
   const onDeleteCallback = useCallback(async () => {
     try {
@@ -245,53 +266,19 @@ export const EmployeeDetails = memo((props: EmployeeDetailsProps) => {
                 </ItemContent>
               </Item>
             )}
-            {/*{(data?.phoneNumber || data?.email) && (*/}
-            {/*  <Marker variant="border">*/}
-            {/*    <MarkerIcon>*/}
-            {/*      <IconAddressBook />*/}
-            {/*    </MarkerIcon>*/}
-            {/*    <MarkerContent>Контакты</MarkerContent>*/}
-            {/*  </Marker>*/}
-            {/*)}*/}
-            {/*{data?.phoneNumber && (*/}
-            {/*  <Item variant={"muted"}>*/}
-            {/*    <ItemMedia variant={"icon"}>*/}
-            {/*      <IconPhone />*/}
-            {/*    </ItemMedia>*/}
-            {/*    <ItemContent>*/}
-            {/*      <ItemDescription> {"Телефон"}</ItemDescription>*/}
-            {/*      {data?.phoneNumber}*/}
-            {/*    </ItemContent>*/}
-            {/*  </Item>*/}
-            {/*)}*/}
-            {/*{data?.email && (*/}
-            {/*  <Item variant={"muted"}>*/}
-            {/*    <ItemMedia variant={"icon"}>*/}
-            {/*      <IconMail />*/}
-            {/*    </ItemMedia>*/}
-            {/*    <ItemContent>*/}
-            {/*      <ItemDescription> {"E-mail"}</ItemDescription>*/}
-            {/*      {data?.email}*/}
-            {/*    </ItemContent>*/}
-            {/*  </Item>*/}
-            {/*)}*/}
-            {data?.id && data.certificates && data.certificates.length > 0 && (
-              <>
-                <FieldDescription className={"mt-4"}>
-                  {"Удостоверения"}
-                </FieldDescription>
-                <Separator />
-                <div className={"grid w-full grid-cols-3 gap-2"}>
-                  {!data.certificates && <div>{"Удостоверений нет"}</div>}
-                  {data.certificates?.map((item) => (
-                    <CertificateCard
-                      key={item.id}
-                      certificate={item}
-                      hideEmployee={true}
-                    />
-                  ))}
+            {employeeStudies && employeeStudies?.length > 0 ? (
+              <div className={"mt-2 flex w-full flex-col gap-2"}>
+                <div className={"text-lg text-muted-foreground"}>
+                  {"Документы по обучениям"}
                 </div>
-              </>
+                <StudyCardList studies={employeeStudies} hideEmployeeInfo />
+              </div>
+            ) : (
+              <Alert className={`mt-2 border-blue-300 p-2`}>
+                <AlertTitle className={"text-blue-400"}>
+                  {"Документы по обучениям сотрудника пока что отсутствуют"}
+                </AlertTitle>
+              </Alert>
             )}
           </div>
         )}

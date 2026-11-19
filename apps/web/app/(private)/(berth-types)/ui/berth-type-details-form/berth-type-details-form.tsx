@@ -1,7 +1,7 @@
 "use client"
 
 import { memo, RefObject, useCallback, useEffect } from "react"
-import { useForm } from "react-hook-form"
+import { FormProvider, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { FieldInput } from "@/components/form/field-input/field-input"
 import { FieldGroup } from "@workspace/ui/components/field"
@@ -49,7 +49,7 @@ export const BerthTypeDetailsForm = memo((props: BerthTypeDetailsFormProps) => {
    * with zodResolver, which infers input and output separately.
    * Either omit the generic and let it infer from resolver, or specify all three explicitly
    */
-  const form = useForm<
+  const methods = useForm<
     z.input<typeof BerthTypeSchema>,
     any,
     z.output<typeof BerthTypeSchema>
@@ -65,8 +65,8 @@ export const BerthTypeDetailsForm = memo((props: BerthTypeDetailsFormProps) => {
   }, [dispatch, berthTypeId, isInitialized, isLoading])
 
   useEffect(() => {
-    form.reset(data)
-  }, [data, form])
+    methods.reset(data)
+  }, [data, methods])
 
   const onSubmitForm = useCallback(
     async (formData: BerthType) => {
@@ -128,27 +128,29 @@ export const BerthTypeDetailsForm = memo((props: BerthTypeDetailsFormProps) => {
       reducers={{ berthTypeDetailsSchema: berthTypeDetailsReducer }}
       removeAfterUnmount={false}
     >
-      <form
-        id={"berth-type-details-form"}
-        className={"overflow-y no-scrollbar flex w-full flex-col gap-8 p-2"}
-        onSubmit={(e) => {
-          e.preventDefault()
-          e.stopPropagation()
-          form.handleSubmit(onSubmitForm)(e)
-        }}
-      >
-        <FieldGroup>
-          <FieldInput
-            required={true}
-            form={form}
-            path={"name"}
-            label={"Название"}
-            placeholder={"Укажите название типа должности"}
-            description={'Например, "ИТР" или "Рабочий"'}
-          />
-        </FieldGroup>
-        <input type={"submit"} hidden ref={submitRef} />
-      </form>
+      {/*Обязательно оборачиваем всю форму в FormProvider*/}
+      <FormProvider {...methods}>
+        <form
+          id={"berth-type-details-form"}
+          className={"overflow-y no-scrollbar flex w-full flex-col gap-8 p-2"}
+          onSubmit={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            methods.handleSubmit(onSubmitForm)(e)
+          }}
+        >
+          <FieldGroup>
+            <FieldInput
+              required={true}
+              name={"name"}
+              label={"Название"}
+              placeholder={"Укажите название типа должности"}
+              description={'Например, "ИТР" или "Рабочий"'}
+            />
+          </FieldGroup>
+          <input type={"submit"} hidden ref={submitRef} />
+        </form>
+      </FormProvider>
     </DynamicModuleLoader>
   )
 })

@@ -33,21 +33,12 @@ export const BerthSchema = z.object(
         },
       })
       .min(1, { error: "Название не указано" }),
-    // workspace:
-    //   // Для устранения ошибок с циклическими зависимостями
-    //   z
-    //     .lazy<typeof WorkspaceSchema>(() => {
-    //       const { WorkspaceSchema } = require("@/Workspaces")
-    //       return WorkspaceSchema
-    //     })
-    //     .nullish(),
     berthType:
       // Для устранения ошибок с циклическими зависимостями
       z.lazy<typeof BerthTypeSchema>(() => {
         const { BerthTypeSchema } = require("@/BerthTypes")
         return BerthTypeSchema
       }),
-    // .nullish(),
   },
   /**
    * Параметры объекта

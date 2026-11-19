@@ -30,12 +30,13 @@ model Employee {
   department   Department? @relation(name: "department-employees", fields: [departmentId], references: [id], onDelete: Restrict)
   departmentId String?
 
+  studies Study[] @relation(name: "studies-employees")
+
+  certificates Certificate[] @relation(name: "employee-certificates")
+
   // Рабочее пространство
   workspace   Workspace @relation(name: "workspace-employees", fields: [workspaceId], references: [id], onDelete: Cascade)
   workspaceId String
-
-  // Удостоверения
-  certificates Certificate[] @relation(name: "employee-certificates")
 
   @@index([surname, name])
   @@map("employees")

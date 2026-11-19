@@ -6,6 +6,17 @@ model Protocol {
   number String?
   date   DateTime?
 
+  studyLocation ProtocolStudyLocation @default(AT_COMPANY)
+
+  // Учебная организация
+  studyOrganization   StudyOrganization? @relation(name: "study-organization-protocols", fields: [studyOrganizationId], references: [id], onDelete: Restrict)
+  studyOrganizationId String?
+
+  studies Study[] @relation(name: "protocol-studies")
+
+  // Копии
+  files File[] @relation(name: "protocol-files")
+
   // Рабочее пространство
   workspace   Workspace? @relation(name: "workspace-protocols", fields: [workspaceId], references: [id], onDelete: Cascade)
   workspaceId String?
@@ -14,12 +25,20 @@ model Protocol {
   user   User?   @relation(name: "user-protocols", fields: [userId], references: [id], onDelete: Cascade)
   userId String?
 
-  // Удостоверения
-  certificates Certificate[] @relation(name: "protocol-certificates")
-
-  // Копии
-  files File[] @relation(name: "protocol-files")
-
   @@index([number])
   @@map("protocols")
+}
+
+/**
+ * Место проведения обучения
+ */
+enum ProtocolStudyLocation {
+  /**
+   * В самой компании
+   */
+  AT_COMPANY
+  /**
+   * В профильной организации по обучению
+   */
+  AT_STUDY_ORGANIZATION
 }

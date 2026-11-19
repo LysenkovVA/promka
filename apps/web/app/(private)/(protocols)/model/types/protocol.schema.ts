@@ -6,6 +6,7 @@ import {
   ZOD_INVALID_STRING_TYPE,
 } from "@/lib/zod/commonErrors"
 import { stripTimezone } from "@/lib/date/utils"
+import { WorkspaceSchema } from "@/Workspaces"
 
 export const ProtocolSchema = z.object(
   {
@@ -41,12 +42,12 @@ export const ProtocolSchema = z.object(
         },
       })
       .transform((val) => stripTimezone(val)),
-    certificates: z
+    studies: z
       .array(
         // Для устранения ошибок с циклическими зависимостями
         z.lazy(() => {
-          const { CertificateSchema } = require("@/Certificates")
-          return CertificateSchema
+          const { StudySchema } = require("@/Studies")
+          return StudySchema
         }),
         {
           error: (issue) => {
@@ -57,7 +58,22 @@ export const ProtocolSchema = z.object(
           },
         }
       )
-      .min(1, "Отсутствуют данные по удостоверениям"),
+      .min(1, { error: "Укажите хотя бы одно обучение" }),
+    studyOrganization:
+      // Для устранения ошибок с циклическими зависимостями
+      z
+        .lazy(() => {
+          const { StudyOrganizationSchema } = require("@/StudyOrganizations")
+          return StudyOrganizationSchema
+        })
+        .nullish(),
+    workspace:
+      // Для устранения ошибок с циклическими зависимостями
+      z.lazy(() => {
+        const { WorkspaceSchema } = require("@/Workspaces")
+        return WorkspaceSchema
+      }),
+    // TODO files
   },
   /**
    * Параметры объекта

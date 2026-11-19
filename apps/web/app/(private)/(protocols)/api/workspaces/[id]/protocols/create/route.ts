@@ -5,10 +5,10 @@ import { ResponseData } from "@/lib/responses/ResponseData"
 import { checkAuthForWorkspace } from "@/app/(public)/(auth)"
 import { validateObject } from "@/lib/zod/validateObject"
 import { prisma } from "@workspace/database/prisma"
-import { Protocol } from "../../../../../model/types/protocol.schema"
 import { ServerError } from "@/lib/responses/ServerError"
-import { ProtocolRequestSchema } from "../../../../../model/types/protocol-request.schema"
+import { ProtocolRequestSchema } from "@/Protocols/model/types/protocol-request.schema"
 import { Prisma } from "@workspace/database/.generated/client"
+import { Protocol } from "../../../../../model/types/protocol.schema"
 
 export async function POST(
   request: NextRequest,
@@ -30,34 +30,105 @@ export async function POST(
 
     const createdData = await prisma.protocol.create({
       data: {
+        // Место обучения
+        studyLocation: validatedData.studyLocation,
+        // Учебный центр
+        studyOrganization: validatedData.studyOrganization?.id
+          ? { connect: { id: validatedData.studyOrganization.id } }
+          : Prisma.skip,
+        // Номер протокола
         number: validatedData.number,
+        // Дата протокола
         date: validatedData.date,
-        certificates: {
-          create: validatedData.certificates.map((newCertificate) => {
+        // Обучения
+        studies: {
+          create: validatedData.studies.map((newStudy) => {
             return {
-              employee: { connect: { id: newCertificate.employee.id } },
-              certificateType: {
-                connect: { id: newCertificate.certificateType.id },
+              // Специализация
+              specialization: { connect: { id: newStudy.specialization.id } },
+              // Сотрудники (если есть)
+              ...(newStudy.employees && newStudy.employees.length > 0
+                ? {
+                    employees: {
+                      connect: newStudy.employees.map((employee) => {
+                        return { id: employee.id }
+                      }),
+                    },
+                  }
+                : Prisma.skip),
+              // Удоствоерения (если есть)
+              ...(newStudy.certificates && newStudy.certificates.length > 0
+                ? {
+                    certificates: {
+                      create: newStudy.certificates.map((newCertificate) => {
+                        return {
+                          // Сотрудник
+                          employee: {
+                            connect: { id: newCertificate.employee.id },
+                          },
+                          // Номер удоствоерения
+                          number: newCertificate.number,
+                          // Дата удостоверения
+                          date: newCertificate.date,
+                          // Workspace
+                          workspace: {
+                            connect: { id: workspaceId },
+                          },
+                        }
+                      }),
+                    },
+                  }
+                : Prisma.skip),
+              // Workspace
+              workspace: {
+                connect: { id: workspaceId },
               },
-              number: newCertificate.number,
-              date: newCertificate.date,
-              group: newCertificate.group ?? Prisma.skip,
-              workspace: { connect: { id: workspaceId } },
             }
           }),
         },
+        // Workspace
         workspace: {
           connect: { id: workspaceId },
         },
       },
       include: {
-        certificates: {
+        studyOrganization: true,
+        studies: {
           include: {
-            certificateType: true,
-            employee: {
+            specialization: {
+              include: {
+                specializationDirection: true,
+                specializationParameter: true,
+              },
+            },
+            employees: {
               include: {
                 berth: { include: { berthType: true } },
                 department: true,
+                workspace: { include: { company: true } },
+              },
+            },
+            certificates: {
+              include: {
+                employee: {
+                  include: {
+                    berth: { include: { berthType: true } },
+                    department: true,
+                  },
+                },
+                study: {
+                  include: {
+                    specialization: {
+                      include: {
+                        specializationDirection: true,
+                        specializationParameter: true,
+                      },
+                    },
+                    protocol: {
+                      include: { workspace: { include: { company: true } } },
+                    },
+                  },
+                },
               },
             },
           },

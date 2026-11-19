@@ -10,11 +10,6 @@ export const getProtocolDetailsData = createSelector(
   (schema) => schema?.entityData ?? undefined
 )
 
-// export const getProtocolDetailsFormData = createSelector(
-//   getProtocolDetails,
-//   (schema) => schema?.entityFormData ?? undefined
-// )
-
 export const getProtocolDetailsIsFetching = createSelector(
   getProtocolDetails,
   (schema) => schema?.isFetching ?? false

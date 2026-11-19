@@ -33,7 +33,7 @@ model User {
   certificates Certificate[] @relation(name: "user-certificates")
 
   // Типы удостоверений пользователя
-  certificateTypes CertificateType[] @relation(name: "user-certificate-types")
+  specializations Specialization[] @relation(name: "user-specializations")
 
   // Протоколы удостоверений пользователя
   protocols Protocol[] @relation(name: "user-protocols")

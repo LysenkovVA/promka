@@ -4,7 +4,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit"
 import { ResponseData } from "@/lib/responses/ResponseData"
 import { ThunkConfig } from "@/lib/redux"
 import apiClient from "@/lib/axios/apiClient"
-import { Protocol } from "../types/protocol.schema"
+import { Protocol } from "@/Protocols/model/types/protocol.schema"
 
 export interface UpdateProtocolThunkProps {
   entityData: Protocol

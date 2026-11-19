@@ -1,7 +1,7 @@
 "use client"
 
 import { memo, RefObject, useCallback, useEffect } from "react"
-import { useForm } from "react-hook-form"
+import { FormProvider, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { FieldInput } from "@/components/form/field-input/field-input"
 import { FieldGroup } from "@workspace/ui/components/field"
@@ -53,7 +53,7 @@ export const DepartmentDetailsForm = memo(
      * with zodResolver, which infers input and output separately.
      * Either omit the generic and let it infer from resolver, or specify all three explicitly
      */
-    const form = useForm<
+    const methods = useForm<
       z.input<typeof DepartmentSchema>,
       any,
       z.output<typeof DepartmentSchema>
@@ -69,8 +69,8 @@ export const DepartmentDetailsForm = memo(
     }, [dispatch, departmentId, isInitialized, isLoading])
 
     useEffect(() => {
-      form.reset(data)
-    }, [data, form])
+      methods.reset(data)
+    }, [data, methods])
 
     const onSubmitForm = useCallback(
       async (formData: Department) => {
@@ -132,26 +132,28 @@ export const DepartmentDetailsForm = memo(
         reducers={{ departmentDetailsSchema: departmentDetailsReducer }}
         removeAfterUnmount={false}
       >
-        <form
-          id={"department-details-form"}
-          className={"overflow-y no-scrollbar flex w-full flex-col gap-8 p-2"}
-          onSubmit={(e) => {
-            e.preventDefault()
-            e.stopPropagation()
-            form.handleSubmit(onSubmitForm)(e)
-          }}
-        >
-          <FieldGroup>
-            <FieldInput
-              required={true}
-              form={form}
-              path={"name"}
-              label={"Название"}
-              placeholder={"Укажите название подразделения"}
-            />
-          </FieldGroup>
-          <input type={"submit"} hidden ref={submitRef} />
-        </form>
+        {/*Обязательно оборачиваем всю форму в FormProvider*/}
+        <FormProvider {...methods}>
+          <form
+            id={"department-details-form"}
+            className={"overflow-y no-scrollbar flex w-full flex-col gap-8 p-2"}
+            onSubmit={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              methods.handleSubmit(onSubmitForm)(e)
+            }}
+          >
+            <FieldGroup>
+              <FieldInput
+                required={true}
+                name={"name"}
+                label={"Название"}
+                placeholder={"Укажите название подразделения"}
+              />
+            </FieldGroup>
+            <input type={"submit"} hidden ref={submitRef} />
+          </form>
+        </FormProvider>
       </DynamicModuleLoader>
     )
   }

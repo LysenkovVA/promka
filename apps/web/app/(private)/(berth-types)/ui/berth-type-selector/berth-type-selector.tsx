@@ -6,10 +6,9 @@ import {
   useAppDispatch,
   useAppSelector,
 } from "@/lib/redux"
-import {
-  berthTypesActions,
-  berthTypesReducer,
-} from "../../model/slice/berth-types.slice"
+import { Selector } from "@/components/selector/selector"
+import { toast } from "sonner"
+import { useAuth } from "@/app/(public)/(auth)"
 import { BerthType } from "../../model/types/berth-type.schema"
 import {
   getBerthTypes,
@@ -17,19 +16,27 @@ import {
   getBerthTypesSearch,
 } from "../../model/selectors/berth-types.selectors"
 import { getBerthTypesThunk } from "../../model/thunks/get-berth-types.thunk"
-import { Selector } from "@/components/selector/selector"
-import { BerthTypeEditDialog } from "../berth-type-edit-dialog/berth-type-edit-dialog"
-import { toast } from "sonner"
-import { useAuth } from "@/app/(public)/(auth)"
 import { deleteBerthTypeThunk } from "../../model/thunks/delete-berth-type.thunk"
+import {
+  berthTypesActions,
+  berthTypesReducer,
+} from "../../model/slice/berth-types.slice"
+import { BerthTypeEditDialog } from "../berth-type-edit-dialog/berth-type-edit-dialog"
 
 export interface BerthTypeSelectorProps {
   value: BerthType | null
   onChange: (value: BerthType | null) => void
+  placeholder?: string
+  isInvalid?: boolean
 }
 
 export const BerthTypeSelector = memo((props: BerthTypeSelectorProps) => {
-  const { value, onChange } = props
+  const {
+    value,
+    onChange,
+    placeholder = "Выберите тип должности",
+    isInvalid = false,
+  } = props
 
   const [isOpen, setIsOpen] = useState(false)
   const [isEdit, setIsEdit] = useState(false)
@@ -60,7 +67,7 @@ export const BerthTypeSelector = memo((props: BerthTypeSelectorProps) => {
 
         if (result.isOk) {
           onChange(null)
-          toast.success(`Тип должности '${value.name}' удалён`, {
+          toast.success(`Сотрудник '${value.name}' удалён`, {
             position: "top-center",
             style: {
               color: "green",
@@ -74,7 +81,7 @@ export const BerthTypeSelector = memo((props: BerthTypeSelectorProps) => {
         style: { color: "tomato" },
       })
     }
-  }, [auth.activeWorkspace.id, dispatch, onChange, value?.id, value?.name])
+  }, [auth?.activeWorkspace?.id, dispatch, onChange, value])
 
   return (
     <DynamicModuleLoader
@@ -83,15 +90,16 @@ export const BerthTypeSelector = memo((props: BerthTypeSelectorProps) => {
     >
       <Selector
         items={data}
+        isInvalid={isInvalid}
         isOpen={isOpen}
         onOpenChange={setIsOpen}
         selectedValue={value?.id ? value : null}
         onRenderSelectedValue={() => {
           if (value?.id) {
-            return <div>{value?.name}</div>
+            return <div>{value.name}</div>
           }
 
-          return <div>{"Выберите тип"}</div>
+          return <div>{placeholder}</div>
         }}
         onChangeSelectedValue={onChange}
         searchValue={search}
@@ -99,7 +107,13 @@ export const BerthTypeSelector = memo((props: BerthTypeSelectorProps) => {
           dispatch(berthTypesActions.setSearch(searchValue))
         }}
         isSearching={isLoading}
-        onRenderItem={(item: BerthType) => <div>{item.name}</div>}
+        onRenderItem={(item: BerthType) => (
+          <div
+            className={"flex w-full flex-col items-start justify-center gap-0"}
+          >
+            <div className={"text-sm"}>{item?.name}</div>
+          </div>
+        )}
         onAddClick={() => {
           setEditValueId(undefined)
           setIsEdit(true)

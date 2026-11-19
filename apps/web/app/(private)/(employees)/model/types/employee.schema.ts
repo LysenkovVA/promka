@@ -9,6 +9,8 @@ import { stripTimezone } from "@/lib/date/utils"
 import { BerthSchema } from "@/Berthes"
 import { DepartmentSchema } from "@/Departments"
 import { isValidPhoneNumber } from "react-phone-number-input/input"
+import { WorkspaceSchema } from "@/Workspaces"
+import { StudySchema } from "@/Studies"
 
 // Функция валидации контрольной суммы СНИЛС
 const validateSnils = (snils: string) => {
@@ -199,6 +201,31 @@ export const EmployeeSchema = z.object(
         }
       )
       .nullish(),
+    studies: z
+      .array(
+        // Для устранения ошибок с циклическими зависимостями
+        z.lazy(() => {
+          const { StudySchema } = require("@/Studies")
+          return StudySchema
+        }),
+        {
+          error: (issue) => {
+            switch (issue.code) {
+              case "invalid_type":
+                return ZOD_INVALID_OBJECT_TYPE
+            }
+          },
+        }
+      )
+      .nullish(),
+    workspace:
+      // Для устранения ошибок с циклическими зависимостями
+      z
+        .lazy(() => {
+          const { WorkspaceSchema } = require("@/Workspaces")
+          return WorkspaceSchema
+        })
+        .nullish(),
   },
   /**
    * Параметры объекта

@@ -1,31 +1,18 @@
 "use client"
 
-import { memo } from "react"
-import {
-  Field,
-  FieldDescription,
-  FieldError,
-  FieldLabel,
-} from "@workspace/ui/components/field"
-import {
-  Controller,
-  FieldPath,
-  FieldValues,
-  UseFormReturn,
-} from "react-hook-form"
-import { IconAsterisk } from "@tabler/icons-react"
-import { Employee } from "../../model/types/employee.schema"
+import { memo, ReactNode } from "react"
+import { FieldPath, FieldValues, useFormContext } from "react-hook-form"
 import { EmployeeSelector } from "../employee-selector/employee-selector"
+import { FormControl } from "@/components/form/form-control/form-control"
 
 export interface FieldEmployeeProps<
   TFieldValues extends FieldValues = FieldValues,
 > {
-  form: UseFormReturn<TFieldValues>
-  path: FieldPath<TFieldValues>
-  label: string
-  onChange?: (value: Employee | null) => void
-  description?: string
+  name: FieldPath<TFieldValues>
+  label?: string
   required?: boolean
+  placeholder?: string
+  description?: ReactNode
 }
 
 /**
@@ -33,42 +20,32 @@ export interface FieldEmployeeProps<
  * @param props
  * @constructor
  */
-function FieldEmployeeInner<TFieldValues extends FieldValues>(
-  props: FieldEmployeeProps<TFieldValues>
-) {
-  const { form, path, label, onChange, description, required = false } = props
+export const FieldEmployee = memo((props: FieldEmployeeProps) => {
+  const { name, label, required = false, placeholder, description } = props
+
+  const { getFieldState } = useFormContext()
 
   return (
-    <Controller
-      control={form.control}
-      name={path}
-      render={({ field, fieldState }) => (
-        <Field aria-invalid={fieldState.invalid} className={"w-full"}>
-          <FieldLabel>
-            <div className={"flex w-full items-center justify-start gap-1"}>
-              {label}
-              {required && (
-                <IconAsterisk className={"size-2 text-destructive"} />
-              )}
-            </div>
-          </FieldLabel>
-          <EmployeeSelector
-            value={field.value ?? null}
-            onChange={(e) => {
-              field.onChange(e)
-              onChange?.(e)
-            }}
-          />
-          {description && <FieldDescription>{description}</FieldDescription>}
-          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-        </Field>
+    <FormControl
+      name={name}
+      label={label}
+      required={required}
+      description={description}
+    >
+      {({ value, onChange, onBlur }) => (
+        <EmployeeSelector
+          placeholder={placeholder}
+          value={value ?? null}
+          onChange={(e) => {
+            if (!e) {
+              onChange({})
+            } else {
+              onChange(e)
+            }
+          }}
+          isInvalid={getFieldState(name)?.invalid}
+        />
       )}
-    />
+    </FormControl>
   )
-}
-
-export const FieldEmployee = memo(FieldEmployeeInner) as <
-  TFieldValues extends FieldValues,
->(
-  props: FieldEmployeeProps<TFieldValues>
-) => ReturnType<React.FC<FieldEmployeeProps<TFieldValues>>>
+})

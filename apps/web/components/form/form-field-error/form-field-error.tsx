@@ -19,11 +19,14 @@ export const FormFieldError = memo((props: FormFieldErrorProps) => {
 
   return (
     <Alert
-      className={`w-full ${withBorder ? "border-destructive" : "border-0 p-0"}`}
+      className={`w-full ${withBorder ? "border-destructive p-1.5" : "border-0 pt-0 pr-1.5 pb-0 pl-1.5"}`}
       variant={"destructive"}
     >
-      <IconAlertSquareRounded />
-      <AlertTitle>{message}</AlertTitle>
+      <div className={"flex w-full items-center justify-start gap-1"}>
+        {" "}
+        <IconAlertSquareRounded className={"size-4"} />
+        <AlertTitle>{message}</AlertTitle>
+      </div>
       {description && <AlertDescription>{description}</AlertDescription>}
     </Alert>
   )

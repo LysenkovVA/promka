@@ -8,18 +8,13 @@ import {
   FieldLabel,
 } from "@workspace/ui/components/field"
 import { Switch } from "@workspace/ui/components/switch"
-import {
-  Controller,
-  FieldPath,
-  FieldValues,
-  UseFormReturn,
-} from "react-hook-form"
+import { Control, Controller, FieldPath, FieldValues } from "react-hook-form"
 import { IconAsterisk } from "@tabler/icons-react"
 
 export interface FieldSwitchProps<
   TFieldValues extends FieldValues = FieldValues,
 > {
-  form: UseFormReturn<TFieldValues>
+  control: Control<TFieldValues, any, TFieldValues>
   path: FieldPath<TFieldValues>
   label: string
   onChange?: (value: boolean) => void
@@ -35,11 +30,18 @@ export interface FieldSwitchProps<
 function FieldSwitchInner<TFieldValues extends FieldValues>(
   props: FieldSwitchProps<TFieldValues>
 ) {
-  const { form, path, label, onChange, description, required = false } = props
+  const {
+    control,
+    path,
+    label,
+    onChange,
+    description,
+    required = false,
+  } = props
 
   return (
     <Controller
-      control={form.control}
+      control={control}
       name={path}
       render={({ field, fieldState }) => (
         <Field aria-invalid={fieldState.invalid}>

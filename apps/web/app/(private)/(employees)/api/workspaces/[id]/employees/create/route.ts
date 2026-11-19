@@ -5,12 +5,10 @@ import { ResponseData } from "@/lib/responses/ResponseData"
 import { checkAuthForWorkspace } from "@/app/(public)/(auth)"
 import { validateObject } from "@/lib/zod/validateObject"
 import { prisma } from "@workspace/database/prisma"
-import {
-  Employee,
-  EmployeeSchema,
-} from "../../../../../model/types/employee.schema"
+import { Employee } from "../../../../../model/types/employee.schema"
 import { Prisma } from "@workspace/database/.generated/client"
 import { ServerError } from "@/lib/responses/ServerError"
+import { EmployeeRequestSchema } from "../../../../../model/types/employee-request.schema"
 
 export async function POST(
   request: NextRequest,
@@ -25,7 +23,10 @@ export async function POST(
     const formData = await request.formData()
     const entityToSave = JSON.parse(formData.get("entity-data") as string)
 
-    const validatedData = await validateObject(EmployeeSchema, entityToSave)
+    const validatedData = await validateObject(
+      EmployeeRequestSchema,
+      entityToSave
+    )
 
     const createdData = await prisma.employee.create({
       data: {
@@ -47,31 +48,40 @@ export async function POST(
         ...(validatedData.department?.id && {
           department: { connect: { id: validatedData.department?.id } },
         }),
-        certificates: {
-          create: validatedData.certificates
-            ? validatedData.certificates.map((item) => {
-                return {
-                  certificateType: {
-                    connect: { id: item.certificateType.id! },
-                  },
-                  number: item.number,
-                  date: item.date ?? Prisma.skip,
-                  group: item.group ?? Prisma.skip,
-                  workspace: {
-                    connect: { id: id },
-                  },
-                  protocol: {
-                    connect: { id: item.protocol.id! },
-                  },
-                }
-              })
-            : Prisma.skip,
-        },
+        // certificates: {
+        //   create: validatedData.certificates
+        //     ? validatedData.certificates.map((item) => {
+        //         return {
+        //           certificateType: {
+        //             connect: { id: item.certificateType.id! },
+        //           },
+        //           number: item.number,
+        //           date: item.date ?? Prisma.skip,
+        //           group: item.group ?? Prisma.skip,
+        //           workspace: {
+        //             connect: { id: id },
+        //           },
+        //           protocol: {
+        //             connect: { id: item.protocol.id! },
+        //           },
+        //         }
+        //       })
+        //     : Prisma.skip,
+        // },
       },
       include: {
-        berth: true,
+        berth: { include: { berthType: true } },
         department: true,
-        certificates: { include: { certificateType: true, protocol: true } },
+        studies: {
+          include: {
+            specialization: {
+              include: {
+                specializationDirection: true,
+                specializationParameter: true,
+              },
+            },
+          },
+        },
       },
     })
 

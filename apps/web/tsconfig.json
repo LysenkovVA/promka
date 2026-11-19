@@ -28,12 +28,32 @@
       "@/BerthTypes/*": ["./app/(private)/(berth-types)/*"],
       "@/Departments": ["./app/(private)/(departments)/index.ts"],
       "@/Departments/*": ["./app/(private)/(departments)/*"],
-      "@/CertificateTypes": ["./app/(private)/(certificate-types)/index.ts"],
-      "@/CertificateTypes/*": ["./app/(private)/(certificate-types)/*"],
+      "@/Specializations": ["./app/(private)/(specializations)/index.ts"],
+      "@/Specializations/*": ["./app/(private)/(specializations)/*"],
+      "@/SpecializationDirections": [
+        "./app/(private)/(specialization-directions)/index.ts"
+      ],
+      "@/SpecializationDirections/*": [
+        "./app/(private)/(specialization-directions)/*"
+      ],
+      "@/SpecializationParameters": [
+        "./app/(private)/(specialization-parameters)/index.ts"
+      ],
+      "@/SpecializationParameters/*": [
+        "./app/(private)/(specialization-parameters)/*"
+      ],
       "@/Certificates": ["./app/(private)/(certificates)/index.ts"],
       "@/Certificates/*": ["./app/(private)/(certificates)/*"],
       "@/Protocols": ["./app/(private)/(protocols)/index.ts"],
-      "@/Protocols/*": ["./app/(private)/(protocols)/*"]
+      "@/Protocols/*": ["./app/(private)/(protocols)/*"],
+      "@/StudyOrganizations": [
+        "./app/(private)/(study-organizations)/index.ts"
+      ],
+      "@/StudyOrganizations/*": ["./app/(private)/(study-organizations)/*"],
+      "@/Studies": [
+        "./app/(private)/(studies)/index.ts"
+      ],
+      "@/Studies/*": ["./app/(private)/(studies)/*"]
     },
     "plugins": [
       {

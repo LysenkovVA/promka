@@ -1,0 +1,17 @@
+/**
+ * Параметр типа удостоверения (Например, группа, разряд, уровень)
+ */
+model SpecializationParameter {
+  id   String @id @default(cuid())
+  name String
+
+  // Рабочее пространство
+  workspace   Workspace? @relation(name: "workspace-specialization-parameters", fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId String?
+
+  // Типы удостоверений, в которых есть данный параметр
+  specializations Specialization[] @relation(name: "specialization-parameter-specializations")
+
+  @@index([name])
+  @@map("specialization-parameters")
+}

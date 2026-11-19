@@ -1,0 +1,25 @@
+/**
+ * Обучение
+ */
+model Study {
+  id String @id @default(cuid())
+
+  // Специализация
+  specialization   Specialization @relation(name: "specialization-studies", fields: [specializationId], references: [id], onDelete: Cascade)
+  specializationId String
+
+  // Обученные сотрудники
+  employees Employee[] @relation(name: "studies-employees")
+
+  // Удостоверения обученных сотрудников
+  certificates Certificate[] @relation(name: "study-certificates")
+
+  protocol   Protocol @relation(name: "protocol-studies", fields: [protocolId], references: [id], onDelete: Cascade)
+  protocolId String
+
+  // Рабочее пространство
+  workspace   Workspace @relation(name: "workspace-studies", fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId String
+
+  @@map("studies")
+}
