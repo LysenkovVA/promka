@@ -1,0 +1,16 @@
+/**
+ * Гражданство
+ */
+model Citizenship {
+  id   String @id @default(cuid())
+  name String
+
+  // Рабочее пространство
+  workspace   Workspace @relation(name: "workspace-citizenships", fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId String
+
+  employees Employee[] @relation("citizenship-employees")
+
+  @@index([name])
+  @@map("citizenships")
+}

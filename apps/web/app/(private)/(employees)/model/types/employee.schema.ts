@@ -13,6 +13,7 @@ import { WorkspaceSchema } from "@/Workspaces"
 import { StudySchema } from "@/Studies"
 import { SnilsSchema } from "@/Snilses"
 import { PassportSchema } from "@/Passports"
+import { CitizenshipSchema } from "@/Citizenships"
 
 /**
  * Схема валидации EmployeeSchema
@@ -72,6 +73,14 @@ export const EmployeeSchema = z.object(
       })
       .transform((val) => stripTimezone(val))
       .nullish(),
+    citizenship:
+      // Для устранения ошибок с циклическими зависимостями
+      z
+        .lazy<typeof CitizenshipSchema>(() => {
+          const { CitizenshipSchema } = require("@/Citizenships")
+          return CitizenshipSchema
+        })
+        .nullish(),
     hireDate: z.coerce
       .date({
         error: (issue) => {

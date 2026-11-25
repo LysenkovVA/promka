@@ -41,6 +41,10 @@ model Employee {
 
   diplomas Diploma[] @relation(name: "employee-diplomas")
 
+  // Гражданство
+  citizenship   Citizenship? @relation(name: "citizenship-employees", fields: [citizenshipId], references: [id], onDelete: Cascade)
+  citizenshipId String?
+
   // Рабочее пространство
   workspace   Workspace @relation(name: "workspace-employees", fields: [workspaceId], references: [id], onDelete: Cascade)
   workspaceId String

@@ -41,5 +41,7 @@ model Workspace {
 
   snilses Snils[] @relation(name: "workspace-snilses")
 
+  citizenships Citizenship[] @relation(name: "workspace-citizenships")
+
   @@map("workspaces")
 }

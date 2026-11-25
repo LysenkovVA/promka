@@ -32,6 +32,7 @@ import { EmployeeRequestSchema } from "../../model/types/employee-request.schema
 import { FormCollectionPassports } from "@/Passports"
 import { FormCollectionSnilses } from "@/Snilses"
 import { FormCollectionDiplomas } from "@/Diplomas"
+import { FieldCitizenship } from "@/Citizenships"
 
 export interface EmployeeDetailsFormProps {
   submitRef: RefObject<HTMLInputElement | null>
@@ -79,6 +80,9 @@ export const EmployeeDetailsForm = memo((props: EmployeeDetailsFormProps) => {
       name: data?.name,
       patronymic: data?.patronymic,
       birthDate: data?.birthDate,
+      citizenship: data?.citizenship?.id
+        ? { id: data.citizenship.id, name: data.citizenship.name }
+        : null,
       email: data?.email,
       phoneNumber: data?.phoneNumber,
       hireDate: data?.hireDate,
@@ -192,6 +196,11 @@ export const EmployeeDetailsForm = memo((props: EmployeeDetailsFormProps) => {
             </div>
             <div className={"grid grid-cols-2 gap-2"}>
               <FieldDatePicker name={"birthDate"} label={"Дата рождения"} />
+              <FieldCitizenship
+                name={"citizenship"}
+                label={"Гражданство"}
+                placeholder={"Укажите гражданство"}
+              />
             </div>
           </FieldGroup>
           {/* ДОКУМЕНТЫ */}

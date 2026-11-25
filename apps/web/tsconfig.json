@@ -57,7 +57,9 @@
       "@/Snilses": ["./app/(private)/(snilses)/index.ts"],
       "@/Snilses/*": ["./app/(snilses)/(snilses)/*"],
       "@/Diplomas": ["./app/(private)/(diplomas)/index.ts"],
-      "@/Diplomas/*": ["./app/(snilses)/(diplomas)/*"]
+      "@/Diplomas/*": ["./app/(snilses)/(diplomas)/*"],
+      "@/Citizenships": ["./app/(private)/(citizenships)/index.ts"],
+      "@/Citizenships/*": ["./app/(snilses)/(citizenships)/*"]
     },
     "plugins": [
       {

@@ -23,6 +23,8 @@ import { SpecializationDirectionsFilters } from "@/SpecializationDirections/mode
 import { Study } from "@/Studies/model/types/study.schema"
 import { StudyFilters } from "@/Studies/model/types/study.filters"
 import { Protocol } from "@/Protocols"
+import { Citizenship } from "@/Citizenships"
+import { CitizenshipFilters } from "@/app/(private)/(citizenships)/model/types/citizenship.filters"
 
 /**
  * Схема глобального состояния
@@ -81,6 +83,10 @@ export interface GlobalStateSchema {
     StudyOrganization,
     StudyOrganizationFilters
   >
+
+  // Гражданство
+  citizenshipDetailsSchema?: DetailsReduxSchema<Citizenship>
+  citizenshipsSchema?: ListReduxSchema<Citizenship, CitizenshipFilters>
 }
 
 /**

@@ -19,7 +19,7 @@ import { useAuth } from "@/app/(public)/(auth)"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { EmployeeHelper } from "../../helpers/employee-helper"
-import { IconCalendar, IconId, IconMail, IconPhone } from "@tabler/icons-react"
+import { IconCalendar, IconMail, IconPhone } from "@tabler/icons-react"
 import {
   Item,
   ItemContent,
@@ -30,7 +30,6 @@ import dayjs from "dayjs"
 import { EmployeeDetailsForm } from "@/Employees/ui/employee-details-form/employee-details-form"
 import { DetailsWrapper } from "@/components/details-wrapper/details-wrapper"
 import { getEmployeeByIdThunk } from "@/Employees/model/thunks/get-employee-by-id.thunk"
-import { formatSnils } from "@/Employees/ui/field-snils/field-snils"
 import { formatPhoneNumberIntl } from "react-phone-number-input"
 import { StudyCardList } from "@/Studies/ui/study-card-list/study-card-list"
 import { Alert, AlertTitle } from "@workspace/ui/components/alert"
@@ -233,17 +232,17 @@ export const EmployeeDetails = memo((props: EmployeeDetailsProps) => {
                 </ItemContent>
               </Item>
             )}
-            {data?.snils && (
-              <Item variant={"muted"}>
-                <ItemMedia variant={"icon"}>
-                  <IconId />
-                </ItemMedia>
-                <ItemContent>
-                  <ItemDescription> {"СНИЛС"}</ItemDescription>
-                  {formatSnils(data?.snils)}
-                </ItemContent>
-              </Item>
-            )}
+            {/*{data?.snils && (*/}
+            {/*  <Item variant={"muted"}>*/}
+            {/*    <ItemMedia variant={"icon"}>*/}
+            {/*      <IconId />*/}
+            {/*    </ItemMedia>*/}
+            {/*    <ItemContent>*/}
+            {/*      <ItemDescription> {"СНИЛС"}</ItemDescription>*/}
+            {/*      {formatSnils(data?.snils)}*/}
+            {/*    </ItemContent>*/}
+            {/*  </Item>*/}
+            {/*)}*/}
             {data?.hireDate && (
               <Item variant={"muted"}>
                 <ItemMedia variant={"icon"}>

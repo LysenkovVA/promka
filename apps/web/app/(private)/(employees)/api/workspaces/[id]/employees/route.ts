@@ -52,6 +52,7 @@ export async function GET(
       take: Number(take),
       skip: Number(skip),
       include: {
+        citizenship: true,
         berth: true,
         department: true,
         studies: {

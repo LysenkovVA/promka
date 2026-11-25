@@ -34,6 +34,9 @@ export async function POST(
         name: validatedData.name ?? Prisma.skip,
         patronymic: validatedData.patronymic ?? Prisma.skip,
         birthDate: validatedData.birthDate ?? Prisma.skip,
+        ...(validatedData.citizenship?.id && {
+          citizenship: { connect: { id: validatedData.citizenship?.id } },
+        }),
         hireDate: validatedData.hireDate ?? Prisma.skip,
         firedDate: validatedData.firedDate ?? Prisma.skip,
         phoneNumber: validatedData.phoneNumber ?? Prisma.skip,
@@ -98,6 +101,7 @@ export async function POST(
         },
       },
       include: {
+        citizenship: true,
         berth: { include: { berthType: true } },
         department: true,
         studies: {

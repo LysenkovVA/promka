@@ -22,6 +22,7 @@ export async function GET(
     const candidate = await prisma.employee.findFirst({
       where: { id: employeeId },
       include: {
+        citizenship: true,
         berth: { include: { berthType: true } },
         department: true,
         certificates: {
@@ -87,6 +88,7 @@ export async function PATCH(
     const existingData = await prisma.employee.findFirst({
       where: { id: employeeId },
       include: {
+        citizenship: true,
         berth: { include: { berthType: true } },
         department: true,
         studies: {
@@ -152,6 +154,11 @@ export async function PATCH(
         name: validatedData.name ?? null,
         patronymic: validatedData.patronymic ?? null,
         birthDate: validatedData.birthDate ?? null,
+        ...(validatedData.citizenship?.id
+          ? {
+              citizenship: { connect: { id: validatedData.citizenship?.id } },
+            }
+          : { citizenship: { disconnect: true } }),
         hireDate: validatedData.hireDate ?? null,
         firedDate: validatedData.firedDate ?? null,
         phoneNumber: validatedData.phoneNumber ?? null,
@@ -267,6 +274,7 @@ export async function PATCH(
       },
       where: { id: employeeId },
       include: {
+        citizenship: true,
         berth: { include: { berthType: true } },
         department: true,
         studies: {

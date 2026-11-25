@@ -84,13 +84,16 @@ export const EmployeeDetailsSimpleForm = memo(
           }
 
           // Отправляем на бэкэнд чистые цифры или строку с маской
-          const rawDigits = formData?.snils?.replace(/\D/g, "")
+          // const rawDigits = formData?.snils?.replace(/\D/g, "")
+          const rawSnilses = formData?.snilses?.map((snils) =>
+            snils.number.replace(/\D/g, "")
+          )
 
           try {
             if (!employeeId) {
               const result = await dispatch(
                 createEmployeeThunk({
-                  entityData: { ...formData, snils: rawDigits },
+                  entityData: { ...formData, snilses: rawSnilses },
                   workspaceId: auth.activeWorkspace.id,
                 })
               ).unwrap()
@@ -107,7 +110,7 @@ export const EmployeeDetailsSimpleForm = memo(
             } else {
               const result = await dispatch(
                 updateEmployeeThunk({
-                  entityData: { ...formData, snils: rawDigits },
+                  entityData: { ...formData, snilses: rawSnilses },
                   workspaceId: auth?.activeWorkspace.id,
                 })
               ).unwrap()
