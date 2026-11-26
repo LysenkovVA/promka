@@ -53,6 +53,7 @@ export async function POST(
                     issuedBy: newPassport.issuedBy,
                     issueDate: newPassport.issueDate,
                     subdivisionCode: newPassport.subdivisionCode,
+                    registrationAddress: newPassport.registrationAddress,
                     workspace: {
                       connect: { id: id },
                     },

@@ -19,7 +19,15 @@ import { useAuth } from "@/app/(public)/(auth)"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { EmployeeHelper } from "../../helpers/employee-helper"
-import { IconCalendar, IconMail, IconPhone } from "@tabler/icons-react"
+import {
+  IconBalloon,
+  IconBook,
+  IconCalendar,
+  IconCertificate,
+  IconId,
+  IconMail,
+  IconPhone,
+} from "@tabler/icons-react"
 import {
   Item,
   ItemContent,
@@ -36,6 +44,8 @@ import { Alert, AlertTitle } from "@workspace/ui/components/alert"
 import { Study } from "@/Studies/model/types/study.schema"
 import { getStudiesByEmployeeIdThunk } from "@/Employees/model/thunks/get-studies-by-employee-id.thunk"
 import { ResponseData } from "@/lib/responses/ResponseData"
+import { PassportHelper } from "@/Passports"
+import { DiplomaHelper } from "@/Diplomas"
 
 export interface EmployeeDetailsProps {
   employeeId?: string
@@ -149,7 +159,7 @@ export const EmployeeDetails = memo((props: EmployeeDetailsProps) => {
               <div
                 className={"flex flex-row items-center justify-center gap-4"}
               >
-                <Avatar style={{ width: 100, height: 100 }} />
+                <Avatar style={{ width: 120, height: 120 }} />
                 <div
                   className={
                     "flex w-full flex-col items-start justify-center gap-1"
@@ -161,30 +171,43 @@ export const EmployeeDetails = memo((props: EmployeeDetailsProps) => {
                   <div style={{ fontSize: 18 }}>
                     {EmployeeHelper.getNameAndPatronymic(data)}
                   </div>
-                  <div
-                    className={
-                      "flex flex-row items-center justify-center gap-2"
-                    }
-                  >
-                    {auth.activeWorkspace?.company?.id && (
-                      <div
-                        className={"rounded-lg bg-muted p-1 text-sm font-light"}
-                      >
-                        {auth.activeWorkspace?.company.name}
-                      </div>
-                    )}
-                    {data?.berth?.id && (
-                      <div
-                        className={"rounded-lg bg-muted p-1 text-sm font-light"}
-                      >
-                        {data?.berth?.name}
-                      </div>
-                    )}
-                    {data?.department?.id && (
-                      <div
-                        className={"rounded-lg bg-muted p-1 text-sm font-light"}
-                      >
-                        {data?.department?.name}
+                  <div className={"flex flex-col gap-1"}>
+                    <div
+                      className={
+                        "flex flex-row items-center justify-center gap-2"
+                      }
+                    >
+                      {auth.activeWorkspace?.company?.id && (
+                        <div
+                          className={
+                            "rounded-lg bg-muted p-1 text-sm font-light"
+                          }
+                        >
+                          {auth.activeWorkspace?.company.name}
+                        </div>
+                      )}
+                      {data?.berth?.id && (
+                        <div
+                          className={
+                            "rounded-lg bg-muted p-1 text-sm font-light"
+                          }
+                        >
+                          {data?.berth?.name}
+                        </div>
+                      )}
+                      {data?.department?.id && (
+                        <div
+                          className={
+                            "rounded-lg bg-muted p-1 text-sm font-light"
+                          }
+                        >
+                          {data?.department?.name}
+                        </div>
+                      )}
+                    </div>
+                    {data?.hireDate && (
+                      <div className={"text-xs text-muted-foreground"}>
+                        {`Работает с ${dayjs(data?.hireDate).format("DD.MM.YYYY")}`}
                       </div>
                     )}
                   </div>
@@ -221,39 +244,62 @@ export const EmployeeDetails = memo((props: EmployeeDetailsProps) => {
                 )}
               </div>
             </div>
-            {data?.birthDate && (
-              <Item variant={"muted"}>
-                <ItemMedia variant={"icon"}>
-                  <IconCalendar />
-                </ItemMedia>
-                <ItemContent>
-                  <ItemDescription> {"Дата рождения"}</ItemDescription>
-                  {dayjs(data.birthDate).format("DD.MM.YYYY")}
-                </ItemContent>
-              </Item>
+            <div className={"grid w-full grid-cols-3 gap-2"}>
+              {data?.birthDate && (
+                <Item variant={"muted"}>
+                  <ItemMedia variant={"icon"}>
+                    <IconBalloon className={"fill-yellow-100 text-red-400"} />
+                  </ItemMedia>
+                  <ItemContent>
+                    <ItemDescription> {"Дата рождения"}</ItemDescription>
+                    {dayjs(data.birthDate).format("DD.MM.YYYY")}
+                  </ItemContent>
+                </Item>
+              )}
+            </div>
+            {((data?.passports && data?.passports.length > 0) ||
+              (data?.snilses && data?.snilses.length > 0) ||
+              (data?.diplomas && data?.diplomas.length > 0)) && (
+              <div className={"text-lg text-muted-foreground"}>
+                {"Документы"}
+              </div>
             )}
-            {/*{data?.snils && (*/}
-            {/*  <Item variant={"muted"}>*/}
-            {/*    <ItemMedia variant={"icon"}>*/}
-            {/*      <IconId />*/}
-            {/*    </ItemMedia>*/}
-            {/*    <ItemContent>*/}
-            {/*      <ItemDescription> {"СНИЛС"}</ItemDescription>*/}
-            {/*      {formatSnils(data?.snils)}*/}
-            {/*    </ItemContent>*/}
-            {/*  </Item>*/}
-            {/*)}*/}
-            {data?.hireDate && (
-              <Item variant={"muted"}>
-                <ItemMedia variant={"icon"}>
-                  <IconCalendar />
-                </ItemMedia>
-                <ItemContent>
-                  <ItemDescription> {"Принят на работу"}</ItemDescription>
-                  {dayjs(data?.hireDate).format("DD.MM.YYYY")}
-                </ItemContent>
-              </Item>
-            )}
+            <div className={"grid w-full grid-cols-3 gap-2"}>
+              {data?.passports && data?.passports.length > 0 && (
+                <Item className={"w-full"} variant={"muted"}>
+                  <ItemMedia variant={"icon"}>
+                    <IconBook />
+                  </ItemMedia>
+                  <ItemContent>
+                    <ItemDescription> {"Паспорт"}</ItemDescription>
+                    {PassportHelper.getSeriesAndNumber(data?.passports[0])}
+                  </ItemContent>
+                </Item>
+              )}
+              {data?.snilses && data?.snilses.length > 0 && (
+                <Item className={"w-full"} variant={"muted"}>
+                  <ItemMedia variant={"icon"}>
+                    <IconId />
+                  </ItemMedia>
+                  <ItemContent>
+                    <ItemDescription> {"СНИЛС"}</ItemDescription>
+                    {data?.snilses[0].number}
+                  </ItemContent>
+                </Item>
+              )}
+              {data?.diplomas && data?.diplomas.length > 0 && (
+                <Item className={"w-full"} variant={"muted"}>
+                  <ItemMedia variant={"icon"}>
+                    <IconCertificate />
+                  </ItemMedia>
+                  <ItemContent>
+                    <ItemDescription> {"Диплом"}</ItemDescription>
+                    {DiplomaHelper.getSeriesAndNumber(data?.diplomas[0])}
+                  </ItemContent>
+                </Item>
+              )}
+            </div>
+
             {data?.firedDate && (
               <Item variant={"muted"}>
                 <ItemMedia variant={"icon"}>
@@ -268,7 +314,7 @@ export const EmployeeDetails = memo((props: EmployeeDetailsProps) => {
             {employeeStudies && employeeStudies?.length > 0 ? (
               <div className={"mt-2 flex w-full flex-col gap-2"}>
                 <div className={"text-lg text-muted-foreground"}>
-                  {"Документы по обучениям"}
+                  {"Обучение"}
                 </div>
                 <StudyCardList studies={employeeStudies} hideEmployeeInfo />
               </div>

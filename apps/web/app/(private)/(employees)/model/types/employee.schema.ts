@@ -9,10 +9,6 @@ import { stripTimezone } from "@/lib/date/utils"
 import { BerthSchema } from "@/Berthes"
 import { DepartmentSchema } from "@/Departments"
 import { isValidPhoneNumber } from "react-phone-number-input/input"
-import { WorkspaceSchema } from "@/Workspaces"
-import { StudySchema } from "@/Studies"
-import { SnilsSchema } from "@/Snilses"
-import { PassportSchema } from "@/Passports"
 import { CitizenshipSchema } from "@/Citizenships"
 
 /**

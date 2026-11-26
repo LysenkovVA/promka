@@ -185,6 +185,8 @@ export async function PATCH(
                     issuedBy: item.issuedBy ?? Prisma.skip,
                     issueDate: item.issueDate ?? Prisma.skip,
                     subdivisionCode: item.subdivisionCode ?? Prisma.skip,
+                    registrationAddress:
+                      item.registrationAddress ?? Prisma.skip,
                     workspace: {
                       connect: { id: id },
                     },
